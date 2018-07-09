@@ -15,5 +15,10 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
+// @require         https://github.com/Tro95/Pardus-Troder/raw/file-split/starbase.js
+// @require         https://github.com/Tro95/Pardus-Troder/raw/file-split/planet.js
+// @require         https://github.com/Tro95/Pardus-Troder/raw/file-split/blackmarket.js
+// @require         https://github.com/Tro95/Pardus-Troder/raw/file-split/drop_cargo.js
+// @require         https://github.com/Tro95/Pardus-Troder/raw/file-split/options.js
 //
 // ==/UserScript==
