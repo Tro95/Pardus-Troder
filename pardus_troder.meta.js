@@ -15,6 +15,7 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
+// @require         https://github.com/Tro95/Pardus-Troder/raw/master/functions.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/starbase.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/planet.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/blackmarket.js
