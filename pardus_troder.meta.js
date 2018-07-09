@@ -9,8 +9,8 @@
 // @include         *.pardus.at/blackmarket.php
 // @include         *.pardus.at/options.php
 // @include         *.pardus.at/drop_cargo.php
-// @downloadURL     https://gist.githubusercontent.com/Tro95/ea4737e794aaa3f8b1e5f6b5a44a9e0b/raw/pardus_troder.user.js
-// @updateURL       https://gist.githubusercontent.com/Tro95/f609b004d38a613ad3b64db32abfb608/raw/pardus_troder.meta.js
+// @downloadURL     https://github.com/Tro95/Pardus-Troder/raw/master/pardus_troder.user.js
+// @updateURL       https://github.com/Tro95/Pardus-Troder/raw/master/pardus_troder.meta.js
 // @grant           GM_setValue
 // @grant           GM_getValue
 // @grant           unsafeWindow
