@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.6.2
+// @version         1.6.3
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -15,6 +15,7 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
+// @require         https://github.com/Tro95/Pardus-Troder/raw/master/commodities.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/functions.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/starbase.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/planet.js
@@ -24,6 +25,7 @@
 //
 // ==/UserScript==
 
+// v1.6.3 Planet buttons no longer sell coloured stims
 // v1.6.2 Fixed multibuy issue when minimum stock values were conflicting with amount attempting to be bought.
 // v1.6.1 Fixed issue with values being calculated incorrectly if there was already values in the buy or sell elements
 // v1.6   Added fuel dropping from the drop cargo screen
@@ -42,7 +44,6 @@ if (version < 1.2) {
     GM_setValue('version', 1.2);
 }
 
-var items = ['Food','Energy','Water','Animal embryos','Ore','Metal','Electronics','Robots','Heavy plastics','Hand weapons','Medicines','Nebula gas','Chemical supplies','Gem stones','Liquor','Hydrogen fuel','Exotic matter','Optical components','Radioactive cells','Droid modules','Bio-waste','Leech baby','Nutrient clods','Cybernetic X-993 Parts','X-993 Repair-Drone','Neural Stimulator','Battleweapon Parts','Slaves','Drugs','Package','Faction package','Explosives','VIP','Christmas Glitter','Military Explosives','Human intestines','Skaari limbs','Keldon brains','Rashkir bones','Exotic Crystal','Blue Sapphire jewels','Ruby jewels','Golden Beryl jewels','Stim Chip','Neural Tissue','Capri Stim','Crimson Stim','Amber Stim'];
 var commodities = [];
 
 var items_to_droidwash = ['Metal', 'Electronics', 'Heavy plastics', 'Hand weapons', 'Droid modules', 'Robots', 'Capri Stim', 'Battleweapon Parts', 'Slaves'];

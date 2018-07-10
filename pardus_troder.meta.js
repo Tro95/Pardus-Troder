@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.6.2
+// @version         1.6.3
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -15,6 +15,7 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
+// @require         https://github.com/Tro95/Pardus-Troder/raw/master/commodities.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/functions.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/starbase.js
 // @require         https://github.com/Tro95/Pardus-Troder/raw/master/planet.js

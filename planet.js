@@ -172,7 +172,7 @@ function planet() {
                 buttons.addButton("Starbase Run", loadStarbase);
                 buttons.addButton("Stock Run", loadStockRun);
                 buttons.addButton("Load Food", loadFood);
-                buttons.addButton("Load Water", function() {unload(["Water"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
+                buttons.addButton("Load Water", function() {unload(["Water", "Capri Stim", "Crimson Stim", "Amber Stim"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
                 break;
             case "i":
                 buttons.addButton("Planet Run", function() {unload(["Food","Water"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
@@ -193,7 +193,7 @@ function planet() {
     }
 
     function loadStarbase() {
-        unload(["Food", "Water"]);
+        unload(["Food", "Water", "Capri Stim", "Crimson Stim", "Amber Stim"]);
         ensureFuel();
 
         var total_carry = GM_getValue(universe + "_total_carry", 0);
@@ -229,7 +229,7 @@ function planet() {
     }
 
     function loadStockRun() {
-        unload(["Food", "Water"]);
+        unload(["Food", "Water", "Capri Stim", "Crimson Stim", "Amber Stim"]);
         ensureFuel();
 
         var total_carry = GM_getValue(universe + "_stock_run_carry", 0);
@@ -266,7 +266,7 @@ function planet() {
     }
 
     function loadFood() {
-        unload(["Food"]);
+        unload(["Food", "Capri Stim", "Crimson Stim", "Amber Stim"]);
         ensureFuel();
         attempt_buy("Food", ship_space.allowedSpace());
         submitIfNotPreview();
