@@ -9,18 +9,19 @@
 // @include         *.pardus.at/blackmarket.php
 // @include         *.pardus.at/options.php
 // @include         *.pardus.at/drop_cargo.php
+// @icon            https://static.pardus.at/img/std/ships/leviathan.png
 // @downloadURL     https://github.com/Tro95/Pardus-Troder/raw/master/pardus_troder.user.js
 // @updateURL       https://github.com/Tro95/Pardus-Troder/raw/master/pardus_troder.meta.js
 // @grant           GM_setValue
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
-// @require         https://github.com/Tro95/Pardus-Troder/raw/master/commodities.js
-// @require         https://github.com/Tro95/Pardus-Troder/raw/master/functions.js
-// @require         https://github.com/Tro95/Pardus-Troder/raw/master/starbase.js
-// @require         https://github.com/Tro95/Pardus-Troder/raw/master/planet.js
-// @require         https://github.com/Tro95/Pardus-Troder/raw/master/blackmarket.js
-// @require         https://github.com/Tro95/Pardus-Troder/raw/master/drop_cargo.js
-// @require         https://github.com/Tro95/Pardus-Troder/raw/master/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.3/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.3/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.3/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.3/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.3/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.3/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.3/options.js
 //
 // ==/UserScript==
