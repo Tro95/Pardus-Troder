@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.6.4
+// @version         1.7
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -16,16 +16,18 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.4/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.4/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.4/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.4/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.4/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.4/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.6.4/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/options.js
 //
 // ==/UserScript==
 
+// v1.7   Greatly improved the droidwashing capabilities
+// v1.6.4 Added userscript icon and resource versioning
 // v1.6.3 Planet buttons no longer sell coloured stims
 // v1.6.2 Fixed multibuy issue when minimum stock values were conflicting with amount attempting to be bought.
 // v1.6.1 Fixed issue with values being calculated incorrectly if there was already values in the buy or sell elements
@@ -46,8 +48,6 @@ if (version < 1.2) {
 }
 
 var commodities = [];
-
-var items_to_droidwash = ['Metal', 'Electronics', 'Heavy plastics', 'Hand weapons', 'Droid modules', 'Robots', 'Capri Stim', 'Battleweapon Parts', 'Slaves'];
 
 var has_magscoop = false;
 var magscoop_size = 0;
@@ -147,7 +147,7 @@ var buttons = {
     number_of_buttons: 0,
     createButtonsBox: function() {
 
-        var buttons_box_html = '<div><table style="background:url(//static.pardus.at/img/std/bgd.gif)" width="90%" cellpadding="3" align="center"><tbody><tr><th>Troder Buttons</th></tr><tr><td><table align="center" width="90%" frame="box" style="border-style:dashed;border-color:yellow;" id="troder-options-box"><tbody><tr><td align="center">Unload ship:</td><td align="center"><input type="checkbox" id="autoUnload"></td></tr><tr><td align="center">Preview Trade:</td><td align="center"><input type="checkbox" id="troder-preview-trade"></td></tr></tbody></table></td></tr><tr><td><table align="center" width="90%" frame="box" style="border-style:dashed;border-color:yellow;border-spacing:10px;" id="troder-buttons-box"><tbody></tbody></table></td></tr></tbody></table></div>';
+        var buttons_box_html = '<div id="troder-buttons-container"><table style="background:url(//static.pardus.at/img/std/bgd.gif)" width="90%" cellpadding="3" align="center" id="troder-buttons-table"><tbody><tr><th>Troder Buttons</th></tr><tr><td><table align="center" width="90%" frame="box" style="border-style:dashed;border-color:yellow;" id="troder-options-box"><tbody><tr><td align="center">Unload ship:</td><td align="center"><input type="checkbox" id="autoUnload"></td></tr><tr><td align="center">Preview Trade:</td><td align="center"><input type="checkbox" id="troder-preview-trade"></td></tr></tbody></table></td></tr><tr><td><table align="center" width="90%" frame="box" style="border-style:dashed;border-color:yellow;border-spacing:10px;" id="troder-buttons-box"><tbody></tbody></table></td></tr></tbody></table></div>';
 
         transfer_button.parentNode.innerHTML = transfer_button.parentNode.innerHTML + buttons_box_html;
 
@@ -208,7 +208,6 @@ var buttons = {
         }
     },
     addButton: function(label, function_to_set) {
-
         if (this.buttons_box == null) {
             return;
         }
@@ -222,6 +221,35 @@ var buttons = {
     addStandardButtons: function() {
         this.addButton("Unload Ship", function() {unload();submitIfNotPreview();});
         this.addButton("Reset", reset);
+    },
+    addDroidwashableItems: function(droidwash_items) {
+        var i;
+
+        var droidwash_items_box = document.createElement('tr');
+        droidwash_items_box.innerHTML = '<td><table align="center" width="90%" frame="box" style="border-style:dashed;border-color:yellow;border-spacing:10px;" id="troder-droidwash-items"><tbody></tbody></table></td>';
+        document.getElementById("troder-buttons-table").firstChild.appendChild(droidwash_items_box);
+        
+        if (droidwash_items.length == 0) {
+            document.getElementById("troder-droidwash-items").firstChild.innerHTML = '<tr><td align="center"><font color="#FF0000">No items capable of being droidwashed</font></td></tr>';
+            return;
+        } else {
+            document.getElementById("troder-droidwash-items").firstChild.innerHTML = '<tr><td align="center">Items capable of being droidwashed:</td></tr><tr><td align="center" style="font-size:11px;"><ul style="list-style-type:none;padding-left:0;" id="troder-droidwash-items-list"></ul></td></tr>';            
+        }
+
+        for (i = 0; i < droidwash_items.length; i++) {
+
+            var new_item = document.createElement('li');
+
+            if (commodities[items.indexOf(droidwash_items[i])].ship_stock + commodities[items.indexOf(droidwash_items[i])].trade_stock < commodities[items.indexOf(droidwash_items[i])].bal + 2) {
+                // Valid item but none in stock
+                new_item.innerHTML = '<font color="#FFAA00">' + droidwash_items[i] + '</font>';
+            } else {
+                // Valid item with some in stock
+                new_item.innerHTML = '<font color="#009900">' + droidwash_items[i] + '</font>';
+            }
+
+            document.getElementById("troder-droidwash-items-list").appendChild(new_item);
+        }
     }
 };
 
@@ -288,6 +316,7 @@ function bootstrap() {
         droid_wash_planet_g_enabled = GM_getValue(universe + "_droid_washing_planet_g_enabled", true);
         droid_wash_planet_r_enabled = GM_getValue(universe + "_droid_washing_planet_r_enabled", true);
         droid_wash_planet_a_enabled = GM_getValue(universe + "_droid_washing_planet_a_enabled", false);
+        droid_wash_level = GM_getValue(universe + "_droid_washing_level", 20);
         magscoop_allowed = GM_getValue(universe + "_magscoop_allowed", false);
         preview = GM_getValue(universe + "_preview", true);
         auto_unload = GM_getValue(universe + "_auto_unload", true);

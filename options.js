@@ -29,9 +29,13 @@ function troderOptions() {
 
     function droidWashingOptions() {
         var droid_washing_options_box = troder_options_tab.addBox("Droid Washing");
-        var droid_washing_inner_html = `<tr><td>The droid washing mode is something that you can activate to assist in droid washing. If you are not actively droid washing it is recommended you disable droid washing mode. These options control how the droid washing mode works.</td></tr><tr> <td> <table> <tbody> <tr> <td>Enable Droid Washing Mode:</td><td> <input id="troder-droid-washing-mode-enabled" type="checkbox"> </td></tr></tbody> </table> </td></tr><tr><td><table><tbody><tr><td>Planets:</td><td><table><tbody> <tr> <td><input id="troder-droid-washing-m-planet-enabled" type="checkbox"> <label>M Class</label></td><td><input id="troder-droid-washing-i-planet-enabled" type="checkbox"> <label>I Class</label></td><td><input id="troder-droid-washing-d-planet-enabled" type="checkbox"> <label>D Class</label></td></tr><tr> <td><input id="troder-droid-washing-g-planet-enabled" type="checkbox"> <label>G Class</label></td><td><input id="troder-droid-washing-r-planet-enabled" type="checkbox"> <label>R Class</label></td><td><input id="troder-droid-washing-a-planet-enabled" type="checkbox"> <label>A Class</label></td></tr></tbody> </table></td></tr></tbody></table></td></tr><tr> <td align="right"> <input value="Save" id="troder-droid-washing-save" type="button"> </td></tr>`;
+        var droid_washing_inner_html = `<tr><td>The droid washing mode is something that you can activate to assist in droid washing. If you are not actively droid washing it is recommended you disable droid washing mode. These options control how the droid washing mode works.</td></tr><tr> <td> <table> <tbody> <tr> <td>Enable Droid Washing Mode:</td><td> <input id="troder-droid-washing-mode-enabled" type="checkbox"> </td></tr></tbody> </table> </td></tr><tr><td><div><input type="range" id="droidwash-level" name="droidwash-level" min="20" max="80" step="20" value="20" style="background:url(//static.pardus.at/img/std/bgd.gif)"><label for="droidwash-level">Mode</label></div></td></tr><tr><td><div id="droidwash-level-info"><table><tbody><tr><td>Credits / ATP: </td><td><div id="credits-per-atp" style="color:#009900">465254</div></td><td><img src="//static.pardus.at/img/std/credits.png" title="Credits" alt="Credits"></td></tr><tr><td>Speed: </td><td><div id="speed-for-atp" style="color:#FFAA00">Moderate</div></td></tr></tbody></table></div></td></tr><tr><td><table><tbody><tr><td>Planets:</td><td><table><tbody> <tr> <td><input id="troder-droid-washing-m-planet-enabled" type="checkbox"> <label>M Class</label></td><td><input id="troder-droid-washing-i-planet-enabled" type="checkbox"> <label>I Class</label></td><td><input id="troder-droid-washing-d-planet-enabled" type="checkbox"> <label>D Class</label></td></tr><tr> <td><input id="troder-droid-washing-g-planet-enabled" type="checkbox"> <label>G Class</label></td><td><input id="troder-droid-washing-r-planet-enabled" type="checkbox"> <label>R Class</label></td><td><input id="troder-droid-washing-a-planet-enabled" type="checkbox"> <label>A Class</label></td></tr></tbody> </table></td></tr></tbody></table></td></tr><tr> <td align="right"> <input value="Save" id="troder-droid-washing-save" type="button"> </td></tr>`;
         droid_washing_options_box.inner_html = droid_washing_inner_html;
         droid_washing_options_box.refreshElement();
+
+        document.getElementById('droidwash-level').value = droid_wash_level;
+        document.getElementById('droidwash-level').addEventListener("input", setCreditsPerATP, true);
+        setCreditsPerATP();
 
         document.getElementById('troder-droid-washing-mode-enabled').checked = droid_wash_mode;
         document.getElementById('troder-droid-washing-m-planet-enabled').checked = droid_wash_planet_m_enabled;
@@ -48,6 +52,39 @@ function troderOptions() {
                 droid_washing_save_button.attachEvent('onclick', saveDroidWashingOptions);
         }
 
+        function setCreditsPerATP() {
+            var slider_value = document.getElementById('droidwash-level').valueAsNumber;
+            var credits_per_atp = 4000000 * ((Math.pow(10, -1 / slider_value) * 1.25) - 1);
+
+            var credits_per_atp_elem = document.getElementById('credits-per-atp');
+            var speed_per_atp_elem = document.getElementById('speed-for-atp');
+
+            credits_per_atp_elem.innerHTML = credits_per_atp.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+
+            switch (slider_value) {
+                case 20:
+                    credits_per_atp_elem.setAttribute('style','color:#009900');
+                    speed_per_atp_elem.setAttribute('style','color:#FFAA00');
+                    speed_per_atp_elem.innerHTML = 'Moderate';
+                    break;
+                case 40:
+                    credits_per_atp_elem.setAttribute('style','color:#FFFF00');
+                    speed_per_atp_elem.setAttribute('style','color:#FFFF00');
+                    speed_per_atp_elem.innerHTML = 'Fast';
+                    break;
+                case 60:
+                    credits_per_atp_elem.setAttribute('style','color:#FFAA00');
+                    speed_per_atp_elem.setAttribute('style','color:#99FF00');
+                    speed_per_atp_elem.innerHTML = 'Faster';
+                    break;
+                case 80:
+                    credits_per_atp_elem.setAttribute('style','color:#CC0000');
+                    speed_per_atp_elem.setAttribute('style','color:#009900');
+                    speed_per_atp_elem.innerHTML = 'Fastest';
+                    break;
+            }
+        }
+
         function saveDroidWashingOptions() {
             var droid_wash_enabled = document.getElementById('troder-droid-washing-mode-enabled').checked;
             var planet_m = document.getElementById('troder-droid-washing-m-planet-enabled').checked;
@@ -56,6 +93,7 @@ function troderOptions() {
             var planet_g = document.getElementById('troder-droid-washing-g-planet-enabled').checked;
             var planet_r = document.getElementById('troder-droid-washing-r-planet-enabled').checked;
             var planet_a = document.getElementById('troder-droid-washing-a-planet-enabled').checked;
+            var level_slider = document.getElementById('droidwash-level').valueAsNumber;
             //var fuel_to_purchase = document.getElementById('troder-options-fuel-purchase').value;
             GM_setValue(universe + '_droid_washing_mode_enabled', droid_wash_enabled);
             GM_setValue(universe + '_droid_washing_planet_m_enabled', planet_m);
@@ -64,6 +102,8 @@ function troderOptions() {
             GM_setValue(universe + '_droid_washing_planet_g_enabled', planet_g);
             GM_setValue(universe + '_droid_washing_planet_r_enabled', planet_r);
             GM_setValue(universe + '_droid_washing_planet_a_enabled', planet_a);
+
+            GM_setValue(universe + '_droid_washing_level', level_slider);
 
             //GM_setValue(universe + '_fuel_to_purchase', fuel_to_purchase);
             displaySaved('troder-droid-washing-save');
