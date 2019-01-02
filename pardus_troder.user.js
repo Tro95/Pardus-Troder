@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.7
+// @version         1.8
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -16,16 +16,17 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.7/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.8/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.8/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.8/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.8/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.8/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.8/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.8/options.js
 //
 // ==/UserScript==
 
+// v1.8   Added buttons for G and D class planets, and made all planet buttons configurable on the options page
 // v1.7   Greatly improved the droidwashing capabilities
 // v1.6.4 Added userscript icon and resource versioning
 // v1.6.3 Planet buttons no longer sell coloured stims
@@ -41,11 +42,6 @@
 // v1.1.1 Fixed a bug with preview on starbases
 // v1.1   Added preview option
 // v1.0   Initial script still with work to do
-
-var version = GM_getValue('version', 0);
-if (version < 1.2) {
-    GM_setValue('version', 1.2);
-}
 
 var commodities = [];
 
