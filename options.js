@@ -14,17 +14,194 @@ function troderOptions() {
 
     droidWashingOptions();
     fuelOptions();
+    planetAOptions();
+    planetMOptions();
+    planetIOptions();
+    planetROptions();
+    planetGOptions();
+    planetDOptions();
 
-    // Set the default values
-    document.getElementById('troder-fuel').value = fuel;
-    document.getElementById('troder-droid-wash').checked = droid_wash_mode;
+    function planetAOptions() {
+        var planet_a_options_box = troder_options_tab.addPremiumBoxLeft("Planets: Class A");
+        var planet_a_inner_html = `<tr><td><table><tbody><tr><td><img src="https://static.pardus.at/img/std/foregrounds/planet_a.png" /></td><td align="center">These options control the buttons displayed on the trade screen for Class A planets (which are only available in the Pardus Cluster).</td></tr></tbody></table></td></tr><tr><td><table><tbody><tr><td>Enable 'Starbase Run' button: </td><td><input id="troder-planet-a-starbase-run-enabled" type="checkbox"></td></tr><tr><td>Enable 'Stock Run' button: </td><td><input id="troder-planet-a-stock-run-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Food' button: </td><td><input id="troder-planet-a-load-food-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Water' button: </td><td><input id="troder-planet-a-load-water-enabled" type="checkbox"></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-planet-a-save" type="button" style="color:#FFCC11"></td></tr>`;
+        planet_a_options_box.inner_html = planet_a_inner_html;
+        planet_a_options_box.refreshElement();
 
-    // Let the save button work
-    var main_save_button = document.getElementById('troder-save');
-    if (main_save_button.addEventListener) {
-            main_save_button.addEventListener("click", saveMainOptions, false);
-    } else if (main_save_button.attachEvent) {
-            main_save_button.attachEvent('onclick', saveMainOptions);
+        document.getElementById('troder-planet-a-starbase-run-enabled').checked = GM_getValue(universe + '_planet_a_starbase_run_enabled', true);
+        document.getElementById('troder-planet-a-stock-run-enabled').checked = GM_getValue(universe + '_planet_a_stock_run_enabled', true);
+        document.getElementById('troder-planet-a-load-food-enabled').checked = GM_getValue(universe + '_planet_a_load_food_enabled', true);
+        document.getElementById('troder-planet-a-load-water-enabled').checked = GM_getValue(universe + '_planet_a_load_water_enabled', true);
+
+        var planet_a_save_button = document.getElementById('troder-planet-a-save');
+        if (planet_a_save_button.addEventListener) {
+            planet_a_save_button.addEventListener("click", savePlanetAOptions, false);
+        } else if (planet_a_save_button.attachEvent) {
+            planet_a_save_button.attachEvent('onclick', savePlanetAOptions);
+        }
+
+        function savePlanetAOptions() {
+            var starbase_run = document.getElementById('troder-planet-a-starbase-run-enabled').checked;
+            var stock_run = document.getElementById('troder-planet-a-stock-run-enabled').checked;
+            var load_food = document.getElementById('troder-planet-a-load-food-enabled').checked;
+            var load_water = document.getElementById('troder-planet-a-load-water-enabled').checked;
+
+            GM_setValue(universe + '_planet_a_starbase_run_enabled', starbase_run);
+            GM_setValue(universe + '_planet_a_stock_run_enabled', stock_run);
+            GM_setValue(universe + '_planet_a_load_food_enabled', load_food);
+            GM_setValue(universe + '_planet_a_load_water_enabled', load_water);
+
+            displayPremiumSaved('troder-planet-a-save');
+        }
+    }
+
+    function planetMOptions() {
+        var planet_m_options_box = troder_options_tab.addBoxRight("Planets: Class M");
+        var planet_m_inner_html = `<tr><td><table><tbody><tr><td><img src="https://static.pardus.at/img/std/foregrounds/planet_m.png" /></td><td align="center">These options control the buttons displayed on the trade screen for Class M planets.</td></tr></tbody></table></td></tr><tr><td><table><tbody><tr><td>Enable 'Starbase Run' button: </td><td><input id="troder-planet-m-starbase-run-enabled" type="checkbox"></td></tr><tr><td>Enable 'Stock Run' button: </td><td><input id="troder-planet-m-stock-run-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Food' button: </td><td><input id="troder-planet-m-load-food-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Water' button: </td><td><input id="troder-planet-m-load-water-enabled" type="checkbox"></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-planet-m-save" type="button"></td></tr>`;
+        planet_m_options_box.inner_html = planet_m_inner_html;
+        planet_m_options_box.refreshElement();
+
+        document.getElementById('troder-planet-m-starbase-run-enabled').checked = GM_getValue(universe + '_planet_m_starbase_run_enabled', true);
+        document.getElementById('troder-planet-m-stock-run-enabled').checked = GM_getValue(universe + '_planet_m_stock_run_enabled', true);
+        document.getElementById('troder-planet-m-load-food-enabled').checked = GM_getValue(universe + '_planet_m_load_food_enabled', true);
+        document.getElementById('troder-planet-m-load-water-enabled').checked = GM_getValue(universe + '_planet_m_load_water_enabled', true);
+
+        var planet_m_save_button = document.getElementById('troder-planet-m-save');
+        if (planet_m_save_button.addEventListener) {
+            planet_m_save_button.addEventListener("click", savePlanetMOptions, false);
+        } else if (planet_m_save_button.attachEvent) {
+            planet_m_save_button.attachEvent('onclick', savePlanetMOptions);
+        }
+
+        function savePlanetMOptions() {
+            var starbase_run = document.getElementById('troder-planet-m-starbase-run-enabled').checked;
+            var stock_run = document.getElementById('troder-planet-m-stock-run-enabled').checked;
+            var load_food = document.getElementById('troder-planet-m-load-food-enabled').checked;
+            var load_water = document.getElementById('troder-planet-m-load-water-enabled').checked;
+
+            GM_setValue(universe + '_planet_m_starbase_run_enabled', starbase_run);
+            GM_setValue(universe + '_planet_m_stock_run_enabled', stock_run);
+            GM_setValue(universe + '_planet_m_load_food_enabled', load_food);
+            GM_setValue(universe + '_planet_m_load_water_enabled', load_water);
+
+            displaySaved('troder-planet-m-save');
+        }
+    }
+
+    function planetIOptions() {
+        var planet_i_options_box = troder_options_tab.addBoxLeft("Planets: Class I");
+        var planet_i_inner_html = `<tr><td><table><tbody><tr><td><img src="https://static.pardus.at/img/std/foregrounds/planet_i.png" /></td><td align="center">These options control the buttons displayed on the trade screen for Class I planets.</td></tr></tbody></table></td></tr><tr><td><table><tbody><tr><td>Enable 'Planet Run' button: </td><td><input id="troder-planet-i-planet-run-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Water' button: </td><td><input id="troder-planet-i-load-water-enabled" type="checkbox"></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-planet-i-save" type="button"></td></tr>`;
+        planet_i_options_box.inner_html = planet_i_inner_html;
+        planet_i_options_box.refreshElement();
+
+        document.getElementById('troder-planet-i-planet-run-enabled').checked = GM_getValue(universe + '_planet_i_planet_run_enabled', true);
+        document.getElementById('troder-planet-i-load-water-enabled').checked = GM_getValue(universe + '_planet_i_load_water_enabled', true);
+
+        var planet_i_save_button = document.getElementById('troder-planet-i-save');
+        if (planet_i_save_button.addEventListener) {
+            planet_i_save_button.addEventListener("click", savePlanetIOptions, false);
+        } else if (planet_i_save_button.attachEvent) {
+            planet_i_save_button.attachEvent('onclick', savePlanetIOptions);
+        }
+
+        function savePlanetIOptions() {
+            var planet_run = document.getElementById('troder-planet-i-planet-run-enabled').checked;
+            var load_water = document.getElementById('troder-planet-i-load-water-enabled').checked;
+
+            GM_setValue(universe + '_planet_i_planet_run_enabled', planet_run);
+            GM_setValue(universe + '_planet_i_load_water_enabled', load_water);
+
+            displaySaved('troder-planet-i-save');
+        }
+    }
+
+    function planetROptions() {
+        var planet_r_options_box = troder_options_tab.addBoxLeft("Planets: Class R");
+        var planet_r_inner_html = `<tr><td><table><tbody><tr><td><img src="https://static.pardus.at/img/std/foregrounds/planet_r.png" /></td><td align="center">These options control the buttons displayed on the trade screen for Class R planets.</td></tr></tbody></table></td></tr><tr><td><table><tbody><tr><td>Enable 'Combo Run' button: </td><td><input id="troder-planet-r-combo-run-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Embryos' button: </td><td><input id="troder-planet-r-load-embryos-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Metal' button: </td><td><input id="troder-planet-r-load-metal-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Ore' button: </td><td><input id="troder-planet-r-load-ore-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Rads' button: </td><td><input id="troder-planet-r-load-rads-enabled" type="checkbox"></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-planet-r-save" type="button"></td></tr>`;
+        planet_r_options_box.inner_html = planet_r_inner_html;
+        planet_r_options_box.refreshElement();
+
+        document.getElementById('troder-planet-r-combo-run-enabled').checked = GM_getValue(universe + '_planet_r_combo_run_enabled', true);
+        document.getElementById('troder-planet-r-load-embryos-enabled').checked = GM_getValue(universe + '_planet_r_load_embryos_enabled', true);
+        document.getElementById('troder-planet-r-load-metal-enabled').checked = GM_getValue(universe + '_planet_r_load_metal_enabled', true);
+        document.getElementById('troder-planet-r-load-ore-enabled').checked = GM_getValue(universe + '_planet_r_load_ore_enabled', true);
+        document.getElementById('troder-planet-r-load-rads-enabled').checked = GM_getValue(universe + '_planet_r_load_rads_enabled', true);
+
+        var planet_r_save_button = document.getElementById('troder-planet-r-save');
+        if (planet_r_save_button.addEventListener) {
+            planet_r_save_button.addEventListener("click", savePlanetROptions, false);
+        } else if (planet_r_save_button.attachEvent) {
+            planet_r_save_button.attachEvent('onclick', savePlanetROptions);
+        }
+
+        function savePlanetROptions() {
+            var combo_run = document.getElementById('troder-planet-r-combo-run-enabled').checked;
+            var load_embryos = document.getElementById('troder-planet-r-load-embryos-enabled').checked;
+            var load_metal = document.getElementById('troder-planet-r-load-metal-enabled').checked;
+            var load_ore = document.getElementById('troder-planet-r-load-ore-enabled').checked;
+            var load_rads = document.getElementById('troder-planet-r-load-rads-enabled').checked;
+
+            GM_setValue(universe + '_planet_r_combo_run_enabled', combo_run);
+            GM_setValue(universe + '_planet_r_load_embryos_enabled', load_embryos);
+            GM_setValue(universe + '_planet_r_load_metal_enabled', load_metal);
+            GM_setValue(universe + '_planet_r_load_ore_enabled', load_ore);
+            GM_setValue(universe + '_planet_r_load_rads_enabled', load_rads);
+
+            displaySaved('troder-planet-r-save');
+        }
+    }
+
+    function planetGOptions() {
+        var planet_g_options_box = troder_options_tab.addBoxRight("Planets: Class G");
+        var planet_g_inner_html = `<tr><td><table><tbody><tr><td><img src="https://static.pardus.at/img/std/foregrounds/planet_g.png" /></td><td align="center">These options control the buttons displayed on the trade screen for Class G planets.</td></tr></tbody></table></td></tr><tr><td><table><tbody><tr><td>Enable 'Load Embryos' button: </td><td><input id="troder-planet-g-load-embryos-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Nebula' button: </td><td><input id="troder-planet-g-load-nebula-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Chemicals' button: </td><td><input id="troder-planet-g-load-chems-enabled" type="checkbox"></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-planet-g-save" type="button"></td></tr>`;
+        planet_g_options_box.inner_html = planet_g_inner_html;
+        planet_g_options_box.refreshElement();
+
+        document.getElementById('troder-planet-g-load-embryos-enabled').checked = GM_getValue(universe + '_planet_g_load_embryos_enabled', true);
+        document.getElementById('troder-planet-g-load-nebula-enabled').checked = GM_getValue(universe + '_planet_g_load_nebula_enabled', true);
+        document.getElementById('troder-planet-g-load-chems-enabled').checked = GM_getValue(universe + '_planet_g_load_chems_enabled', true);
+
+        var planet_g_save_button = document.getElementById('troder-planet-g-save');
+        if (planet_g_save_button.addEventListener) {
+            planet_g_save_button.addEventListener("click", savePlanetGOptions, false);
+        } else if (planet_g_save_button.attachEvent) {
+            planet_g_save_button.attachEvent('onclick', savePlanetGOptions);
+        }
+
+        function savePlanetGOptions() {
+            var load_embryos = document.getElementById('troder-planet-g-load-embryos-enabled').checked;
+            var load_nebula = document.getElementById('troder-planet-g-load-nebula-enabled').checked;
+            var load_chems = document.getElementById('troder-planet-g-load-chems-enabled').checked;
+
+            GM_setValue(universe + '_planet_g_load_embryos_enabled', load_embryos);
+            GM_setValue(universe + '_planet_g_load_nebula_enabled', load_nebula);
+            GM_setValue(universe + '_planet_g_load_chems_enabled', load_chems);
+
+            displaySaved('troder-planet-g-save');
+        }
+    }
+
+    function planetDOptions() {
+        var planet_d_options_box = troder_options_tab.addBoxRight("Planets: Class D");
+        var planet_d_inner_html = `<tr><td><table><tbody><tr><td><img src="https://static.pardus.at/img/std/foregrounds/planet_d.png" /></td><td align="center">These options control the buttons displayed on the trade screen for Class D planets.</td></tr></tbody></table></td></tr><tr><td><table><tbody><tr><td>Enable 'Load Slaves' button: </td><td><input id="troder-planet-d-load-slaves-enabled" type="checkbox"></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-planet-d-save" type="button"></td></tr>`;
+        planet_d_options_box.inner_html = planet_d_inner_html;
+        planet_d_options_box.refreshElement();
+
+        document.getElementById('troder-planet-d-load-slaves-enabled').checked = GM_getValue(universe + '_planet_d_load_slaves_enabled', true);
+        
+        var planet_d_save_button = document.getElementById('troder-planet-d-save');
+        if (planet_d_save_button.addEventListener) {
+            planet_d_save_button.addEventListener("click", savePlanetDOptions, false);
+        } else if (planet_d_save_button.attachEvent) {
+            planet_d_save_button.attachEvent('onclick', savePlanetDOptions);
+        }
+
+        function savePlanetDOptions() {
+            var load_slaves = document.getElementById('troder-planet-d-load-slaves-enabled').checked;
+
+            GM_setValue(universe + '_planet_d_load_slaves_enabled', load_slaves);
+
+            displaySaved('troder-planet-d-save');
+        }
     }
 
     function droidWashingOptions() {
@@ -47,9 +224,9 @@ function troderOptions() {
 
         var droid_washing_save_button = document.getElementById('troder-droid-washing-save');
         if (droid_washing_save_button.addEventListener) {
-                droid_washing_save_button.addEventListener("click", saveDroidWashingOptions, false);
+            droid_washing_save_button.addEventListener("click", saveDroidWashingOptions, false);
         } else if (droid_washing_save_button.attachEvent) {
-                droid_washing_save_button.attachEvent('onclick', saveDroidWashingOptions);
+            droid_washing_save_button.attachEvent('onclick', saveDroidWashingOptions);
         }
 
         function setCreditsPerATP() {
@@ -94,7 +271,7 @@ function troderOptions() {
             var planet_r = document.getElementById('troder-droid-washing-r-planet-enabled').checked;
             var planet_a = document.getElementById('troder-droid-washing-a-planet-enabled').checked;
             var level_slider = document.getElementById('droidwash-level').valueAsNumber;
-            //var fuel_to_purchase = document.getElementById('troder-options-fuel-purchase').value;
+
             GM_setValue(universe + '_droid_washing_mode_enabled', droid_wash_enabled);
             GM_setValue(universe + '_droid_washing_planet_m_enabled', planet_m);
             GM_setValue(universe + '_droid_washing_planet_i_enabled', planet_i);
@@ -102,10 +279,8 @@ function troderOptions() {
             GM_setValue(universe + '_droid_washing_planet_g_enabled', planet_g);
             GM_setValue(universe + '_droid_washing_planet_r_enabled', planet_r);
             GM_setValue(universe + '_droid_washing_planet_a_enabled', planet_a);
-
             GM_setValue(universe + '_droid_washing_level', level_slider);
 
-            //GM_setValue(universe + '_fuel_to_purchase', fuel_to_purchase);
             displaySaved('troder-droid-washing-save');
         }
     }
@@ -122,16 +297,16 @@ function troderOptions() {
 
         setFuelPurchaseOptions();
         if (fuel_space_allowed.addEventListener) {
-                fuel_space_allowed.addEventListener("change", setFuelPurchaseOptions, false);
+            fuel_space_allowed.addEventListener("change", setFuelPurchaseOptions, false);
         } else if (fuel_space_allowed.attachEvent) {
-                fuel_space_allowed.attachEvent('onchange', setFuelPurchaseOptions);
+            fuel_space_allowed.attachEvent('onchange', setFuelPurchaseOptions);
         }
 
         var fuel_save_button = document.getElementById('troder-fuel-save');
         if (fuel_save_button.addEventListener) {
-                fuel_save_button.addEventListener("click", saveFuelOptions, false);
+            fuel_save_button.addEventListener("click", saveFuelOptions, false);
         } else if (fuel_save_button.attachEvent) {
-                fuel_save_button.attachEvent('onclick', saveFuelOptions);
+            fuel_save_button.attachEvent('onclick', saveFuelOptions);
         }
 
         function setFuelPurchaseOptions() {
@@ -172,15 +347,6 @@ function troderOptions() {
         }
     }
 
-    function saveMainOptions() {
-        var fuel_to_save = document.getElementById('troder-fuel').value;
-        var droid_wash_mode = document.getElementById('troder-droid-wash').checked;
-        GM_setValue(universe + '_fuel', fuel_to_save);
-        GM_setValue(universe + '_droid_wash_mode', droid_wash_mode);
-        //displaySaved();
-        //window.scrollTo(0,0);
-    }
-
     function displaySaved(id) {
         var save_button = document.getElementById(id);
         save_button.setAttribute('disabled', 'true');
@@ -190,6 +356,18 @@ function troderOptions() {
             save_button.removeAttribute('disabled');
             save_button.value = 'Save';
             save_button.removeAttribute('style');
+        }, 2000);
+    }
+
+    function displayPremiumSaved(id) {
+        var save_button = document.getElementById(id);
+        save_button.setAttribute('disabled', 'true');
+        save_button.value = 'Saved';
+        save_button.setAttribute('style', 'color:green;background-color:silver');
+        setTimeout(function() {
+            save_button.removeAttribute('disabled');
+            save_button.value = 'Save';
+            save_button.setAttribute('style', 'color:#FFCC11');
         }, 2000);
     }
 }

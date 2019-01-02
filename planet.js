@@ -179,22 +179,72 @@ function planet() {
 
         switch(this.planet_type) {
             case "a":
+                if (GM_getValue(universe + '_planet_a_starbase_run_enabled', true)) {
+                    buttons.addButton("Starbase Run", loadStarbase);
+                }
+                if (GM_getValue(universe + '_planet_a_stock_run_enabled', true)) {
+                    buttons.addButton("Stock Run", loadStockRun);
+                }
+                if (GM_getValue(universe + '_planet_a_load_food_enabled', true)) {
+                    buttons.addButton("Load Food", function() {unload(["Food", "Capri Stim", "Crimson Stim", "Amber Stim"]);ensureFuel();attempt_buy("Food", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                if (GM_getValue(universe + '_planet_a_load_water_enabled', true)) {
+                    buttons.addButton("Load Water", function() {unload(["Water", "Capri Stim", "Crimson Stim", "Amber Stim"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                break;
             case "m":
-                buttons.addButton("Starbase Run", loadStarbase);
-                buttons.addButton("Stock Run", loadStockRun);
-                buttons.addButton("Load Food", loadFood);
-                buttons.addButton("Load Water", function() {unload(["Water", "Capri Stim", "Crimson Stim", "Amber Stim"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
+                if (GM_getValue(universe + '_planet_m_starbase_run_enabled', true)) {
+                    buttons.addButton("Starbase Run", loadStarbase);
+                }
+                if (GM_getValue(universe + '_planet_m_stock_run_enabled', true)) {
+                    buttons.addButton("Stock Run", loadStockRun);
+                }
+                if (GM_getValue(universe + '_planet_m_load_food_enabled', true)) {
+                    buttons.addButton("Load Food", function() {unload(["Food", "Capri Stim", "Crimson Stim", "Amber Stim"]);ensureFuel();attempt_buy("Food", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                if (GM_getValue(universe + '_planet_m_load_water_enabled', true)) {
+                    buttons.addButton("Load Water", function() {unload(["Water", "Capri Stim", "Crimson Stim", "Amber Stim"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
+                }
                 break;
             case "i":
-                buttons.addButton("Planet Run", function() {unload(["Food","Water"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
-                buttons.addButton("Load Water", function() {unload(["Water"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
+                if (GM_getValue(universe + '_planet_i_planet_run_enabled', true)) {
+                    buttons.addButton("Planet Run", function() {unload(["Food","Water"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                if (GM_getValue(universe + '_planet_i_load_water_enabled', true)) {
+                    buttons.addButton("Load Water", function() {unload(["Water"]);ensureFuel();attempt_buy("Water", ship_space.allowedSpace());submitIfNotPreview();});
+                }
                 break;
             case "r":
-                buttons.addButton("Combo Run", function() {loadMultiBuy("planet_r_combo", ["Animal embryos", "Metal", "Ore", "Radioactive cells"], [10,5,15,1]);});
-                buttons.addButton("Load Embryos", function() {unload(["Animal embryos"]);ensureFuel();attempt_buy("Animal embryos", ship_space.allowedSpace());submitIfNotPreview();});
-                buttons.addButton("Load Metal", function() {unload(["Metal"]);ensureFuel();attempt_buy("Metal", ship_space.allowedSpace());submitIfNotPreview();});
-                buttons.addButton("Load Ore", function() {unload(["Ore"]);ensureFuel();attempt_buy("Ore", ship_space.allowedSpace());submitIfNotPreview();});
-                buttons.addButton("Load Rads", function() {unload(["Radioactive cells"]);ensureFuel();attempt_buy("Radioactive cells", ship_space.allowedSpace());submitIfNotPreview();});
+                if (GM_getValue(universe + '_planet_r_combo_run_enabled', true)) {
+                    buttons.addButton("Combo Run", function() {loadMultiBuy("planet_r_combo", ["Animal embryos", "Metal", "Ore", "Radioactive cells"], [10,5,15,1]);});
+                }
+                if (GM_getValue(universe + '_planet_r_load_embryos_enabled', true)) {
+                    buttons.addButton("Load Embryos", function() {unload(["Animal embryos"]);ensureFuel();attempt_buy("Animal embryos", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                if (GM_getValue(universe + '_planet_r_load_metal_enabled', true)) {
+                    buttons.addButton("Load Metal", function() {unload(["Metal"]);ensureFuel();attempt_buy("Metal", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                if (GM_getValue(universe + '_planet_r_load_ore_enabled', true)) {
+                    buttons.addButton("Load Ore", function() {unload(["Ore"]);ensureFuel();attempt_buy("Ore", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                if (GM_getValue(universe + '_planet_r_load_rads_enabled', true)) {
+                    buttons.addButton("Load Rads", function() {unload(["Radioactive cells"]);ensureFuel();attempt_buy("Radioactive cells", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                break;
+            case "g":
+                if (GM_getValue(universe + '_planet_g_load_embryos_enabled', true)) {
+                    buttons.addButton("Load Embryos", function() {unload(["Animal embryos"]);ensureFuel();attempt_buy("Animal embryos", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                if (GM_getValue(universe + '_planet_g_load_nebula_enabled', true)) {
+                    buttons.addButton("Load Nebula", function() {unload(["Nebula gas"]);ensureFuel();attempt_buy("Nebula gas", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+                if (GM_getValue(universe + '_planet_g_load_chems_enabled', true)) {
+                    buttons.addButton("Load Chemicals", function() {unload(["Chemical supplies"]);ensureFuel();attempt_buy("Chemical supplies", ship_space.allowedSpace());submitIfNotPreview();});
+                }
+            case "d":
+                if (GM_getValue(universe + '_planet_d_load_slaves_enabled', true)) {
+                    buttons.addButton("Load Slaves", function() {unload(["Slaves"]);ensureFuel();attempt_buy("Slaves", ship_space.allowedSpace());submitIfNotPreview();});
+                }
                 break;
             default:
                 break;
