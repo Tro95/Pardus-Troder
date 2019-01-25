@@ -2,6 +2,7 @@ function starbase() {
     var sell_table;
     var buy_table;
     var player_owned = false;
+    var items_to_droidwash = [];
 
     findStarbaseTables();
     parseStarbaseTables();
@@ -156,6 +157,22 @@ function starbase() {
     function addButtons() {
 
         buttons.createButtonsBox();
+
+        if (droid_wash_mode) {
+            if (GM_getValue(universe + "_droid_washing_starbase_enabled", false) == true) {
+                findItemsToDroidwash();
+                buttons.addDroidwashableItems(items_to_droidwash);
+                if (items_to_droidwash.length != 0) {
+                    if (isReadyToDroidWash()) {
+                        droidWash();
+                        buttons.addButton("Stop Droid Wash", endDroidWash);
+                    } else {
+                        buttons.addButton("Start Droid Wash", droidWash);
+                    }
+                }
+            }
+        }
+
         buttons.addButton("Planet Run", loadPlanet);
         buttons.addButton("Load Robots", loadRobots);
         buttons.addButton("Load MO", function() {loadMultiBuy("sb_mo_materials", ["Metal", "Ore"]);});
@@ -176,5 +193,77 @@ function starbase() {
         ensureFuel();
         attempt_buy("Robots", ship_space.allowedSpace());
         submitIfNotPreview();
+    }
+
+    function findItemsToDroidwash() {
+        var i;
+        for (i = 0; i < commodities.length; i++) {
+            if (commodities[i].max <= droid_wash_level && commodities[i].max > 0) {
+                items_to_droidwash.push(commodities[i].item);
+            }
+        }
+    }
+
+    function droidWash() {
+        var i;
+        unload(items_to_droidwash);
+        ensureFuel();
+
+        if (isReadyToDroidWash()) {
+            for (i = 0; i < items_to_droidwash.length; i++) {
+                if (ableToDroidWashItem(items_to_droidwash[i])) {
+                    attempt_sell(items_to_droidwash[i], 999);
+                    attempt_buy(items_to_droidwash[i], 999);
+                    commodities[items.indexOf(items_to_droidwash[i])].buy(parseInt(commodities[items.indexOf(items_to_droidwash[i])].buyValue()) + parseInt(commodities[items.indexOf(items_to_droidwash[i])].sellValue()) - 1);
+                }
+            }
+        } else {
+            for (i = 0; i < items_to_droidwash.length; i++) {
+                if (ableToDroidWashItem(items_to_droidwash[i])) {
+                    if (commodities[items.indexOf(items_to_droidwash[i])].trade_stock > commodities[items.indexOf(items_to_droidwash[i])].bal) {
+                        attempt_buy(items_to_droidwash[i], commodities[items.indexOf(items_to_droidwash[i])].trade_stock - commodities[items.indexOf(items_to_droidwash[i])].bal - 1);
+                    }
+                    if (commodities[items.indexOf(items_to_droidwash[i])].trade_stock <= commodities[items.indexOf(items_to_droidwash[i])].bal) {
+                        attempt_sell(items_to_droidwash[i], commodities[items.indexOf(items_to_droidwash[i])].bal - commodities[items.indexOf(items_to_droidwash[i])].trade_stock + 1);
+                    }
+                }
+            }
+        }
+    }
+
+    function ableToDroidWashItem(item) {
+        if (commodities[items.indexOf(item)].ship_stock + commodities[items.indexOf(item)].trade_stock > commodities[items.indexOf(item)].bal + 1) {
+            return true;
+        }
+        return false;
+    }
+
+    function endDroidWash() {
+        reset();
+        ensureFuel();
+
+        for (var i = 0; i < items_to_droidwash.length; i++) {
+            if (ableToDroidWashItem(items_to_droidwash[i])) {
+                attempt_buy(items_to_droidwash[i], 999);
+            }
+        }
+
+        submitIfNotPreview();
+    }
+
+    function isReadyToDroidWash() {
+        for (var i = 0; i < items_to_droidwash.length; i++) {
+            if (ableToDroidWashItem(items_to_droidwash[i])) {
+                if (commodities[items.indexOf(items_to_droidwash[i])].trade_stock > commodities[items.indexOf(items_to_droidwash[i])].bal + 1) {
+                    console.log("Item '" + items_to_droidwash[i] + "' has too many items starbase-side to begin the droidwash!");
+                    return false;
+                }
+                if (commodities[items.indexOf(items_to_droidwash[i])].trade_stock <= commodities[items.indexOf(items_to_droidwash[i])].bal) {
+                    console.log("Item '" + items_to_droidwash[i] + "' doesn't have enough items starbase-side to begin the droidwash!");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
