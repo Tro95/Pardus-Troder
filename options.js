@@ -20,6 +20,7 @@ function troderOptions() {
     planetROptions();
     planetGOptions();
     planetDOptions();
+    starbaseOptions();
 
     function planetAOptions() {
         var planet_a_options_box = troder_options_tab.addPremiumBoxLeft("Planets: Class A");
@@ -201,6 +202,42 @@ function troderOptions() {
             GM_setValue(universe + '_planet_d_load_slaves_enabled', load_slaves);
 
             displaySaved('troder-planet-d-save');
+        }
+    }
+
+    function starbaseOptions() {
+        var starbase_options_box = troder_options_tab.addBoxLeft("Starbases");
+        var starbase_inner_html = `<tr><td><table><tbody><tr><td><img src="https://static.pardus.at/img/std/foregrounds/starbase_p0_s4.png" /></td><td align="center">These options control the buttons displayed on the trade screen for Starbases (both NPC and player-controlled).</td></tr></tbody></table></td></tr><tr><td><table><tbody><tr><td>Enable 'Planet Run' button: </td><td><input id="troder-starbase-planet-run-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Robots' button: </td><td><input id="troder-starbase-load-robots-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load MO' button: </td><td><input id="troder-starbase-load-mo-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Metal' button: </td><td><input id="troder-starbase-load-metal-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Ore' button: </td><td><input id="troder-starbase-load-ore-enabled" type="checkbox"></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-starbase-save" type="button"></td></tr>`;
+        starbase_options_box.inner_html = starbase_inner_html;
+        starbase_options_box.refreshElement();
+
+        document.getElementById('troder-starbase-planet-run-enabled').checked = GM_getValue(universe + '_starbase_planet_run_enabled', true);
+        document.getElementById('troder-starbase-load-robots-enabled').checked = GM_getValue(universe + '_starbase_load_robots_enabled', true);
+        document.getElementById('troder-starbase-load-mo-enabled').checked = GM_getValue(universe + '_starbase_load_mo_enabled', true);
+        document.getElementById('troder-starbase-load-metal-enabled').checked = GM_getValue(universe + '_starbase_load_metal_enabled', true);
+        document.getElementById('troder-starbase-load-ore-enabled').checked = GM_getValue(universe + '_starbase_load_ore_enabled', true);
+
+        var starbase_save_button = document.getElementById('troder-starbase-save');
+        if (starbase_save_button.addEventListener) {
+            starbase_save_button.addEventListener("click", saveStarbaseOptions, false);
+        } else if (starbase_save_button.attachEvent) {
+            starbase_save_button.attachEvent('onclick', saveStarbaseOptions);
+        }
+
+        function saveStarbaseOptions() {
+            var planet_run = document.getElementById('troder-starbase-planet-run-enabled').checked;
+            var load_robots = document.getElementById('troder-starbase-load-robots-enabled').checked;
+            var load_mo = document.getElementById('troder-starbase-load-mo-enabled').checked;
+            var load_metal = document.getElementById('troder-starbase-load-metal-enabled').checked;
+            var load_ore = document.getElementById('troder-starbase-load-ore-enabled').checked;
+
+            GM_setValue(universe + '_starbase_planet_run_enabled', planet_run);
+            GM_setValue(universe + '_starbase_load_robots_enabled', load_robots);
+            GM_setValue(universe + '_starbase_load_mo_enabled', load_mo);
+            GM_setValue(universe + '_starbase_load_metal_enabled', load_metal);
+            GM_setValue(universe + '_starbase_load_ore_enabled', load_ore);
+
+            displaySaved('troder-starbase-save');
         }
     }
 
