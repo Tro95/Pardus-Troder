@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.9
+// @version         1.10
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -16,16 +16,17 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.9/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.9/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.9/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.9/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.9/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.9/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.9/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/options.js
 //
 // ==/UserScript==
 
+// v1.10  Added Starbase and Blackmarket options
 // v1.9   Added droid washing capabilities for NPC SBs
 // v1.8   Added buttons for G and D class planets, and made all planet buttons configurable on the options page
 // v1.7   Greatly improved the droidwashing capabilities
