@@ -21,6 +21,7 @@ function troderOptions() {
     planetGOptions();
     planetDOptions();
     starbaseOptions();
+    blackmarketOptions();
 
     function planetAOptions() {
         var planet_a_options_box = troder_options_tab.addPremiumBoxLeft("Planets: Class A");
@@ -238,6 +239,46 @@ function troderOptions() {
             GM_setValue(universe + '_starbase_load_ore_enabled', load_ore);
 
             displaySaved('troder-starbase-save');
+        }
+    }
+
+    function blackmarketOptions() {
+        var blackmarket_options_box = troder_options_tab.addBoxRight("Black Market");
+        var blackmarket_inner_html = `<tr><td><table><tbody><tr><td><img src="https://static.pardus.at/img/std/foregrounds/dark_dome.png" /></td><td align="center">These options control the buttons displayed on the trade screen for the Black Market.</td></tr></tbody></table></td></tr><tr><td><table><tbody><tr><td>Enable 'Load MOE' button: </td><td><input id="troder-blackmarket-load-moe-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Energy' button: </td><td><input id="troder-blackmarket-load-energy-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Metal' button: </td><td><input id="troder-blackmarket-load-metal-enabled" type="checkbox"></td></tr><tr><td>Enable 'Load Ore' button: </td><td><input id="troder-blackmarket-load-ore-enabled" type="checkbox"></td></tr><tr><td>Enable 'Sell Drugs' button: </td><td><input id="troder-blackmarket-sell-drugs-enabled" type="checkbox"></td></tr><tr><td>Quantity of drugs to sell: </td><td><select id="troder-blackmarket-drugs-to-sell"> <option value="0">None</option> <option value="1">1</option> <option value="2">2</option> <option value="3">3</option> <option value="4">4</option> <option value="5">5</option> <option value="6">6</option> <option value="7">7</option> <option value="8">8</option> <option value="9">9</option> <option value="10">10</option> </select></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-blackmarket-save" type="button"></td></tr>`;
+
+        blackmarket_options_box.inner_html = blackmarket_inner_html;
+        blackmarket_options_box.refreshElement();
+
+        document.getElementById('troder-blackmarket-load-moe-enabled').checked = GM_getValue(universe + '_blackmarket_load_moe_enabled', true);
+        document.getElementById('troder-blackmarket-load-energy-enabled').checked = GM_getValue(universe + '_blackmarket_load_energy_enabled', true);
+        document.getElementById('troder-blackmarket-load-metal-enabled').checked = GM_getValue(universe + '_blackmarket_load_metal_enabled', true);
+        document.getElementById('troder-blackmarket-load-ore-enabled').checked = GM_getValue(universe + '_blackmarket_load_ore_enabled', true);
+        document.getElementById('troder-blackmarket-sell-drugs-enabled').checked = GM_getValue(universe + '_blackmarket_sell_drugs_enabled', true);
+        document.getElementById('troder-blackmarket-drugs-to-sell').value = GM_getValue(universe + '_blackmarket_drugs_to_sell', 2);
+
+        var blackmarket_save_button = document.getElementById('troder-blackmarket-save');
+        if (blackmarket_save_button.addEventListener) {
+            blackmarket_save_button.addEventListener("click", saveBlackmarketOptions, false);
+        } else if (blackmarket_save_button.attachEvent) {
+            blackmarket_save_button.attachEvent('onclick', saveBlackmarketOptions);
+        }
+
+        function saveBlackmarketOptions() {
+            var load_moe = document.getElementById('troder-blackmarket-load-moe-enabled').checked
+            var load_energy = document.getElementById('troder-blackmarket-load-energy-enabled').checked
+            var load_metal = document.getElementById('troder-blackmarket-load-metal-enabled').checked
+            var load_ore = document.getElementById('troder-blackmarket-load-ore-enabled').checked;
+            var sell_drugs = document.getElementById('troder-blackmarket-sell-drugs-enabled').checked;
+            var drugs_to_sell = document.getElementById('troder-blackmarket-drugs-to-sell').value;
+
+            GM_setValue(universe + '_blackmarket_load_moe_enabled', load_moe);
+            GM_setValue(universe + '_blackmarket_load_energy_enabled', load_energy);
+            GM_setValue(universe + '_blackmarket_load_metal_enabled', load_metal);
+            GM_setValue(universe + '_blackmarket_load_ore_enabled', load_ore);
+            GM_setValue(universe + '_blackmarket_sell_drugs_enabled', sell_drugs);
+            GM_setValue(universe + '_blackmarket_drugs_to_sell', drugs_to_sell);
+
+            displaySaved('troder-blackmarket-save');
         }
     }
 

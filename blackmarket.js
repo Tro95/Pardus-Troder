@@ -135,19 +135,29 @@ function blackmarket() {
     function addButtons() {
 
         buttons.createButtonsBox();
-        //buttons.addButton("Planet Run", loadPlanet);
-        //buttons.addButton("Load Robots", loadRobots);
-        buttons.addButton("Load MOE", function() {loadMultiBuy("bm_construction_materials", ["Energy", "Metal", "Ore"]);});
-        buttons.addButton("Load Energy", function() {unload(["Energy"]);ensureFuel();attempt_buy("Energy", ship_space.allowedSpace());submitIfNotPreview();});
-        buttons.addButton("Load Metal", function() {unload(["Metal"]);ensureFuel();attempt_buy("Metal", ship_space.allowedSpace());submitIfNotPreview();});
-        buttons.addButton("Load Ore", function() {unload(["Ore"]);ensureFuel();attempt_buy("Ore", ship_space.allowedSpace());submitIfNotPreview();});
-        buttons.addButton("Sell Drugs", unloadDrugs);
+
+        if (GM_getValue(universe + '_blackmarket_load_moe_enabled', true)) {
+            buttons.addButton("Load MOE", function() {loadMultiBuy("bm_construction_materials", ["Energy", "Metal", "Ore"]);});
+        }
+        if (GM_getValue(universe + '_blackmarket_load_energy_enabled', true)) {
+            buttons.addButton("Load Energy", function() {unload(["Energy"]);ensureFuel();attempt_buy("Energy", ship_space.allowedSpace());submitIfNotPreview();});
+        }
+        if (GM_getValue(universe + '_blackmarket_load_metal_enabled', true)) {
+            buttons.addButton("Load Metal", function() {unload(["Metal"]);ensureFuel();attempt_buy("Metal", ship_space.allowedSpace());submitIfNotPreview();});
+        }
+        if (GM_getValue(universe + '_blackmarket_load_ore_enabled', true)) {
+            buttons.addButton("Load Ore", function() {unload(["Ore"]);ensureFuel();attempt_buy("Ore", ship_space.allowedSpace());submitIfNotPreview();});
+        }
+        if (GM_getValue(universe + '_blackmarket_sell_drugs_enabled', true)) {
+            buttons.addButton("Sell Drugs", unloadDrugs);
+        }
+        
         buttons.addStandardButtons();
     }
 
     function unloadDrugs() {
         ensureFuel();
-        attempt_sell("Drugs", drugs_to_sell);
+        attempt_sell("Drugs", GM_getValue(universe + '_blackmarket_drugs_to_sell', 2));
         submitIfNotPreview();
     }
 

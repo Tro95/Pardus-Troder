@@ -54,8 +54,6 @@ var magscoop_free_space = 0;
 var total_free_space = 0;
 var allowed_free_space = 0;
 var magscoop_allowed = false;
-var drugs_to_sell = 2;
-
 
 var universe = '';
 var fuel = 0;
