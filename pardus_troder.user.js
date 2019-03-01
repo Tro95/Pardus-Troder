@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.10
+// @version         1.10.1
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -16,34 +16,35 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.1/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.1/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.1/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.1/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.1/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.1/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.1/options.js
 //
 // ==/UserScript==
 
-// v1.10  Added Starbase and Blackmarket options
-// v1.9   Added droid washing capabilities for NPC SBs
-// v1.8   Added buttons for G and D class planets, and made all planet buttons configurable on the options page
-// v1.7   Greatly improved the droidwashing capabilities
-// v1.6.4 Added userscript icon and resource versioning
-// v1.6.3 Planet buttons no longer sell coloured stims
-// v1.6.2 Fixed multibuy issue when minimum stock values were conflicting with amount attempting to be bought.
-// v1.6.1 Fixed issue with values being calculated incorrectly if there was already values in the buy or sell elements
-// v1.6   Added fuel dropping from the drop cargo screen
-// v1.5.1 Fixed SB metal and ore buttons from unloading any metal and ore before rebuying it
-// v1.5   Added R class planet buttons and extended black market buttons.
-// v1.4   Migrated to the Pardus Options script, revamping the options page and adding additional options for droid washing
-// v1.3   Added support for the black market
-// v1.2.1 Fixed two semi-colon issues
-// v1.2   New options tab and droid washing capabilities
-// v1.1.1 Fixed a bug with preview on starbases
-// v1.1   Added preview option
-// v1.0   Initial script still with work to do
+// v1.10.1 Increased max fuel quantities to 20 (from 10 originally)
+// v1.10   Added Starbase and Blackmarket options
+// v1.9    Added droid washing capabilities for NPC SBs
+// v1.8    Added buttons for G and D class planets, and made all planet buttons configurable on the options page
+// v1.7    Greatly improved the droidwashing capabilities
+// v1.6.4  Added userscript icon and resource versioning
+// v1.6.3  Planet buttons no longer sell coloured stims
+// v1.6.2  Fixed multibuy issue when minimum stock values were conflicting with amount attempting to be bought.
+// v1.6.1  Fixed issue with values being calculated incorrectly if there was already values in the buy or sell elements
+// v1.6    Added fuel dropping from the drop cargo screen
+// v1.5.1  Fixed SB metal and ore buttons from unloading any metal and ore before rebuying it
+// v1.5    Added R class planet buttons and extended black market buttons.
+// v1.4    Migrated to the Pardus Options script, revamping the options page and adding additional options for droid washing
+// v1.3    Added support for the black market
+// v1.2.1  Fixed two semi-colon issues
+// v1.2    New options tab and droid washing capabilities
+// v1.1.1  Fixed a bug with preview on starbases
+// v1.1    Added preview option
+// v1.0    Initial script still with work to do
 
 var commodities = [];
 
