@@ -160,7 +160,7 @@ var buttons = {
                 document.getElementById("useMagScoop").checked = true;
             }
 
-            document.getElementById('useMagScoop').addEventListener("click", isMagscoopAllowed, true);
+            document.getElementById('useMagScoop').addEventListener("change", isMagscoopAllowed, true);
         }
 
         if (preview) {
@@ -171,8 +171,8 @@ var buttons = {
             document.getElementById("autoUnload").checked = true;
         }
 
-        document.getElementById('autoUnload').addEventListener("click", isAutoUnload, true);
-        document.getElementById('troder-preview-trade').addEventListener("click", isPreview, true);
+        document.getElementById('autoUnload').addEventListener("change", isAutoUnload, true);
+        document.getElementById('troder-preview-trade').addEventListener("change", isPreview, true);
 
         function isMagscoopAllowed() {
             if (document.getElementById('useMagScoop').checked == true) {
