@@ -27,6 +27,7 @@
 //
 // ==/UserScript==
 
+// v1.10.3 Minor UI fixes on the options page, and added defaults.js file to help with mobile settings not saving
 // v1.10.2 Made default buttons mobile-friendly
 // v1.10.1 Increased max fuel quantities to 20 (from 10 originally)
 // v1.10   Added Starbase and Blackmarket options
