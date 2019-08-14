@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.10.2
+// @version         1.10.3
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -16,12 +16,13 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.2/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.2/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.2/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.2/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.2/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.2/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.2/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.3/defaults.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.3/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.3/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.3/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.3/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.3/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.3/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.3/options.js
 //
 // ==/UserScript==
