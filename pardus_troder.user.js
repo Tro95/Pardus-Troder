@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.10.4
+// @version         1.10.5
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -15,18 +15,19 @@
 // @grant           GM_setValue
 // @grant           GM_getValue
 // @grant           unsafeWindow
-// @require         https://gist.github.com/Tro95/3b102f4b834682bd2d2793b66e47845a/raw/pardus_options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.4/defaults.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.4/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.4/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.4/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.4/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.4/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.4/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.4/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v1.0/pardus_options_library.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.5/defaults.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.5/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.5/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.5/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.5/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.5/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.5/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.5/options.js
 //
 // ==/UserScript==
 
+// v1.10.5 Moving to the general release of the Pardus Options Library
 // v1.10.4 Fixed a bug where the magscoop_allowed variable was not loaded from settings correctly
 // v1.10.3 Minor UI fixes on the options page, and added defaults.js file to help with mobile settings not saving
 // v1.10.2 Made default buttons mobile-friendly
