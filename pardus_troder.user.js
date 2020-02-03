@@ -162,6 +162,8 @@ var buttons = {
 
             if (GM_getValue(universe + '_magscoop_allowed', defaults['use_magscoop'])) {
                 document.getElementById("useMagScoop").checked = true;
+            } else {
+                document.getElementById("useMagScoop").checked = false;
             }
 
             document.getElementById('useMagScoop').addEventListener("change", isMagscoopAllowed, true);
