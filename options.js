@@ -229,8 +229,6 @@ function troderOptions() {
         }
 
         function setFuelPurchaseOptions(fuel_amount_select, fuel_auto_purchase_select) {
-            console.log("Called!");
-
             var permitted_fuel_amounts = fuel_amount_select.options;
             var value_to_set = fuel_auto_purchase_select.getValue();
             var current_space_for_fuel = parseInt(fuel_amount_select.getCurrentValue());
