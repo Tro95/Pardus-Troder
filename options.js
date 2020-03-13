@@ -6,7 +6,7 @@
  */
 function troderOptions() {
     var troder_options_tab = unsafeWindow.Options.addNewTab('Troder Options', 'troder-options', GM_setValue, GM_getValue);
-    var main_options_box = troder_options_tab.addBox("Main Options");
+    var main_options_box = troder_options_tab.addBox({heading: "Main Options"});
     main_options_box.description.setDescription("These are the options for the Pardus Troder script.");
 
     droidWashingOptions();
@@ -21,85 +21,85 @@ function troderOptions() {
     blackmarketOptions();
 
     function planetAOptions() {
-        var planet_a_options_box = troder_options_tab.addPremiumBoxLeft("Planets: Class A");
+        var planet_a_options_box = troder_options_tab.addPremiumBoxLeft({heading: "Planets: Class A"});
         planet_a_options_box.description.setDescription("These options control the buttons displayed on the trade screen for Class A planets (which are only available in the Pardus Cluster).");
         planet_a_options_box.description.addImageLeft("https://static.pardus.at/img/std/foregrounds/planet_a.png");
-        planet_a_options_box.addBooleanOption("planet_a_starbase_run_enabled", "Enable 'Starbase Run' button: ", true);
-        planet_a_options_box.addBooleanOption("planet_a_stock_run_enabled", "Enable 'Stock Run' button: ", true);
-        planet_a_options_box.addBooleanOption("planet_a_load_food_enabled", "Enable 'Load Food' button: ", true);
-        planet_a_options_box.addBooleanOption("planet_a_load_water_enabled", "Enable 'Load Water' button: ", true);
+        planet_a_options_box.addBooleanOption({variable: "planet_a_starbase_run_enabled", description: "Enable 'Starbase Run' button:", defaultValue: true});
+        planet_a_options_box.addBooleanOption({variable: "planet_a_stock_run_enabled", description: "Enable 'Stock Run' button:", defaultValue: true});
+        planet_a_options_box.addBooleanOption({variable: "planet_a_load_food_enabled", description: "Enable 'Load Food' button:", defaultValue: true});
+        planet_a_options_box.addBooleanOption({variable: "planet_a_load_water_enabled", description: "Enable 'Load Water' button:", defaultValue: true});
     }
 
     function planetMOptions() {
-        var planet_m_options_box = troder_options_tab.addBoxRight("Planets: Class M");
+        var planet_m_options_box = troder_options_tab.addBoxRight({heading: "Planets: Class M"});
         planet_m_options_box.description.setDescription("These options control the buttons displayed on the trade screen for Class M planets.");
         planet_m_options_box.description.addImageLeft("https://static.pardus.at/img/std/foregrounds/planet_m.png");
-        planet_m_options_box.addBooleanOption("planet_m_starbase_run_enabled", "Enable 'Starbase Run' button: ", true);
-        planet_m_options_box.addBooleanOption("planet_m_stock_run_enabled", "Enable 'Stock Run' button: ", true);
-        planet_m_options_box.addBooleanOption("planet_m_load_food_enabled", "Enable 'Load Food' button: ", true);
-        planet_m_options_box.addBooleanOption("planet_m_load_water_enabled", "Enable 'Load Water' button: ", true);
+        planet_m_options_box.addBooleanOption({variable: "planet_m_starbase_run_enabled", description: "Enable 'Starbase Run' button: ", defaultValue: true});
+        planet_m_options_box.addBooleanOption({variable: "planet_m_stock_run_enabled", description: "Enable 'Stock Run' button: ", defaultValue: true});
+        planet_m_options_box.addBooleanOption({variable: "planet_m_load_food_enabled", description: "Enable 'Load Food' button: ", defaultValue: true});
+        planet_m_options_box.addBooleanOption({variable: "planet_m_load_water_enabled", description: "Enable 'Load Water' button: ", defaultValue: true});
     }
 
     function planetIOptions() {
-        var planet_i_options_box = troder_options_tab.addBoxLeft("Planets: Class I");
+        var planet_i_options_box = troder_options_tab.addBoxLeft({heading: "Planets: Class I"});
         planet_i_options_box.description.setDescription("These options control the buttons displayed on the trade screen for Class i planets.");
         planet_i_options_box.description.addImageLeft("https://static.pardus.at/img/std/foregrounds/planet_i.png");
-        planet_i_options_box.addBooleanOption("planet_i_planet_run_enabled", "Enable 'Planet Run' button: ", true);
-        planet_i_options_box.addBooleanOption("planet_i_load_water_enabled", "Enable 'Load Water' button: ", true);
+        planet_i_options_box.addBooleanOption({variable: "planet_i_planet_run_enabled", description: "Enable 'Planet Run' button: ", defaultValue: true});
+        planet_i_options_box.addBooleanOption({variable: "planet_i_load_water_enabled", description: "Enable 'Load Water' button: ", defaultValue: true});
     }
 
     function planetROptions() {
-        var planet_r_options_box = troder_options_tab.addBoxLeft("Planets: Class R");
+        var planet_r_options_box = troder_options_tab.addBoxLeft({heading: "Planets: Class R"});
         planet_r_options_box.description.setDescription("These options control the buttons displayed on the trade screen for Class R planets.");
         planet_r_options_box.description.addImageLeft("https://static.pardus.at/img/std/foregrounds/planet_r.png");
-        planet_r_options_box.addBooleanOption("planet_r_combo_run_enabled", "Enable 'Combo Run' button: ", true);
-        planet_r_options_box.addBooleanOption("planet_r_load_embryos_enabled", "Enable 'Load Embryos' button: ", true);
-        planet_r_options_box.addBooleanOption("planet_r_load_metal_enabled", "Enable 'Load Metal' button: ", true);
-        planet_r_options_box.addBooleanOption("planet_r_load_ore_enabled", "Enable 'Load Ore' button: ", true);
-        planet_r_options_box.addBooleanOption("planet_r_load_rads_enabled", "Enable 'Load Rads' button: ", true);
+        planet_r_options_box.addBooleanOption({variable: "planet_r_combo_run_enabled", description: "Enable 'Combo Run' button: ", defaultValue: true});
+        planet_r_options_box.addBooleanOption({variable: "planet_r_load_embryos_enabled", description: "Enable 'Load Embryos' button: ", defaultValue: true});
+        planet_r_options_box.addBooleanOption({variable: "planet_r_load_metal_enabled", description: "Enable 'Load Metal' button: ", defaultValue: true});
+        planet_r_options_box.addBooleanOption({variable: "planet_r_load_ore_enabled", description: "Enable 'Load Ore' button: ", defaultValue: true});
+        planet_r_options_box.addBooleanOption({variable: "planet_r_load_rads_enabled", description: "Enable 'Load Rads' button: ", defaultValue: true});
     }
 
     function planetGOptions() {
-        var planet_g_options_box = troder_options_tab.addBoxRight("Planets: Class G");
+        var planet_g_options_box = troder_options_tab.addBoxRight({heading: "Planets: Class G"});
         planet_g_options_box.description.setDescription("These options control the buttons displayed on the trade screen for Class G planets.");
         planet_g_options_box.description.addImageLeft("https://static.pardus.at/img/std/foregrounds/planet_g.png");
-        planet_g_options_box.addBooleanOption("planet_g_load_embryos_enabled", "Enable 'Load Embryos' button: ", true);
-        planet_g_options_box.addBooleanOption("planet_g_load_nebula_enabled", "Enable 'Load Nebula' button: ", true);
-        planet_g_options_box.addBooleanOption("planet_g_load_chems_enabled", "Enable 'Load Chems' button: ", true);
+        planet_g_options_box.addBooleanOption({variable: "planet_g_load_embryos_enabled", description: "Enable 'Load Embryos' button: ", defaultValue: true});
+        planet_g_options_box.addBooleanOption({variable: "planet_g_load_nebula_enabled", description: "Enable 'Load Nebula' button: ", defaultValue: true});
+        planet_g_options_box.addBooleanOption({variable: "planet_g_load_chems_enabled", description: "Enable 'Load Chems' button: ", defaultValue: true});
     }
 
     function planetDOptions() {
-        var planet_d_options_box = troder_options_tab.addBoxRight("Planets: Class D");
+        var planet_d_options_box = troder_options_tab.addBoxRight({heading: "Planets: Class D"});
         planet_d_options_box.description.setDescription("These options control the buttons displayed on the trade screen for Class D planets.");
         planet_d_options_box.description.addImageLeft("https://static.pardus.at/img/std/foregrounds/planet_d.png");
-        planet_d_options_box.addBooleanOption("planet_d_load_slaves_enabled", "Enable 'Load Slaves' button: ", true);
+        planet_d_options_box.addBooleanOption({variable: "planet_d_load_slaves_enabled", description: "Enable 'Load Slaves' button: ", defaultValue: true});
     }
 
     function starbaseOptions() {
-        var starbase_options_box = troder_options_tab.addBoxLeft("Starbases");
+        var starbase_options_box = troder_options_tab.addBoxLeft({heading: "Starbases"});
         starbase_options_box.description.setDescription("These options control the buttons displayed on the trade screen for Starbases (both NPC and player-controlled).");
         starbase_options_box.description.addImageLeft("https://static.pardus.at/img/std/foregrounds/starbase_p0_s4.png");
-        starbase_options_box.addBooleanOption("starbase_planet_run_enabled", "Enable 'Planet Run' button: ", true);
-        starbase_options_box.addBooleanOption("starbase_load_robots_enabled", "Enable 'Load Robots' button: ", true);
-        starbase_options_box.addBooleanOption("starbase_load_mo_enabled", "Enable 'Load MO' button: ", true);
-        starbase_options_box.addBooleanOption("starbase_load_metal_enabled", "Enable 'Load Metal' button: ", true);
-        starbase_options_box.addBooleanOption("starbase_load_ore_enabled", "Enable 'Load Ore' button: ", true);
+        starbase_options_box.addBooleanOption({variable: "starbase_planet_run_enabled", description: "Enable 'Planet Run' button: ", defaultValue: true});
+        starbase_options_box.addBooleanOption({variable: "starbase_load_robots_enabled", description: "Enable 'Load Robots' button: ", defaultValue: true});
+        starbase_options_box.addBooleanOption({variable: "starbase_load_mo_enabled", description: "Enable 'Load MO' button: ", defaultValue: true});
+        starbase_options_box.addBooleanOption({variable: "starbase_load_metal_enabled", description: "Enable 'Load Metal' button: ", defaultValue: true});
+        starbase_options_box.addBooleanOption({variable: "starbase_load_ore_enabled", description: "Enable 'Load Ore' button: ", defaultValue: true});
     }
 
     function blackmarketOptions() {
-        var blackmarket_options_box = troder_options_tab.addBoxRight("Black Market");
+        var blackmarket_options_box = troder_options_tab.addBoxRight({heading: "Black Market"});
         blackmarket_options_box.description.setDescription("These options control the buttons displayed on the trade screen for the Black Market.");
         blackmarket_options_box.description.addImageLeft("https://static.pardus.at/img/std/foregrounds/dark_dome.png");
-        blackmarket_options_box.addBooleanOption("blackmarket_load_moe_enabled", "Enable 'Load MOE' button: ", true);
-        blackmarket_options_box.addBooleanOption("blackmarket_load_energy_enabled", "Enable 'Load Energy' button: ", true);
-        blackmarket_options_box.addBooleanOption("blackmarket_load_metal_enabled", "Enable 'Load Metal' button: ", true);
-        blackmarket_options_box.addBooleanOption("blackmarket_load_ore_enabled", "Enable 'Load Ore' button: ", true);
-        blackmarket_options_box.addBooleanOption("blackmarket_sell_drugs_enabled", "Enable 'Sell Drugs' button: ", true);
-        blackmarket_options_box.addNumericOption("blackmarket_drugs_to_sell", "Quantity of drugs to sell: ", 2, 1, 100);
+        blackmarket_options_box.addBooleanOption({variable: "blackmarket_load_moe_enabled", description: "Enable 'Load MOE' button: ", defaultValue: true});
+        blackmarket_options_box.addBooleanOption({variable: "blackmarket_load_energy_enabled", description: "Enable 'Load Energy' button: ", defaultValue: true});
+        blackmarket_options_box.addBooleanOption({variable: "blackmarket_load_metal_enabled", description: "Enable 'Load Metal' button: ", defaultValue: true});
+        blackmarket_options_box.addBooleanOption({variable: "blackmarket_load_ore_enabled", description: "Enable 'Load Ore' button: ", defaultValue: true});
+        blackmarket_options_box.addBooleanOption({variable: "blackmarket_sell_drugs_enabled", description: "Enable 'Sell Drugs' button: ", defaultValue: true});
+        blackmarket_options_box.addNumericOption({variable: "blackmarket_drugs_to_sell", description: "Quantity of drugs to sell: ", defaultValue: 2, min: 1, max: 100});
     }
 
     function droidWashingOptions() {
-        var droid_washing_options_box = troder_options_tab.addBox("Droid Washing");
+        var droid_washing_options_box = troder_options_tab.addBox({heading: "Droid Washing"});
         droid_washing_options_box.description.setDescription("The droid washing mode is something that you can activate to assist in droid washing. If you are not actively droid washing it is recommended you disable droid washing mode. These options control how the droid washing mode works.");
         droid_washing_options_box.description.setAlignment("left");
 
@@ -186,7 +186,7 @@ function troderOptions() {
     }
 
     function fuelOptions() {
-        var fuel_options_box = troder_options_tab.addBox("Refueling");
+        var fuel_options_box = troder_options_tab.addBox({heading: "Refueling"});
         fuel_options_box.description.setDescription("These options control the amount of space to leave for fuel, and whether or not you wish to purchase additional fuel automatically.");
         fuel_options_box.description.setAlignment("left");
 
@@ -214,11 +214,11 @@ function troderOptions() {
             { value: "20", text: "20" },
         ];
 
-        var fuel_amount_select = fuel_options_box.addSelectOption("fuel_space_left", "Amount of space left for fuel: ", permitted_fuel_amounts, 5);
+        var fuel_amount_select = fuel_options_box.addSelectOption({variable: "fuel_space_left", description: "Amount of space left for fuel: ", options: permitted_fuel_amounts, defaultValue: "5"});
 
 
         var fuel_to_purchase = permitted_fuel_amounts.slice(0, parseInt(fuel_amount_select.getCurrentValue()) + 1);
-        var fuel_auto_purchase_select = fuel_options_box.addSelectOption("fuel_to_purchase", "Amount of fuel to automatically purchase: ", fuel_to_purchase, 5);
+        var fuel_auto_purchase_select = fuel_options_box.addSelectOption({variable: "fuel_to_purchase", description: "Amount of fuel to automatically purchase: ", options: fuel_to_purchase, defaultValue: "5"});
 
         var fuel_amount_element = fuel_amount_select.getElement();
 

@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.10.7
+// @version         1.10.8
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -15,18 +15,19 @@
 // @grant           GM_setValue
 // @grant           GM_getValue
 // @grant           unsafeWindow
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v1.2/pardus_options_library.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.7/defaults.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.7/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.7/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.7/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.7/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.7/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.7/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.7/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v1.3/pardus_options_library.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.8/defaults.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.8/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.8/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.8/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.8/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.8/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.8/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.8/options.js
 //
 // ==/UserScript==
 
+// v1.10.8 Upgrading to Pardus Options Library v1.3
 // v1.10.7 Upgrading to Pardus Options Library v1.2, with major options refactoring
 // v1.10.6 Upgrading to Pardus Options Library v1.1
 // v1.10.5 Moving to the general release of the Pardus Options Library
