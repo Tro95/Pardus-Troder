@@ -5,7 +5,7 @@
  *  as well as enabling/disabling droid wash mode
  */
 function troderOptions() {
-    var troder_options_tab = unsafeWindow.Options.addNewTab('Troder Options', 'troder-options', GM_setValue, GM_getValue);
+    var troder_options_tab = unsafeWindow.PardusOptions.addTab({heading: 'Troder Options', id: 'troder-options', saveFunction: GM_setValue, getFunction: GM_getValue});
     var main_options_box = troder_options_tab.addBox({heading: "Main Options"});
     main_options_box.description.setDescription("These are the options for the Pardus Troder script.");
 
