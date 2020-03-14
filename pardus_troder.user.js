@@ -265,8 +265,6 @@ var buttons = {
 
 bootstrap();
 
-console.log(commodities);
-
 if (document.location.pathname == '/options.php') {
     //placeOptions();
     troderOptions();
