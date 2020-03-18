@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.10.9
+// @version         1.10.10
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -15,45 +15,46 @@
 // @grant           GM_setValue
 // @grant           GM_getValue
 // @grant           unsafeWindow
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v1.4/pardus_options_library.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.9/defaults.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.9/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.9/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.9/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.9/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.9/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.9/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.9/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v1.5/pardus_options_library.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/defaults.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/options.js
 //
 // ==/UserScript==
 
-// v1.10.9 Upgrading to Pardus Options Library v1.4
-// v1.10.8 Upgrading to Pardus Options Library v1.3
-// v1.10.7 Upgrading to Pardus Options Library v1.2, with major options refactoring
-// v1.10.6 Upgrading to Pardus Options Library v1.1
-// v1.10.5 Moving to the general release of the Pardus Options Library
-// v1.10.4 Fixed a bug where the magscoop_allowed variable was not loaded from settings correctly
-// v1.10.3 Minor UI fixes on the options page, and added defaults.js file to help with mobile settings not saving
-// v1.10.2 Made default buttons mobile-friendly
-// v1.10.1 Increased max fuel quantities to 20 (from 10 originally)
-// v1.10   Added Starbase and Blackmarket options
-// v1.9    Added droid washing capabilities for NPC SBs
-// v1.8    Added buttons for G and D class planets, and made all planet buttons configurable on the options page
-// v1.7    Greatly improved the droidwashing capabilities
-// v1.6.4  Added userscript icon and resource versioning
-// v1.6.3  Planet buttons no longer sell coloured stims
-// v1.6.2  Fixed multibuy issue when minimum stock values were conflicting with amount attempting to be bought.
-// v1.6.1  Fixed issue with values being calculated incorrectly if there was already values in the buy or sell elements
-// v1.6    Added fuel dropping from the drop cargo screen
-// v1.5.1  Fixed SB metal and ore buttons from unloading any metal and ore before rebuying it
-// v1.5    Added R class planet buttons and extended black market buttons.
-// v1.4    Migrated to the Pardus Options script, revamping the options page and adding additional options for droid washing
-// v1.3    Added support for the black market
-// v1.2.1  Fixed two semi-colon issues
-// v1.2    New options tab and droid washing capabilities
-// v1.1.1  Fixed a bug with preview on starbases
-// v1.1    Added preview option
-// v1.0    Initial script still with work to do
+// v1.10.10 Upgrading to Pardus Options Library v1.5 with minor options refactoring
+// v1.10.9  Upgrading to Pardus Options Library v1.4
+// v1.10.8  Upgrading to Pardus Options Library v1.3
+// v1.10.7  Upgrading to Pardus Options Library v1.2, with major options refactoring
+// v1.10.6  Upgrading to Pardus Options Library v1.1
+// v1.10.5  Moving to the general release of the Pardus Options Library
+// v1.10.4  Fixed a bug where the magscoop_allowed variable was not loaded from settings correctly
+// v1.10.3  Minor UI fixes on the options page, and added defaults.js file to help with mobile settings not saving
+// v1.10.2  Made default buttons mobile-friendly
+// v1.10.1  Increased max fuel quantities to 20 (from 10 originally)
+// v1.10    Added Starbase and Blackmarket options
+// v1.9     Added droid washing capabilities for NPC SBs
+// v1.8     Added buttons for G and D class planets, and made all planet buttons configurable on the options page
+// v1.7     Greatly improved the droidwashing capabilities
+// v1.6.4   Added userscript icon and resource versioning
+// v1.6.3   Planet buttons no longer sell coloured stims
+// v1.6.2   Fixed multibuy issue when minimum stock values were conflicting with amount attempting to be bought.
+// v1.6.1   Fixed issue with values being calculated incorrectly if there was already values in the buy or sell elements
+// v1.6     Added fuel dropping from the drop cargo screen
+// v1.5.1   Fixed SB metal and ore buttons from unloading any metal and ore before rebuying it
+// v1.5     Added R class planet buttons and extended black market buttons.
+// v1.4     Migrated to the Pardus Options script, revamping the options page and adding additional options for droid washing
+// v1.3     Added support for the black market
+// v1.2.1   Fixed two semi-colon issues
+// v1.2     New options tab and droid washing capabilities
+// v1.1.1   Fixed a bug with preview on starbases
+// v1.1     Added preview option
+// v1.0     Initial script still with work to do
 
 var commodities = [];
 
