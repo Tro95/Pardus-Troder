@@ -25,6 +25,6 @@
 // @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.11/blackmarket.js
 // @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.11/drop_cargo.js
 // @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.11/options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.11/ship_transfer
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.11/ship_transfer.js
 //
 // ==/UserScript==
