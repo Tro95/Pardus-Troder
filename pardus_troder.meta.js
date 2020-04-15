@@ -16,13 +16,13 @@
 // @grant           GM_getValue
 // @grant           unsafeWindow
 // @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v2.0/pardus_options_library.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/defaults.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.10/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.11/defaults.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.11/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.11/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.11/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.11/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.11/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.11/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.10.11/options.js
 //
 // ==/UserScript==
