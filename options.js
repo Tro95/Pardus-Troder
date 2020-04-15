@@ -5,11 +5,9 @@
  *  as well as enabling/disabling droid wash mode
  */
 function troderOptions() {
-    var troder_options_tab = unsafeWindow.PardusOptions.addTab({
+    var troder_options_tab = PardusOptions.addTab({
         heading: 'Troder Options',
         id: 'troder-options',
-        saveFunction: GM_setValue,
-        getFunction: GM_getValue,
     });
 
     var main_options_box = troder_options_tab.addBox({
@@ -37,25 +35,25 @@ function troderOptions() {
 
         planet_a_options_box.addBooleanOption({
             variable: 'planet_a_starbase_run_enabled',
-            description: 'Enable \'Starbase Run\' button:',
+            description: 'Enable \'Starbase Run\' button',
             defaultValue: true,
         });
 
         planet_a_options_box.addBooleanOption({
             variable: 'planet_a_stock_run_enabled',
-            description: 'Enable \'Stock Run\' button:',
+            description: 'Enable \'Stock Run\' button',
             defaultValue: true,
         });
 
         planet_a_options_box.addBooleanOption({
             variable: 'planet_a_load_food_enabled',
-            description: 'Enable \'Load Food\' button:',
+            description: 'Enable \'Load Food\' button',
             defaultValue: true,
         });
 
         planet_a_options_box.addBooleanOption({
             variable: 'planet_a_load_water_enabled',
-            description: 'Enable \'Load Water\' button:',
+            description: 'Enable \'Load Water\' button',
             defaultValue: true,
         });
     }
@@ -69,25 +67,25 @@ function troderOptions() {
 
         planet_m_options_box.addBooleanOption({
             variable: 'planet_m_starbase_run_enabled',
-            description: 'Enable \'Starbase Run\' button:',
+            description: 'Enable \'Starbase Run\' button',
             defaultValue: true,
         });
 
         planet_m_options_box.addBooleanOption({
             variable: 'planet_m_stock_run_enabled',
-            description: 'Enable \'Stock Run\' button:',
+            description: 'Enable \'Stock Run\' button',
             defaultValue: true,
         });
 
         planet_m_options_box.addBooleanOption({
             variable: 'planet_m_load_food_enabled',
-            description: 'Enable \'Load Food\' button: ',
+            description: 'Enable \'Load Food\' button',
             defaultValue: true,
         });
 
         planet_m_options_box.addBooleanOption({
             variable: 'planet_m_load_water_enabled',
-            description: 'Enable \'Load Water\' button:',
+            description: 'Enable \'Load Water\' button',
             defaultValue: true,
         });
     }
@@ -101,13 +99,13 @@ function troderOptions() {
 
         planet_i_options_box.addBooleanOption({
             variable: 'planet_i_planet_run_enabled',
-            description: 'Enable \'Planet Run\' button:',
+            description: 'Enable \'Planet Run\' button',
             defaultValue: true,
         });
 
         planet_i_options_box.addBooleanOption({
             variable: 'planet_i_load_water_enabled',
-            description: 'Enable \'Load Water\' button:',
+            description: 'Enable \'Load Water\' button',
             defaultValue: true,
         });
     }
@@ -121,31 +119,31 @@ function troderOptions() {
 
         planet_r_options_box.addBooleanOption({
             variable: 'planet_r_combo_run_enabled',
-            description: 'Enable \'Combo Run\' button:',
+            description: 'Enable \'Combo Run\' button',
             defaultValue: true,
         });
 
         planet_r_options_box.addBooleanOption({
             variable: 'planet_r_load_embryos_enabled',
-            description: 'Enable \'Load Embryos\' button:',
+            description: 'Enable \'Load Embryos\' button',
             defaultValue: true,
         });
 
         planet_r_options_box.addBooleanOption({
             variable: 'planet_r_load_metal_enabled',
-            description: 'Enable \'Load Metal\' button:',
+            description: 'Enable \'Load Metal\' button',
             defaultValue: true,
         });
 
         planet_r_options_box.addBooleanOption({
             variable: 'planet_r_load_ore_enabled',
-            description: 'Enable \'Load Ore\' button:',
+            description: 'Enable \'Load Ore\' button',
             defaultValue: true,
         });
 
         planet_r_options_box.addBooleanOption({
             variable: 'planet_r_load_rads_enabled',
-            description: 'Enable \'Load Rads\' button:',
+            description: 'Enable \'Load Rads\' button',
             defaultValue: true,
         });
     }
@@ -159,19 +157,19 @@ function troderOptions() {
 
         planet_g_options_box.addBooleanOption({
             variable: 'planet_g_load_embryos_enabled',
-            description: 'Enable \'Load Embryos\' button:',
+            description: 'Enable \'Load Embryos\' button',
             defaultValue: true,
         });
 
         planet_g_options_box.addBooleanOption({
             variable: 'planet_g_load_nebula_enabled',
-            description: 'Enable \'Load Nebula\' button:',
+            description: 'Enable \'Load Nebula\' button',
             defaultValue: true,
         });
 
         planet_g_options_box.addBooleanOption({
             variable: 'planet_g_load_chems_enabled',
-            description: 'Enable \'Load Chems\' button:',
+            description: 'Enable \'Load Chems\' button',
             defaultValue: true,
         });
     }
@@ -185,7 +183,7 @@ function troderOptions() {
 
         planet_d_options_box.addBooleanOption({
             variable: 'planet_d_load_slaves_enabled',
-            description: 'Enable \'Load Slaves\' button:',
+            description: 'Enable \'Load Slaves\' button',
             defaultValue: true,
         });
     }
@@ -199,31 +197,31 @@ function troderOptions() {
 
         starbase_options_box.addBooleanOption({
             variable: 'starbase_planet_run_enabled',
-            description: 'Enable \'Planet Run\' button:',
+            description: 'Enable \'Planet Run\' button',
             defaultValue: true,
         });
 
         starbase_options_box.addBooleanOption({
             variable: 'starbase_load_robots_enabled',
-            description: 'Enable \'Load Robots\' button:',
+            description: 'Enable \'Load Robots\' button',
             defaultValue: true,
         });
 
         starbase_options_box.addBooleanOption({
             variable: 'starbase_load_mo_enabled',
-            description: 'Enable \'Load MO\' button:',
+            description: 'Enable \'Load MO\' button',
             defaultValue: true,
         });
 
         starbase_options_box.addBooleanOption({
             variable: 'starbase_load_metal_enabled',
-            description: 'Enable \'Load Metal\' button:',
+            description: 'Enable \'Load Metal\' button',
             defaultValue: true,
         });
 
         starbase_options_box.addBooleanOption({
             variable: 'starbase_load_ore_enabled',
-            description: 'Enable \'Load Ore\' button:',
+            description: 'Enable \'Load Ore\' button',
             defaultValue: true,
         });
     }
@@ -237,37 +235,37 @@ function troderOptions() {
 
         blackmarket_options_box.addBooleanOption({
             variable: 'blackmarket_load_moe_enabled',
-            description: 'Enable \'Load MOE\' button:',
+            description: 'Enable \'Load MOE\' button',
             defaultValue: true,
         });
 
         blackmarket_options_box.addBooleanOption({
             variable: 'blackmarket_load_energy_enabled',
-            description: 'Enable \'Load Energy\' button:',
+            description: 'Enable \'Load Energy\' button',
             defaultValue: true,
         });
 
         blackmarket_options_box.addBooleanOption({
             variable: 'blackmarket_load_metal_enabled',
-            description: 'Enable \'Load Metal\' button:',
+            description: 'Enable \'Load Metal\' button',
             defaultValue: true,
         });
 
         blackmarket_options_box.addBooleanOption({
             variable: 'blackmarket_load_ore_enabled',
-            description: 'Enable \'Load Ore\' button:',
+            description: 'Enable \'Load Ore\' button',
             defaultValue: true,
         });
 
         blackmarket_options_box.addBooleanOption({
             variable: 'blackmarket_sell_drugs_enabled',
-            description: 'Enable \'Sell Drugs\' button:',
+            description: 'Enable \'Sell Drugs\' button',
             defaultValue: true,
         });
 
         blackmarket_options_box.addNumericOption({
             variable: 'blackmarket_drugs_to_sell',
-            description: 'Quantity of drugs to sell:',
+            description: 'Quantity of drugs to sell',
             defaultValue: 2,
             min: 1,
             max: 100,
@@ -397,26 +395,21 @@ function troderOptions() {
 
         var fuel_amount_select = fuel_options_box.addSelectOption({
             variable: 'fuel_space_left',
-            description: 'Amount of space left for fuel:',
+            description: 'Amount of space left for fuel',
             options: permitted_fuel_amounts,
             defaultValue: '5',
         });
 
         var fuel_to_purchase = permitted_fuel_amounts.slice(0, parseInt(fuel_amount_select.getCurrentValue()) + 1);
+
         var fuel_auto_purchase_select = fuel_options_box.addSelectOption({
             variable: 'fuel_to_purchase',
-            description: 'Amount of fuel to automatically purchase:',
+            description: 'Amount of fuel to automatically purchase',
             options: fuel_to_purchase,
             defaultValue: '5',
         });
 
-        var fuel_amount_element = fuel_amount_select.getElement();
-
-        if (fuel_amount_element.addEventListener) {
-            fuel_amount_element.addEventListener("change", function(){setFuelPurchaseOptions(fuel_amount_select,fuel_auto_purchase_select);}, false);
-        } else if (fuel_amount_element.attachEvent) {
-            fuel_amount_element.attachEvent('onchange', function(){setFuelPurchaseOptions(fuel_amount_select,fuel_auto_purchase_select);});
-        }
+        fuel_amount_select.addEventListener('change', function(){setFuelPurchaseOptions(fuel_amount_select,fuel_auto_purchase_select);})
 
         function setFuelPurchaseOptions(fuel_amount_select, fuel_auto_purchase_select) {
             var permitted_fuel_amounts = fuel_amount_select.options;
