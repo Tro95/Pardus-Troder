@@ -62,7 +62,7 @@ function ship_transfer() {
             return;
         }
 
-        const bots_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('bots_to_preload'), 1);
+        const bots_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('bots_to_preload'), 20);
         const drugs_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('bots_to_preload'), 6);
 
         for (const row of resources_table.rows) {
