@@ -25,6 +25,37 @@ function troderOptions() {
     planetDOptions();
     starbaseOptions();
     blackmarketOptions();
+    shipTransferOptions();
+
+    function shipTransferOptions() {
+        const ship_transfer_options_box = troder_options_tab.addBox({
+            heading: 'Ship Transfer',
+            description: 'These options control the buttons displayed on the ship-to-ship transfer screen.',
+            imageLeft: 'https://static.pardus.at/img/std/ships/leviathan.png',
+        });
+
+        ship_transfer_options_box.addBooleanOption({
+            variable: 'ship2ship_transfer_op_mode',
+            description: 'Enable \'OP\' mode',
+            defaultValue: true
+        });
+
+        ship_transfer_options_box.addNumericOption({
+            variable: 'bots_to_preload',
+            description: 'Bots to preload',
+            defaultValue: 20,
+            min: 0,
+            max: 500,
+        });
+
+        ship_transfer_options_box.addNumericOption({
+            variable: 'drugs_to_preload',
+            description: 'Drugs to preload',
+            defaultValue: 6,
+            min: 0,
+            max: 500,
+        });
+    }
 
     function planetAOptions() {
         var planet_a_options_box = troder_options_tab.addPremiumBoxLeft({
