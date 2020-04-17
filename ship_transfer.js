@@ -82,7 +82,7 @@ function ship_transfer() {
                     }
                     const button = create_button('Robots');
                     row.cells[3].appendChild(button);
-                    input_element.value = Math.min(bots_to_preload, free_space);
+                    input_element.value = Math.min(bots_to_preload, amount, free_space);
                     break;
                 }
                 case 'Drugs': {
@@ -91,7 +91,7 @@ function ship_transfer() {
                     }
                     const button = create_button('Drugs');
                     row.cells[3].appendChild(button);
-                    input_element.value = Math.min(drugs_to_preload, free_space);
+                    input_element.value = Math.min(drugs_to_preload, amount, free_space);
                     break;
                 }
                 default:
