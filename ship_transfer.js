@@ -77,12 +77,18 @@ function ship_transfer() {
 
             switch (resource) {
                 case 'Robots': {
+                    if (bots_to_preload === 0) {
+                        break;
+                    }
                     const button = create_button('Robots');
                     row.cells[3].appendChild(button);
                     input_element.value = Math.min(bots_to_preload, free_space);
                     break;
                 }
                 case 'Drugs': {
+                    if (drugs_to_preload === 0) {
+                        break;
+                    }
                     const button = create_button('Drugs');
                     row.cells[3].appendChild(button);
                     input_element.value = Math.min(drugs_to_preload, free_space);
