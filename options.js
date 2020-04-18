@@ -8,6 +8,7 @@ function troderOptions() {
     var troder_options_tab = PardusOptions.addTab({
         heading: 'Troder Options',
         id: 'troder-options',
+        refresh: false,
     });
 
     var main_options_box = troder_options_tab.addBox({
@@ -27,6 +28,8 @@ function troderOptions() {
     blackmarketOptions();
     shipTransferOptions();
 
+    troder_options_tab.refreshElement();
+
     function shipTransferOptions() {
         const ship_transfer_options_box = troder_options_tab.addBox({
             heading: 'Ship Transfer',
@@ -44,6 +47,10 @@ function troderOptions() {
             variable: 'ship2ship_transfer_op_mode',
             description: 'Enable \'OP\' mode',
             defaultValue: true,
+            info: {
+                title: 'OP Mode',
+                description: 'OP mode enables the use of quick transfer buttons with predefined amounts for specific resources.'
+            },
         });
 
         ship_transfer_options_box.addNumericOption({
@@ -318,7 +325,7 @@ function troderOptions() {
         var droid_washing_inner_html = `<tr> <td> <table> <tbody> <tr> <td>Enable Droid Washing Mode:</td><td> <input id="troder-droid-washing-mode-enabled" type="checkbox"> </td></tr></tbody> </table> </td></tr><tr><td><div><table><tbody><tr><td><label for="droidwash-level">Mode</label></td><td><input type="range" id="droidwash-level" name="droidwash-level" min="20" max="80" step="20" value="20" style="background:url(//static.pardus.at/img/std/bgd.gif)"></td></tr></tbody></table></div></td></tr><tr><td><div id="droidwash-level-info"><table><tbody><tr><td>Credits / ATP: </td><td><div id="credits-per-atp" style="color:#009900">465254</div></td><td><img src="//static.pardus.at/img/std/credits.png" title="Credits" alt="Credits"></td></tr><tr><td>Speed: </td><td><div id="speed-for-atp" style="color:#FFAA00">Moderate</div></td></tr></tbody></table></div></td></tr><tr><td><table><tbody><tr><td>Planets:</td><td><table><tbody> <tr> <td><input id="troder-droid-washing-m-planet-enabled" type="checkbox"> <label>M Class</label></td><td><input id="troder-droid-washing-i-planet-enabled" type="checkbox"> <label>I Class</label></td><td><input id="troder-droid-washing-d-planet-enabled" type="checkbox"> <label>D Class</label></td></tr><tr> <td><input id="troder-droid-washing-g-planet-enabled" type="checkbox"> <label>G Class</label></td><td><input id="troder-droid-washing-r-planet-enabled" type="checkbox"> <label>R Class</label></td><td><input id="troder-droid-washing-a-planet-enabled" type="checkbox"> <label>A Class</label></td></tr></tbody> </table></td></tr><tr><td>Starbases:</td><td><table><tbody><tr><td><input id="troder-droid-washing-starbase-enabled" type="checkbox"> <label>NPC Starbase</label></td></tr></tbody> </table></td></tr></tbody></table></td></tr><tr> <td align="right"> <input value="Save" id="troder-droid-washing-save" type="button"> </td></tr>`;
         droid_washing_options_box.innerHtml = droid_washing_inner_html;
         droid_washing_options_box.addAfterRefreshHook(droidWashAfterRefresh);
-        droid_washing_options_box.refreshElement();
+        //droid_washing_options_box.refreshElement();
 
         function droidWashAfterRefresh() {
             document.getElementById('droidwash-level').value = droid_wash_level;
@@ -437,7 +444,7 @@ function troderOptions() {
             defaultValue: '5',
         });
 
-        var fuel_to_purchase = permitted_fuel_amounts.slice(0, parseInt(fuel_amount_select.getCurrentValue()) + 1);
+        var fuel_to_purchase = permitted_fuel_amounts.slice(0, parseInt(fuel_amount_select.getValue()) + 1);
 
         var fuel_auto_purchase_select = fuel_options_box.addSelectOption({
             variable: 'fuel_to_purchase',
