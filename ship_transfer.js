@@ -8,7 +8,10 @@ function ship_transfer() {
     const resources_table = document.querySelector('form table.messagestyle');
 
     get_ship_id();
-    create_refresh_button();
+
+    if (GM_getValue(PardusOptionsUtility.getVariableName('ship2ship_enable_refresh_button'), true)) {
+        create_refresh_button();
+    }
 
     if (GM_getValue(PardusOptionsUtility.getVariableName('ship2ship_transfer_op_mode'), true)) {
         preload_resources();

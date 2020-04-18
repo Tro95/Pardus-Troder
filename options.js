@@ -35,9 +35,15 @@ function troderOptions() {
         });
 
         ship_transfer_options_box.addBooleanOption({
+            variable: 'ship2ship_enable_refresh_button',
+            description: 'Enable \'Refresh\' button',
+            defaultValue: true,
+        });
+
+        ship_transfer_options_box.addBooleanOption({
             variable: 'ship2ship_transfer_op_mode',
             description: 'Enable \'OP\' mode',
-            defaultValue: true
+            defaultValue: true,
         });
 
         ship_transfer_options_box.addNumericOption({
