@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.12.2
+// @version         1.12.3
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -16,18 +16,19 @@
 // @grant           GM_setValue
 // @grant           GM_getValue
 // @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v2.1/pardus_options_library.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/defaults.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/ship_transfer.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/defaults.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/ship_transfer.js
 //
 // ==/UserScript==
 
+// v1.12.3  More optimal options page, and added icon + tooltip for ship transfer OP mode option
 // v1.12.2  Added missing option for refresh button and upgraded to Pardus Options Library v2.0.1
 // v1.12.1  Fixing ship transfer OP quantities to not excede the amount the user has
 // v1.12    Added quick transfer buttons and OP mode to the ship transfer page
