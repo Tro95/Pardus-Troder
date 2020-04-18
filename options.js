@@ -453,24 +453,22 @@ function troderOptions() {
             defaultValue: '5',
         });
 
-        fuel_amount_select.addEventListener('change', function(){setFuelPurchaseOptions(fuel_amount_select,fuel_auto_purchase_select);})
+        fuel_amount_select.addEventListener('change', () => {
+            const permitted_fuel_amounts = fuel_amount_select.options;
+            const value_to_set = fuel_auto_purchase_select.getValue();
+            const current_space_for_fuel = parseInt(fuel_amount_select.getCurrentValue());
 
-        function setFuelPurchaseOptions(fuel_amount_select, fuel_auto_purchase_select) {
-            var permitted_fuel_amounts = fuel_amount_select.options;
-            var value_to_set = fuel_auto_purchase_select.getValue();
-            var current_space_for_fuel = parseInt(fuel_amount_select.getCurrentValue());
+            let fuel_to_purchase = permitted_fuel_amounts.slice(0, current_space_for_fuel + 1);
 
-            var fuel_to_purchase = permitted_fuel_amounts.slice(0, current_space_for_fuel + 1);
-
-            for (var i = 0; i < fuel_to_purchase.length; i++) {
-                delete fuel_to_purchase[i].default;
+            for (const obj of fuel_to_purchase) {
+                delete obj.default;
             }
             
             fuel_to_purchase[Math.min(fuel_auto_purchase_select.getValue() + 1, fuel_to_purchase.length - 1)].default = true;
 
             fuel_auto_purchase_select.options = fuel_to_purchase;
             fuel_auto_purchase_select.refreshElement();
-        }
+        });
     }
 
     function displaySaved(id) {
