@@ -15,7 +15,7 @@
 // @updateURL       https://github.com/Tro95/Pardus-Troder/raw/master/pardus_troder.meta.js
 // @grant           GM_setValue
 // @grant           GM_getValue
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v2.0.1/pardus_options_library.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v2.1/pardus_options_library.js
 // @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/defaults.js
 // @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/commodities.js
 // @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.2/functions.js
