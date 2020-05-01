@@ -7,8 +7,6 @@ function ship_transfer() {
     const centre_row = main_form.children[1].children[0].children[1].children[0];
     const resources_table = document.querySelector('form table.messagestyle');
 
-    get_ship_id();
-
     if (GM_getValue(PardusOptionsUtility.getVariableName('ship2ship_enable_refresh_button'), true)) {
         create_refresh_button();
     }
@@ -18,23 +16,7 @@ function ship_transfer() {
     }
 
     function get_ship_id() {
-        const parsed_url = new URL(window.location);
-
-        // Will return null if not set
-        const possible_ship_id = parsed_url.searchParams.get('playerid');
-
-        if (possible_ship_id === null) {
-            const return_value = GM_getValue(PardusOptionsUtility.getVariableName('ship2ship_transfer_last_playerid'), null);
-
-            if (return_value === null) {
-                throw Error('Was unable to detect the playerid');
-            }
-
-            return return_value;
-        }
-
-        GM_setValue(PardusOptionsUtility.getVariableName('ship2ship_transfer_last_playerid'), possible_ship_id);
-        return possible_ship_id;
+        return document.querySelector('input[name="playerid"]').value;
     }
 
     function get_redirect_url() {
@@ -65,8 +47,10 @@ function ship_transfer() {
             return;
         }
 
+        const fuel_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('fuel_to_preload'), 1);
         const bots_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('bots_to_preload'), 20);
         const drugs_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('bots_to_preload'), 6);
+        const amber_stims_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('amber_stims_to_preload'), 6);
 
         for (const row of resources_table.rows) {
             // Skip over the break row
@@ -79,6 +63,15 @@ function ship_transfer() {
             const input_element = row.cells[3].childNodes[0];
 
             switch (resource) {
+                case 'Hydrogen fuel': {
+                    if (fuel_to_preload === 0) {
+                        break;
+                    }
+                    const button = create_button('Hydrogen fuel');
+                    row.cells[3].appendChild(button);
+                    input_element.value = Math.min(fuel_to_preload, amount, free_space);
+                    break;
+                }
                 case 'Robots': {
                     if (bots_to_preload === 0) {
                         break;
@@ -95,6 +88,15 @@ function ship_transfer() {
                     const button = create_button('Drugs');
                     row.cells[3].appendChild(button);
                     input_element.value = Math.min(drugs_to_preload, amount, free_space);
+                    break;
+                }
+                case 'Amber Stim': {
+                    if (amber_stims_to_preload === 0) {
+                        break;
+                    }
+                    const button = create_button('Amber Stim');
+                    row.cells[3].appendChild(button);
+                    input_element.value = Math.min(amber_stims_to_preload, amount, free_space);
                     break;
                 }
                 default:

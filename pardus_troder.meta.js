@@ -2,7 +2,7 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.12.3
+// @version         1.12.4
 // @description     Trading script to assist in the buying and selling on planets and starbases
 // @include         *.pardus.at/starbase_trade.php
 // @include         *.pardus.at/planet_trade.php
@@ -15,15 +15,15 @@
 // @updateURL       https://github.com/Tro95/Pardus-Troder/raw/master/pardus_troder.meta.js
 // @grant           GM_setValue
 // @grant           GM_getValue
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v2.1/pardus_options_library.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/defaults.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.3/ship_transfer.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v2.2/pardus_options_library.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/defaults.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.4/ship_transfer.js
 //
 // ==/UserScript==

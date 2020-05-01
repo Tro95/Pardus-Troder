@@ -1,3 +1,4 @@
+/* global PardusOptions, PardusOptionsUtility, universe */
 /**
  *  Places the configuration options for this script on the Options page in Pardus.
  *
@@ -9,29 +10,51 @@ function troderOptions() {
         heading: 'Troder Options',
         id: 'troder-options',
         refresh: false,
+        defaultLabel: 'General',
     });
 
-    var main_options_box = troder_options_tab.addBox({
-        heading: 'Main Options',
-        description: 'These are the options for the Pardus Troder script.',
+    var main_options_box = troder_options_tab.addBoxTop({
+        heading: 'Introduction',
+        description: 'Welcome to the Pardus Troder script\'s options. The settings are specific to the universe you are in.<br><br>You can request additional features by sending a message to Tro (Artemis) or Troll (Orion).',
     });
 
-    droidWashingOptions();
-    fuelOptions();
-    planetAOptions();
-    planetMOptions();
-    planetIOptions();
-    planetROptions();
-    planetGOptions();
-    planetDOptions();
-    starbaseOptions();
-    blackmarketOptions();
-    shipTransferOptions();
+    var planets_subtab = troder_options_tab.addSubTab({
+        label: 'Planets',
+    });
+
+    var sb_subtab = troder_options_tab.addSubTab({
+        label: 'Starbases',
+    });
+
+    var bm_subtab = troder_options_tab.addSubTab({
+        label: 'Black Market',
+    });
+
+    var droidwashing_subtab = troder_options_tab.addSubTab({
+        label: 'Droid Washing',
+        padding: '10px',
+    });
+
+    var shiptransfer_subtab = troder_options_tab.addSubTab({
+        label: 'Ship Transfer',
+    });
+
+    droidWashingOptions(droidwashing_subtab);
+    fuelOptions(troder_options_tab);
+    planetAOptions(planets_subtab);
+    planetMOptions(planets_subtab);
+    planetIOptions(planets_subtab);
+    planetROptions(planets_subtab);
+    planetGOptions(planets_subtab);
+    planetDOptions(planets_subtab);
+    starbaseOptions(sb_subtab);
+    blackmarketOptions(bm_subtab);
+    shipTransferOptions(shiptransfer_subtab);
 
     troder_options_tab.refreshElement();
 
-    function shipTransferOptions() {
-        const ship_transfer_options_box = troder_options_tab.addBox({
+    function shipTransferOptions(subtab) {
+        const ship_transfer_options_box = subtab.addBox({
             heading: 'Ship Transfer',
             description: 'These options control the buttons displayed on the ship-to-ship transfer screen.',
             imageLeft: 'https://static.pardus.at/img/std/ships/leviathan.png',
@@ -43,7 +66,14 @@ function troderOptions() {
             defaultValue: true,
         });
 
-        ship_transfer_options_box.addBooleanOption({
+        const op_mode_box = subtab.addBox({
+            heading: 'OP Mode',
+            description: 'OP mode enables quick transfer of specific items to other players, designed to make the role of a support trader during operations much easier.',
+            imageLeft: 'https://static.pardus.at/img/std/factions/relation_war_b.png',
+        });
+
+
+        op_mode_box.addBooleanOption({
             variable: 'ship2ship_transfer_op_mode',
             description: 'Enable \'OP\' mode',
             defaultValue: true,
@@ -53,7 +83,15 @@ function troderOptions() {
             },
         });
 
-        ship_transfer_options_box.addNumericOption({
+        op_mode_box.addNumericOption({
+            variable: 'fuel_to_preload',
+            description: 'Fuel to preload',
+            defaultValue: 3,
+            min: 0,
+            max: 500,
+        });
+
+        op_mode_box.addNumericOption({
             variable: 'bots_to_preload',
             description: 'Bots to preload',
             defaultValue: 20,
@@ -61,17 +99,25 @@ function troderOptions() {
             max: 500,
         });
 
-        ship_transfer_options_box.addNumericOption({
+        op_mode_box.addNumericOption({
             variable: 'drugs_to_preload',
             description: 'Drugs to preload',
             defaultValue: 6,
             min: 0,
             max: 500,
         });
+
+        op_mode_box.addNumericOption({
+            variable: 'amber_stims_to_preload',
+            description: 'Amber Stims to preload',
+            defaultValue: 1,
+            min: 0,
+            max: 500,
+        });
     }
 
-    function planetAOptions() {
-        var planet_a_options_box = troder_options_tab.addPremiumBoxLeft({
+    function planetAOptions(subtab) {
+        var planet_a_options_box = subtab.addPremiumBoxLeft({
             heading: 'Planets: Class A',
             description: 'These options control the buttons displayed on the trade screen for Class A planets (which are only available in the Pardus Cluster).',
             imageLeft: 'https://static.pardus.at/img/std/foregrounds/planet_a.png',
@@ -102,8 +148,8 @@ function troderOptions() {
         });
     }
 
-    function planetMOptions() {
-        var planet_m_options_box = troder_options_tab.addBoxRight({
+    function planetMOptions(subtab) {
+        var planet_m_options_box = subtab.addBoxRight({
             heading: 'Planets: Class M',
             description: 'These options control the buttons displayed on the trade screen for Class M planets.',
             imageLeft: 'https://static.pardus.at/img/std/foregrounds/planet_m.png',
@@ -134,8 +180,8 @@ function troderOptions() {
         });
     }
 
-    function planetIOptions() {
-        var planet_i_options_box = troder_options_tab.addBoxLeft({
+    function planetIOptions(subtab) {
+        var planet_i_options_box = subtab.addBoxLeft({
             heading: 'Planets: Class I',
             description: 'These options control the buttons displayed on the trade screen for Class i planets.',
             imageLeft: 'https://static.pardus.at/img/std/foregrounds/planet_i.png',
@@ -154,8 +200,8 @@ function troderOptions() {
         });
     }
 
-    function planetROptions() {
-        var planet_r_options_box = troder_options_tab.addBoxLeft({
+    function planetROptions(subtab) {
+        var planet_r_options_box = subtab.addBoxLeft({
             heading: 'Planets: Class R',
             description: 'These options control the buttons displayed on the trade screen for Class R planets.',
             imageLeft: 'https://static.pardus.at/img/std/foregrounds/planet_r.png',
@@ -192,8 +238,8 @@ function troderOptions() {
         });
     }
 
-    function planetGOptions() {
-        var planet_g_options_box = troder_options_tab.addBoxRight({
+    function planetGOptions(subtab) {
+        var planet_g_options_box = subtab.addBoxRight({
             heading: 'Planets: Class G',
             description: 'These options control the buttons displayed on the trade screen for Class G planets.',
             imageLeft: 'https://static.pardus.at/img/std/foregrounds/planet_g.png',
@@ -218,8 +264,8 @@ function troderOptions() {
         });
     }
 
-    function planetDOptions() {
-        var planet_d_options_box = troder_options_tab.addBoxRight({
+    function planetDOptions(subtab) {
+        var planet_d_options_box = subtab.addBoxRight({
             heading: 'Planets: Class D',
             description: 'These options control the buttons displayed on the trade screen for Class D planets.',
             imageLeft: 'https://static.pardus.at/img/std/foregrounds/planet_d.png',
@@ -232,46 +278,58 @@ function troderOptions() {
         });
     }
 
-    function starbaseOptions() {
-        var starbase_options_box = troder_options_tab.addBoxLeft({
-            heading: 'Starbases',
-            description: 'These options control the buttons displayed on the trade screen for Starbases (both NPC and player-controlled).',
+    function starbaseOptions(subtab) {
+        var po_starbase_options_box = subtab.addBoxRight({
+            heading: 'Player-Owned Starbases',
+            description: 'These options control the buttons displayed on the trade screen for player-owned Starbases.',
             imageLeft: 'https://static.pardus.at/img/std/foregrounds/starbase_p0_s4.png',
         });
 
-        starbase_options_box.addBooleanOption({
-            variable: 'starbase_planet_run_enabled',
+        po_starbase_options_box.addBooleanOption({
+            variable: 'po_starbase_planet_run_enabled',
             description: 'Enable \'Planet Run\' button',
             defaultValue: true,
         });
 
-        starbase_options_box.addBooleanOption({
-            variable: 'starbase_load_robots_enabled',
+        po_starbase_options_box.addBooleanOption({
+            variable: 'po_starbase_load_robots_enabled',
             description: 'Enable \'Load Robots\' button',
             defaultValue: true,
         });
 
-        starbase_options_box.addBooleanOption({
-            variable: 'starbase_load_mo_enabled',
+        po_starbase_options_box.addBooleanOption({
+            variable: 'po_starbase_load_mo_enabled',
             description: 'Enable \'Load MO\' button',
             defaultValue: true,
         });
 
-        starbase_options_box.addBooleanOption({
-            variable: 'starbase_load_metal_enabled',
+        po_starbase_options_box.addBooleanOption({
+            variable: 'po_starbase_load_metal_enabled',
             description: 'Enable \'Load Metal\' button',
             defaultValue: true,
         });
 
-        starbase_options_box.addBooleanOption({
-            variable: 'starbase_load_ore_enabled',
+        po_starbase_options_box.addBooleanOption({
+            variable: 'po_starbase_load_ore_enabled',
             description: 'Enable \'Load Ore\' button',
+            defaultValue: true,
+        });
+
+        var npc_starbase_options_box = subtab.addBoxLeft({
+            heading: 'NPC Starbases',
+            description: 'These options control the buttons displayed on the trade screen for NPC Starbases.',
+            imageLeft: 'https://static.pardus.at/img/std/foregrounds/starbase_f0_s4.png',
+        });
+
+        npc_starbase_options_box.addBooleanOption({
+            variable: 'npc_starbase_planet_run_enabled',
+            description: 'Enable \'Planet Run\' button',
             defaultValue: true,
         });
     }
 
-    function blackmarketOptions() {
-        var blackmarket_options_box = troder_options_tab.addBoxRight({
+    function blackmarketOptions(subtab) {
+        var blackmarket_options_box = subtab.addBox({
             heading: 'Black Market',
             description: 'These options control the buttons displayed on the trade screen for the Black Market.',
             imageLeft: 'https://static.pardus.at/img/std/foregrounds/dark_dome.png',
@@ -316,23 +374,47 @@ function troderOptions() {
         });
     }
 
-    function droidWashingOptions() {
-        var droid_washing_options_box = troder_options_tab.addBox({
-            heading: 'Droid Washing',
-            description: 'The droid washing mode is something that you can activate to assist in droid washing. If you are not actively droid washing it is recommended you disable droid washing mode. These options control how the droid washing mode works.',
+    function droidWashingOptions(subtab) {
+        var droid_washing_instructions_box = subtab.addBox({
+            heading: 'Instructions',
+            description: 'The droid washing mode provides special buttons on configured planets and starbases, designed to make droid washing as simple and efficient as possible.<br><br><ul><li>On the trade screen, items listed in <font color="#FFAA00">orange</font> are able to be droid washed efficiently on the planet/SB, however none are currently available in either your ship\'s hold or the planet/SB stock to do so.</li><li>On the trade screen, items listed in <font color="#009900">green</font> are both able to be droid washed efficiently and are currently available to do so.</li><li>Ensure that you have at least one item available to be droid washed (i.e. the item is listed in <font color="#009900">green</font> on the trade screen). The more items you have, the faster (and more AP-efficient) the droid wash will be.</li></ul>',
         });
 
-        var droid_washing_inner_html = `<tr> <td> <table> <tbody> <tr> <td>Enable Droid Washing Mode:</td><td> <input id="troder-droid-washing-mode-enabled" type="checkbox"> </td></tr></tbody> </table> </td></tr><tr><td><div><table><tbody><tr><td><label for="droidwash-level">Mode</label></td><td><input type="range" id="droidwash-level" name="droidwash-level" min="20" max="80" step="20" value="20" style="background:url(//static.pardus.at/img/std/bgd.gif)"></td></tr></tbody></table></div></td></tr><tr><td><div id="droidwash-level-info"><table><tbody><tr><td>Credits / ATP: </td><td><div id="credits-per-atp" style="color:#009900">465254</div></td><td><img src="//static.pardus.at/img/std/credits.png" title="Credits" alt="Credits"></td></tr><tr><td>Speed: </td><td><div id="speed-for-atp" style="color:#FFAA00">Moderate</div></td></tr></tbody></table></div></td></tr><tr><td><table><tbody><tr><td>Planets:</td><td><table><tbody> <tr> <td><input id="troder-droid-washing-m-planet-enabled" type="checkbox"> <label>M Class</label></td><td><input id="troder-droid-washing-i-planet-enabled" type="checkbox"> <label>I Class</label></td><td><input id="troder-droid-washing-d-planet-enabled" type="checkbox"> <label>D Class</label></td></tr><tr> <td><input id="troder-droid-washing-g-planet-enabled" type="checkbox"> <label>G Class</label></td><td><input id="troder-droid-washing-r-planet-enabled" type="checkbox"> <label>R Class</label></td><td><input id="troder-droid-washing-a-planet-enabled" type="checkbox"> <label>A Class</label></td></tr></tbody> </table></td></tr><tr><td>Starbases:</td><td><table><tbody><tr><td><input id="troder-droid-washing-starbase-enabled" type="checkbox"> <label>NPC Starbase</label></td></tr></tbody> </table></td></tr></tbody></table></td></tr><tr> <td align="right"> <input value="Save" id="troder-droid-washing-save" type="button"> </td></tr>`;
+        var droid_washing_quickstart_box = subtab.addBoxLeft({
+            heading: 'Quick Start Guide',
+            description: 'The quick start guide assumes default settings.<ul type="1"><li>Identify a nearby planet or NPC SB with under 5,000 population.</li><li>Obtain 20t of droids, battleweapons, handweapons, all varieties of stim chips, and robots. It is not necessary to get all of these items, but the more the better.</li><li>On the trade screen, select \'Start Droid Wash\'. You should see a variety of items set to be sold and possibly bought.</li><li>Click the \'Transfer\' button. The droid wash is now set up, and you should continue clicking the \'Transfer\' button until you wish to stop.</li><li>Click the \'Stop Droid Wash\' button to end droid washing, which will attempt to rebuy as many goods as possible.</li></ul>',
+        });
+
+        var droid_washing_faq_box = subtab.addBoxLeft({
+            heading: 'FAQ',
+            description: '<i>Why should I use more expensive items to droid wash?</i><br><br>You gain ATPs at a fixed ratio, proportional to the base price of an item. By using more expensive items for droid washing, you still lose the same amount of credits to gain the same number of ATPs, however the number of trades required is less. Using more expensive items is a more efficient usage of APs.<br><br><i>Why should I use a planet or NPC SB with a population below 5,000?</i><br><br>The amount of credits you lose per ATP is dependent on the maximum quantity a planet or NPC SB will buy for the particular items you are droid washing. The lower the maximum quantity, the cheaper the ATP will cost. The smallest the maximum quantity for most items can be is 20, which is only available when a planet or NPC SB is below a population of 5,000. If the population reaches 5,000 the maximum quantity of most items is increased to 40, which will increase the cost of a single ATP from 456k to 720k (with no trade uplink).<br><br><i>What is the exact formula for the cost of one ATP?</i><br><br>The cost of one ATP is determined using the maximum quantity of an item you can sell to a planet or NPC SB.<br><br>The formula is:<pre>4000000 * ((10^^(-1 / item_max) * 1.25) - 1)</pre>',
+        });
+
+        var droid_washing_master_box = subtab.addBoxRight({
+            heading: 'Droid Washing Mode',
+            description: 'If you are not actively using the droid washing mode it is recommended you disable it.',
+        });
+
+        droid_washing_master_box.addBooleanOption({
+            variable: 'droid_washing_mode_enabled',
+            description: 'Enable droid washing mode',
+            defaultValue: false,
+        });
+
+        var droid_washing_options_box = subtab.addBox({
+            heading: 'Droid Washing',
+            description: 'These options let you balance the cost-efficiency of droid washing with speed and availability of suitable locations. It is recommended to use the most cost-efficient option as increased speed and availability is rarely worth the price difference.',
+        });
+
+        var droid_washing_inner_html = '<tr><td><div><table><tbody><tr><td><label for="droidwash-level">Mode</label></td><td><input type="range" id="droidwash-level" name="droidwash-level" min="20" max="80" step="20" value="20" style="background:url(//static.pardus.at/img/std/bgd.gif)"></td></tr></tbody></table></div></td></tr><tr><td><div id="droidwash-level-info"><table><tbody><tr><td>Credits / ATP:</td><td><div id="credits-per-atp" style="color:#009900">465254</div></td><td><img src="//static.pardus.at/img/std/credits.png" title="Credits" alt="Credits"></td></tr><tr><td>Speed:</td><td><div id="speed-for-atp" style="color:#FFAA00">Moderate</div></td></tr></tbody></table></div></td></tr><tr><td><table><tbody><tr><td>Planets:</td><td><table><tbody><tr><td><input id="troder-droid-washing-m-planet-enabled" type="checkbox"><label>M Class</label></td><td><input id="troder-droid-washing-i-planet-enabled" type="checkbox"><label>I Class</label></td><td><input id="troder-droid-washing-d-planet-enabled" type="checkbox"><label>D Class</label></td></tr><tr><td><input id="troder-droid-washing-g-planet-enabled" type="checkbox"><label>G Class</label></td><td><input id="troder-droid-washing-r-planet-enabled" type="checkbox"><label>R Class</label></td><td><input id="troder-droid-washing-a-planet-enabled" type="checkbox"><label>A Class</label></td></tr></tbody></table></td></tr><tr><td>Starbases:</td><td><table><tbody><tr><td><input id="troder-droid-washing-starbase-enabled" type="checkbox"><label>NPC Starbase</label></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-droid-washing-save" type="button"></td></tr>';
         droid_washing_options_box.innerHtml = droid_washing_inner_html;
         droid_washing_options_box.addAfterRefreshHook(droidWashAfterRefresh);
-        //droid_washing_options_box.refreshElement();
 
         function droidWashAfterRefresh() {
             document.getElementById('droidwash-level').value = droid_wash_level;
             document.getElementById('droidwash-level').addEventListener("input", setCreditsPerATP, true);
             setCreditsPerATP();
 
-            document.getElementById('troder-droid-washing-mode-enabled').checked = droid_wash_mode;
             document.getElementById('troder-droid-washing-m-planet-enabled').checked = droid_wash_planet_m_enabled;
             document.getElementById('troder-droid-washing-i-planet-enabled').checked = droid_wash_planet_i_enabled;
             document.getElementById('troder-droid-washing-d-planet-enabled').checked = droid_wash_planet_d_enabled;
@@ -382,7 +464,6 @@ function troderOptions() {
             }
 
             function saveDroidWashingOptions() {
-                var droid_wash_enabled = document.getElementById('troder-droid-washing-mode-enabled').checked;
                 var planet_m = document.getElementById('troder-droid-washing-m-planet-enabled').checked;
                 var planet_i = document.getElementById('troder-droid-washing-i-planet-enabled').checked;
                 var planet_d = document.getElementById('troder-droid-washing-d-planet-enabled').checked;
@@ -392,7 +473,6 @@ function troderOptions() {
                 var starbase = document.getElementById('troder-droid-washing-starbase-enabled').checked;
                 var level_slider = document.getElementById('droidwash-level').valueAsNumber;
 
-                GM_setValue(universe + '_droid_washing_mode_enabled', droid_wash_enabled);
                 GM_setValue(universe + '_droid_washing_planet_m_enabled', planet_m);
                 GM_setValue(universe + '_droid_washing_planet_i_enabled', planet_i);
                 GM_setValue(universe + '_droid_washing_planet_d_enabled', planet_d);
@@ -407,8 +487,8 @@ function troderOptions() {
         }
     }
 
-    function fuelOptions() {
-        var fuel_options_box = troder_options_tab.addBox({
+    function fuelOptions(subtab) {
+        var fuel_options_box = subtab.addBox({
             heading: 'Refueling',
             description: 'These options control the amount of space to leave for fuel, and whether or not you wish to purchase additional fuel automatically.',
         });
@@ -463,7 +543,7 @@ function troderOptions() {
             for (const obj of fuel_to_purchase) {
                 delete obj.default;
             }
-            
+
             fuel_to_purchase[Math.min(fuel_auto_purchase_select.getValue() + 1, fuel_to_purchase.length - 1)].default = true;
 
             fuel_auto_purchase_select.options = fuel_to_purchase;

@@ -158,35 +158,41 @@ function starbase() {
 
         buttons.createButtonsBox();
 
-        if (droid_wash_mode) {
-            if (GM_getValue(universe + "_droid_washing_starbase_enabled", false) == true) {
-                findItemsToDroidwash();
-                buttons.addDroidwashableItems(items_to_droidwash);
-                if (items_to_droidwash.length != 0) {
-                    if (isReadyToDroidWash()) {
-                        droidWash();
-                        buttons.addButton("Stop Droid Wash", endDroidWash);
-                    } else {
-                        buttons.addButton("Start Droid Wash", droidWash);
+        if (player_owned) {
+            if (GM_getValue(universe + '_po_starbase_planet_run_enabled', true)) {
+                buttons.addButton("Planet Run", loadPlanet);
+            }
+            if (GM_getValue(universe + '_po_starbase_load_robots_enabled', true)) {
+                buttons.addButton("Load Robots", loadRobots);
+            }
+            if (GM_getValue(universe + '_po_starbase_load_mo_enabled', true)) {
+                buttons.addButton("Load MO", function() {loadMultiBuy("sb_mo_materials", ["Metal", "Ore"]);});
+            }
+            if (GM_getValue(universe + '_po_starbase_load_metal_enabled', true)) {
+               buttons.addButton("Load Metal", function() {unload(["Metal"]);ensureFuel();attempt_buy("Metal", ship_space.allowedSpace());submitIfNotPreview();});
+            }
+            if (GM_getValue(universe + '_po_starbase_load_ore_enabled', true)) {
+                buttons.addButton("Load Ore", function() {unload(["Ore"]);ensureFuel();attempt_buy("Ore", ship_space.allowedSpace());submitIfNotPreview();});
+            }
+        } else {
+            if (droid_wash_mode) {
+                if (GM_getValue(universe + "_droid_washing_npc_starbase_enabled", false) == true) {
+                    findItemsToDroidwash();
+                    buttons.addDroidwashableItems(items_to_droidwash);
+                    if (items_to_droidwash.length != 0) {
+                        if (isReadyToDroidWash()) {
+                            droidWash();
+                            buttons.addButton("Stop Droid Wash", endDroidWash);
+                        } else {
+                            buttons.addButton("Start Droid Wash", droidWash);
+                        }
                     }
                 }
             }
-        }
 
-        if (GM_getValue(universe + '_starbase_planet_run_enabled', true)) {
-            buttons.addButton("Planet Run", loadPlanet);
-        }
-        if (GM_getValue(universe + '_starbase_load_robots_enabled', true)) {
-            buttons.addButton("Load Robots", loadRobots);
-        }
-        if (GM_getValue(universe + '_starbase_load_mo_enabled', true)) {
-            buttons.addButton("Load MO", function() {loadMultiBuy("sb_mo_materials", ["Metal", "Ore"]);});
-        }
-        if (GM_getValue(universe + '_starbase_load_metal_enabled', true)) {
-           buttons.addButton("Load Metal", function() {unload(["Metal"]);ensureFuel();attempt_buy("Metal", ship_space.allowedSpace());submitIfNotPreview();});
-        }
-        if (GM_getValue(universe + '_starbase_load_ore_enabled', true)) {
-            buttons.addButton("Load Ore", function() {unload(["Ore"]);ensureFuel();attempt_buy("Ore", ship_space.allowedSpace());submitIfNotPreview();});
+            if (GM_getValue(universe + '_npc_starbase_planet_run_enabled', true)) {
+                buttons.addButton("Planet Run", loadPlanet);
+            }
         }
           
         buttons.addStandardButtons();
