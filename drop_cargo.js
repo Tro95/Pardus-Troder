@@ -1,5 +1,10 @@
+/* global PardusOptions, PardusOptionsUtility */
 function drop_cargo() {
     var drop_table;
+
+    if (!GM_getValue(PardusOptionsUtility.getVariableName('cargo_drop_enabled'), true)) {
+        return;
+    }
 
     findTables();
     parseDropCargoTables();
@@ -27,7 +32,7 @@ function drop_cargo() {
     }
 
     function autodropFuel() {
-        if (commodities[items.indexOf("Hydrogen fuel")].ship_stock > fuel_space_left) {
+        if (GM_getValue(PardusOptionsUtility.getVariableName('drop_excess_fuel'), true) && commodities[items.indexOf("Hydrogen fuel")].ship_stock > fuel_space_left) {
             commodities[items.indexOf("Hydrogen fuel")].sell(commodities[items.indexOf("Hydrogen fuel")].ship_stock - fuel_space_left);
         }
     }

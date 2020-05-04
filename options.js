@@ -35,8 +35,12 @@ function troderOptions() {
         padding: '10px',
     });
 
-    var shiptransfer_subtab = troder_options_tab.addSubTab({
+    var ship_transfer_subtab = troder_options_tab.addSubTab({
         label: 'Ship Transfer',
+    });
+
+    var cargo_drop_subtab = troder_options_tab.addSubTab({
+        label: 'Cargo Dropping',
     });
 
     droidWashingOptions(droidwashing_subtab);
@@ -49,9 +53,38 @@ function troderOptions() {
     planetDOptions(planets_subtab);
     starbaseOptions(sb_subtab);
     blackmarketOptions(bm_subtab);
-    shipTransferOptions(shiptransfer_subtab);
+    shipTransferOptions(ship_transfer_subtab);
+    cargoDroppingOptions(cargo_drop_subtab);
 
     troder_options_tab.refreshElement();
+
+    function cargoDroppingOptions(subtab) {
+        const cargo_dropping_main_box = subtab.addBox({
+            heading: 'Cargo Dropping',
+            description: 'These options control cargo dropping.'
+        });
+
+        cargo_dropping_main_box.addBooleanOption({
+            variable: 'cargo_drop_enabled',
+            description: 'Enable cargo dropping',
+            defaultValue: true,
+        });
+
+        const cargo_dropping_items_box = subtab.addBox({
+            heading: 'Items',
+            description: 'These options configure the individual resources to drop.'
+        });
+
+        cargo_dropping_items_box.addBooleanOption({
+            variable: 'drop_excess_fuel',
+            description: 'Drop excess fuel',
+            defaultValue: true,
+            info: {
+                title: 'Excess Fuel',
+                description: 'Excess fuel is any fuel above the configured amount of fuel to leave on the ship. This value can be configured in the \'General\' tab of the Pardus Troder options, and defaults to 5t.'
+            },
+        });
+    }
 
     function shipTransferOptions(subtab) {
         const ship_transfer_options_box = subtab.addBox({
