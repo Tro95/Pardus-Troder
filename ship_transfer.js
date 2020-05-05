@@ -47,10 +47,10 @@ function ship_transfer() {
             return;
         }
 
-        const fuel_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('fuel_to_preload'), 1);
+        const fuel_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('fuel_to_preload'), 3);
         const bots_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('bots_to_preload'), 20);
         const drugs_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('bots_to_preload'), 6);
-        const amber_stims_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('amber_stims_to_preload'), 6);
+        const amber_stims_to_preload = GM_getValue(PardusOptionsUtility.getVariableName('amber_stims_to_preload'), 1);
 
         for (const row of resources_table.rows) {
             // Skip over the break row
