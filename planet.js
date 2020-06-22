@@ -163,7 +163,17 @@ function planet() {
         buttons.createButtonsBox();
 
         if (droid_wash_mode) {
-            if (GM_getValue(universe + "_droid_washing_planet_" + this.planet_type + "_enabled", false) == true) {
+
+            droid_washing_defaults = {
+                'i': true,
+                'a': false,
+                'm': false,
+                'g': true,
+                'r': true,
+                'd': true,
+            };
+
+            if (GM_getValue(universe + "_droid_washing_planet_" + this.planet_type + "_enabled", droid_washing_defaults[this.planet_type]) == true) {
                 findItemsToDroidwash();
                 buttons.addDroidwashableItems(items_to_droidwash);
                 if (items_to_droidwash.length != 0) {
