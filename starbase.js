@@ -176,7 +176,7 @@ function starbase() {
             }
         } else {
             if (droid_wash_mode) {
-                if (GM_getValue(universe + "_droid_washing_npc_starbase_enabled", false) == true) {
+                if (GM_getValue(universe + "_droid_washing_starbase_enabled", false) == true) {
                     findItemsToDroidwash();
                     buttons.addDroidwashableItems(items_to_droidwash);
                     if (items_to_droidwash.length != 0) {
