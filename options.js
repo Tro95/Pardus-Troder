@@ -439,8 +439,7 @@ function troderOptions() {
             description: 'These options let you balance the cost-efficiency of droid washing with speed and availability of suitable locations. It is recommended to use the most cost-efficient option as increased speed and availability is rarely worth the price difference.',
         });
 
-        var droid_washing_inner_html = '<tr><td><div><table><tbody><tr><td><label for="droidwash-level">Mode</label></td><td><input type="range" id="droidwash-level" name="droidwash-level" min="20" max="80" step="20" value="20" style="background:url(//static.pardus.at/img/std/bgd.gif)"></td></tr></tbody></table></div></td></tr><tr><td><div id="droidwash-level-info"><table><tbody><tr><td>Credits / ATP:</td><td><div id="credits-per-atp" style="color:#009900">465254</div></td><td><img src="//static.pardus.at/img/std/credits.png" title="Credits" alt="Credits"></td></tr><tr><td>Speed:</td><td><div id="speed-for-atp" style="color:#FFAA00">Moderate</div></td></tr></tbody></table></div></td></tr><tr><td><table><tbody><tr><td>Planets:</td><td><table><tbody><tr><td><input id="troder-droid-washing-m-planet-enabled" type="checkbox"><label>M Class</label></td><td><input id="troder-droid-washing-i-planet-enabled" type="checkbox"><label>I Class</label></td><td><input id="troder-droid-washing-d-planet-enabled" type="checkbox"><label>D Class</label></td></tr><tr><td><input id="troder-droid-washing-g-planet-enabled" type="checkbox"><label>G Class</label></td><td><input id="troder-droid-washing-r-planet-enabled" type="checkbox"><label>R Class</label></td><td><input id="troder-droid-washing-a-planet-enabled" type="checkbox"><label>A Class</label></td></tr></tbody></table></td></tr><tr><td>Starbases:</td><td><table><tbody><tr><td><input id="troder-droid-washing-starbase-enabled" type="checkbox"><label>NPC Starbase</label></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-droid-washing-save" type="button"></td></tr>';
-        droid_washing_options_box.innerHtml = droid_washing_inner_html;
+        var droid_washing_inner_html = '<tr><td><div><table><tbody><tr><td><label for="droidwash-level">Mode</label></td><td><input type="range" id="droidwash-level" name="droidwash-level" min="20" max="80" step="20" value="20" style="background:url(//static.pardus.at/img/std/bgd.gif)"></td></tr></tbody></table></div></td></tr><tr><td><div id="droidwash-level-info"><table><tbody><tr><td>Credits / ATP:</td><td><div id="credits-per-atp" style="color:#009900">465254</div></td><td><img src="//static.pardus.at/img/std/credits.png" title="Credits" alt="Credits"></td></tr><tr><td>Credits / ATP *:</td><td><div id="credits-per-atp-neutral-div-6" style="color:#009900"></div></td><td><img src="//static.pardus.at/img/std/credits.png" title="Credits" alt="Credits"></td></tr><tr><td>Speed:</td><td><div id="speed-for-atp" style="color:#FFAA00">Moderate</div></td></tr></tbody></table></div></td></tr><tr><td><div>* neutral div-6 trade uplink</div></td></tr><tr><td><table><tbody><tr><td>Planets:</td><td><table><tbody><tr><td><input id="troder-droid-washing-m-planet-enabled" type="checkbox"><label>M Class</label></td><td><input id="troder-droid-washing-i-planet-enabled" type="checkbox"><label>I Class</label></td><td><input id="troder-droid-washing-d-planet-enabled" type="checkbox"><label>D Class</label></td></tr><tr><td><input id="troder-droid-washing-g-planet-enabled" type="checkbox"><label>G Class</label></td><td><input id="troder-droid-washing-r-planet-enabled" type="checkbox"><label>R Class</label></td><td><input id="troder-droid-washing-a-planet-enabled" type="checkbox"><label>A Class</label></td></tr></tbody></table></td></tr><tr><td>Starbases:</td><td><table><tbody><tr><td><input id="troder-droid-washing-starbase-enabled" type="checkbox"><label>NPC Starbase</label></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align="right"><input value="Save" id="troder-droid-washing-save" type="button"></td></tr>';        droid_washing_options_box.innerHtml = droid_washing_inner_html;
         droid_washing_options_box.addAfterRefreshHook(droidWashAfterRefresh);
 
         function droidWashAfterRefresh() {
@@ -466,30 +465,37 @@ function troderOptions() {
             function setCreditsPerATP() {
                 var slider_value = document.getElementById('droidwash-level').valueAsNumber;
                 var credits_per_atp = 4000000 * ((Math.pow(10, -1 / slider_value) * 1.25) - 1);
+                var credits_per_atp_neutral_div_6 = credits_per_atp / (1 + (6 * 0.08));
 
                 var credits_per_atp_elem = document.getElementById('credits-per-atp');
+                var credits_per_atp_neutral_div_6_elem = document.getElementById('credits-per-atp-neutral-div-6');
                 var speed_per_atp_elem = document.getElementById('speed-for-atp');
 
                 credits_per_atp_elem.innerHTML = credits_per_atp.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                credits_per_atp_neutral_div_6_elem.innerHTML = credits_per_atp_neutral_div_6.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
                 switch (slider_value) {
                     case 20:
                         credits_per_atp_elem.setAttribute('style','color:#009900');
+                        credits_per_atp_neutral_div_6_elem.setAttribute('style','color:#009900');
                         speed_per_atp_elem.setAttribute('style','color:#FFAA00');
                         speed_per_atp_elem.innerHTML = 'Moderate';
                         break;
                     case 40:
                         credits_per_atp_elem.setAttribute('style','color:#FFFF00');
+                        credits_per_atp_neutral_div_6_elem.setAttribute('style','color:#FFFF00');
                         speed_per_atp_elem.setAttribute('style','color:#FFFF00');
                         speed_per_atp_elem.innerHTML = 'Fast';
                         break;
                     case 60:
                         credits_per_atp_elem.setAttribute('style','color:#FFAA00');
+                        credits_per_atp_neutral_div_6_elem.setAttribute('style','color:#FFAA00');
                         speed_per_atp_elem.setAttribute('style','color:#99FF00');
                         speed_per_atp_elem.innerHTML = 'Faster';
                         break;
                     case 80:
                         credits_per_atp_elem.setAttribute('style','color:#CC0000');
+                        credits_per_atp_neutral_div_6_elem.setAttribute('style','color:#CC0000');
                         speed_per_atp_elem.setAttribute('style','color:#009900');
                         speed_per_atp_elem.innerHTML = 'Fastest';
                         break;
