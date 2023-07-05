@@ -161,6 +161,10 @@ function starbase() {
         if (player_owned) {
             if (GM_getValue(universe + '_po_starbase_planet_run_enabled', true)) {
                 buttons.addButton("Planet Run", loadPlanet);
+
+                document.addPardusKeyDownListener('starbase_planet_run_keypress', {code: 83}, (event) => {
+                    loadPlanet();
+                });
             }
             if (GM_getValue(universe + '_po_starbase_load_robots_enabled', true)) {
                 buttons.addButton("Load Robots", loadRobots);
@@ -192,6 +196,10 @@ function starbase() {
 
             if (GM_getValue(universe + '_npc_starbase_planet_run_enabled', true)) {
                 buttons.addButton("Planet Run", loadPlanet);
+
+                document.addPardusKeyDownListener('starbase_planet_run_keypress', {code: 83}, (event) => {
+                    loadPlanet();
+                });
             }
         }
           

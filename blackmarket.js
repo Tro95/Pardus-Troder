@@ -108,8 +108,8 @@ function blackmarket() {
             // Search for available Space in building.
             if (cell.innerHTML == 'free&nbsp;space:') {
 
-                building_space_location = cell.nextSibling;
-                building_space = scrubData(building_space_location.innerHTML.substring(0,cell.nextSibling.innerHTML.length - 1));
+                //building_space_location = cell.nextSibling;
+                building_space = 999;
 
             }
         }

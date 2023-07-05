@@ -146,16 +146,6 @@ function planet() {
         sell_table.addEventListener('click',updateSpace,true);
         buy_table.addEventListener('keyup',updateSpace,true);
         buy_table.addEventListener('click',updateSpace,true);
-
-        /*for (var i = 0; i < items.length; i++) {
-            if (commodities[i].ship_stock > 0) {
-                commodities[i].sell_element.addEventListener('keyup',function(){ship_space.calculateShipSpace();}, true);
-            }
-            if (commodities[i].trade_stock > commodities[i].min) {
-                commodities[i].buy_element.addEventListener('keyup',function(){ship_space.calculateShipSpace();}, true);
-            }
-        }*/
-
     }
 
     function addButtons() {
@@ -191,6 +181,10 @@ function planet() {
             case "a":
                 if (GM_getValue(universe + '_planet_a_starbase_run_enabled', true)) {
                     buttons.addButton("Starbase Run", loadStarbase);
+
+                    document.addPardusKeyDownListener('planet_starbase_run_keypress', {code: 83}, (event) => {
+                        loadStarbase();
+                    });
                 }
                 if (GM_getValue(universe + '_planet_a_stock_run_enabled', true)) {
                     buttons.addButton("Stock Run", loadStockRun);
@@ -205,6 +199,10 @@ function planet() {
             case "m":
                 if (GM_getValue(universe + '_planet_m_starbase_run_enabled', true)) {
                     buttons.addButton("Starbase Run", loadStarbase);
+
+                    document.addPardusKeyDownListener('planet_starbase_run_keypress', {code: 83}, (event) => {
+                        loadStarbase();
+                    });
                 }
                 if (GM_getValue(universe + '_planet_m_stock_run_enabled', true)) {
                     buttons.addButton("Stock Run", loadStockRun);

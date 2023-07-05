@@ -51,10 +51,36 @@ function troderOptions() {
     planetROptions(planets_subtab);
     planetGOptions(planets_subtab);
     planetDOptions(planets_subtab);
+    planetKeyboardOptions(planets_subtab);
     starbaseOptions(sb_subtab);
     blackmarketOptions(bm_subtab);
     shipTransferOptions(ship_transfer_subtab);
     cargoDroppingOptions(cargo_drop_subtab);
+
+    const keyboard_options = troder_options_tab.addBox({
+        heading: 'Key Commands',
+        description: 'These options control the key bindings for general trading.',
+    });
+
+    keyboard_options.addKeyDownOption({
+        variable: 'transfer_keypress',
+        description: 'Transfer',
+        defaultValue: {
+            code: 13,
+            key: "Enter",
+            description: "Enter"
+        },
+    });
+
+    keyboard_options.addKeyDownOption({
+        variable: 'exit_to_nav_keypress',
+        description: 'Exit to nav',
+        defaultValue: {
+            code: 27,
+            key: "Escape",
+            description: "Escape"
+        },
+    });
 
     troder_options_tab.refreshElement();
 
@@ -311,6 +337,23 @@ function troderOptions() {
         });
     }
 
+    function planetKeyboardOptions(subtab) {
+        const keyboard_options = subtab.addBox({
+            heading: 'Key Commands',
+            description: 'These options control the key bindings for trading planets.',
+        });
+
+        keyboard_options.addKeyDownOption({
+            variable: 'planet_starbase_run_keypress',
+            description: 'Starbase run',
+            defaultValue: {
+                code: 83,
+                key: "KeyS",
+                description: "s"
+            },
+        });
+    }
+
     function starbaseOptions(subtab) {
         var po_starbase_options_box = subtab.addBoxRight({
             heading: 'Player-Owned Starbases',
@@ -358,6 +401,21 @@ function troderOptions() {
             variable: 'npc_starbase_planet_run_enabled',
             description: 'Enable \'Planet Run\' button',
             defaultValue: true,
+        });
+
+        const keyboard_options = subtab.addBox({
+            heading: 'Key Commands',
+            description: 'These options control the key bindings for trading starbases.',
+        });
+
+        keyboard_options.addKeyDownOption({
+            variable: 'starbase_planet_run_keypress',
+            description: 'Planet run',
+            defaultValue: {
+                code: 83,
+                key: "KeyS",
+                description: "s"
+            },
         });
     }
 
