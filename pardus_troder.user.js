@@ -2,32 +2,32 @@
 // @name            Pardus Troder
 // @namespace       Tro
 // @author          Tro (Artemis)
-// @version         1.12.10
+// @version         1.13
 // @description     Trading script to assist in the buying and selling on planets and starbases
-// @include         *.pardus.at/starbase_trade.php
-// @include         *.pardus.at/planet_trade.php
-// @include         *.pardus.at/blackmarket.php
-// @include         *.pardus.at/options.php
-// @include         *.pardus.at/drop_cargo.php
-// @include         *.pardus.at/ship2ship_transfer.php*
+// @match           *.pardus.at/starbase_trade.php
+// @match           *.pardus.at/planet_trade.php
+// @match           *.pardus.at/blackmarket.php
+// @match           *.pardus.at/options.php
+// @match           *.pardus.at/drop_cargo.php
+// @match           *.pardus.at/ship2ship_transfer.php*
 // @icon            https://static.pardus.at/img/std/ships/leviathan.png
 // @downloadURL     https://github.com/Tro95/Pardus-Troder/raw/master/pardus_troder.user.js
 // @updateURL       https://github.com/Tro95/Pardus-Troder/raw/master/pardus_troder.meta.js
 // @grant           GM_setValue
 // @grant           GM_getValue
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v2.5.3/dist/pardus-options-library.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/defaults.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/commodities.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/functions.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/starbase.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/planet.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/blackmarket.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/drop_cargo.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/options.js
-// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.10/ship_transfer.js
-//
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Options-Library/v2.6.8/dist/pardus-options-library.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/defaults.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/commodities.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/functions.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/starbase.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/planet.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/blackmarket.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/drop_cargo.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/options.js
+// @require         https://raw.githubusercontent.com/Tro95/Pardus-Troder/v1.12.11/ship_transfer.js
 // ==/UserScript==
 
+// v1.13    Adding basic key commands
 // v1.12.10 Updating Pardus Options Library
 // v1.12.9  Updating droidwashing options to display neutral div-6 cost
 // v1.12.8  Fixing NPC SB droidwashing bug
@@ -231,6 +231,19 @@ var buttons = {
                 preview = false;
             }
         }
+
+        document.addPardusKeyDownListener('transfer_keypress', {code: 13}, (event) => {
+            for (const button of document.querySelectorAll('input[type="submit"]')) {
+                if (button.value === '<- Transfer ->') {
+                    button.click();
+                }
+            }
+        });
+
+        document.addPardusKeyDownListener('exit_to_nav_keypress', {code: 27}, (event) => {
+            document.location.assign(`${document.location.origin}/main.php`);
+            event.preventDefault();
+        });
     },
     addButton: function(label, function_to_set) {
         if (this.buttons_box == null) {
