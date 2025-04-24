@@ -279,7 +279,7 @@ var buttons = {
             document.getElementById("troder-droidwash-items").firstChild.innerHTML = '<tr><td align="center"><font color="#FF0000">No items capable of being droidwashed</font></td></tr>';
             return;
         } else {
-            document.getElementById("troder-droidwash-items").firstChild.innerHTML = '<tr><td align="center">Items capable of being droidwashed:</td></tr><tr><td align="center" style="font-size:11px;"><ul style="list-style-type:none;padding-left:0;" id="troder-droidwash-items-list"></ul></td></tr>';            
+            document.getElementById("troder-droidwash-items").firstChild.innerHTML = '<tr><td align="center">Items capable of being droidwashed:</td></tr><tr><td align="center" style="font-size:11px;"><ul style="list-style-type:none;padding-left:0;" id="troder-droidwash-items-list"></ul></td></tr>';
         }
 
         for (i = 0; i < droidwash_items.length; i++) {
