@@ -168,6 +168,10 @@ function starbase() {
             }
             if (GM_getValue(universe + '_po_starbase_load_robots_enabled', true)) {
                 buttons.addButton("Load Robots", loadRobots);
+
+                document.addPardusKeyDownListener('starbase_load_robots_keypress', {code: 66}, (event) => {
+                    loadRobots();
+                });
             }
             if (GM_getValue(universe + '_po_starbase_load_mo_enabled', true)) {
                 buttons.addButton("Load MO", function() {loadMultiBuy("sb_mo_materials", ["Metal", "Ore"]);});

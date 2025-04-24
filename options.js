@@ -82,6 +82,26 @@ function troderOptions() {
         },
     });
 
+    keyboard_options.addKeyDownOption({
+        variable: 'unload_keypress',
+        description: 'Unload',
+        defaultValue: {
+            code: 85,
+            key: "U",
+            description: "U"
+        },
+    });
+
+    keyboard_options.addKeyDownOption({
+        variable: 'reset_keypress',
+        description: 'Reset',
+        defaultValue: {
+            code: 82,
+            key: "R",
+            description: "R"
+        },
+    });
+
     troder_options_tab.refreshElement();
 
     function cargoDroppingOptions(subtab) {
@@ -350,6 +370,26 @@ function troderOptions() {
                 code: 83,
                 key: "KeyS",
                 description: "s"
+            },
+        });
+
+        keyboard_options.addKeyDownOption({
+            variable: 'planet_food_run_keypress',
+            description: 'Food run',
+            defaultValue: {
+                code: 70,
+                key: "KeyF",
+                description: "f"
+            },
+        });
+
+        keyboard_options.addKeyDownOption({
+            variable: 'planet_water_run_keypress',
+            description: 'Water run',
+            defaultValue: {
+                code: 87,
+                key: "KeyW",
+                description: "w"
             },
         });
     }

@@ -259,6 +259,13 @@ var buttons = {
     addStandardButtons: function() {
         this.addButton("Unload Ship", function() {unload();submitIfNotPreview();});
         this.addButton("Reset", reset);
+        document.addPardusKeyDownListener('unload_keypress', {code: 85}, (event) => {
+            unload();
+            submitIfNotPreview();
+        });
+        document.addPardusKeyDownListener('reset_keypress', {code: 82}, (event) => {
+            reset();
+        });
     },
     addDroidwashableItems: function(droidwash_items) {
         var i;

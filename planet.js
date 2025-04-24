@@ -185,6 +185,20 @@ function planet() {
                     document.addPardusKeyDownListener('planet_starbase_run_keypress', {code: 83}, (event) => {
                         loadStarbase();
                     });
+
+                    document.addPardusKeyDownListener('planet_food_run_keypress', {code: 70}, (event) => {
+                        unload(["Food", "Capri Stim", "Crimson Stim", "Amber Stim"]);
+                        ensureFuel();
+                        attempt_buy("Food", ship_space.allowedSpace());
+                        submitIfNotPreview();
+                    });
+
+                    document.addPardusKeyDownListener('planet_water_run_keypress', {code: 87}, (event) => {
+                        unload(["Water", "Capri Stim", "Crimson Stim", "Amber Stim"]);
+                        ensureFuel();
+                        attempt_buy("Water", ship_space.allowedSpace());
+                        submitIfNotPreview();
+                    });
                 }
                 if (GM_getValue(universe + '_planet_a_stock_run_enabled', true)) {
                     buttons.addButton("Stock Run", loadStockRun);
@@ -202,6 +216,20 @@ function planet() {
 
                     document.addPardusKeyDownListener('planet_starbase_run_keypress', {code: 83}, (event) => {
                         loadStarbase();
+                    });
+
+                    document.addPardusKeyDownListener('planet_food_run_keypress', {code: 70}, (event) => {
+                        unload(["Food", "Capri Stim", "Crimson Stim", "Amber Stim"]);
+                        ensureFuel();
+                        attempt_buy("Food", ship_space.allowedSpace());
+                        submitIfNotPreview();
+                    });
+
+                    document.addPardusKeyDownListener('planet_water_run_keypress', {code: 87}, (event) => {
+                        unload(["Water", "Capri Stim", "Crimson Stim", "Amber Stim"]);
+                        ensureFuel();
+                        attempt_buy("Water", ship_space.allowedSpace());
+                        submitIfNotPreview();
                     });
                 }
                 if (GM_getValue(universe + '_planet_m_stock_run_enabled', true)) {
