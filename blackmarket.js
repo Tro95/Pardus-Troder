@@ -152,7 +152,7 @@ function blackmarket() {
             buttons.addButton("Sell Drugs", unloadDrugs);
         }
         if (GM_getValue(universe + '_blackmarket_load_gem_merchant_enabled', true)) {
-            buttons.addButton("Load Gem Merchant", loadGemMerchant);
+            buttons.addButton("Gem Merchant", loadGemMerchant);
         }
         
         buttons.addStandardButtons();

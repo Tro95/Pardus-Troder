@@ -506,7 +506,7 @@ function troderOptions() {
 
         blackmarket_options_box.addBooleanOption({
             variable: 'blackmarket_load_gem_merchant_enabled',
-            description: 'Enable \'Load Gem Merchant\' button',
+            description: 'Enable \'Gem Merchant\' button',
             defaultValue: true,
         });
     }
