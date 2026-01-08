@@ -503,6 +503,12 @@ function troderOptions() {
             min: 1,
             max: 100,
         });
+
+        blackmarket_options_box.addBooleanOption({
+            variable: 'blackmarket_load_gem_merchant_enabled',
+            description: 'Enable \'Load Gem Merchant\' button',
+            defaultValue: true,
+        });
     }
 
     function droidWashingOptions(subtab) {
