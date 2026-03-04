@@ -1,0 +1,30 @@
+{
+  "name": "pardus-troder",
+  "version": "2.0.0",
+  "description": "Trading script to assist in the buying and selling on planets and starbases in Pardus (https://pardus.at)",
+  "main": "pardus_troder.user.js",
+  "type": "module",
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.9.0",
+    "eslint": "^10.0.0",
+    "globals": "^16.1.0",
+    "terser-webpack-plugin": "^5.3.15",
+    "webpack": "^5.48.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "scripts": {
+    "build": "npx webpack-cli",
+    "lint": "eslint src",
+    "lint-fix": "eslint src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tro95/Pardus-Troder.git"
+  },
+  "author": "Tro",
+  "license": "ISC",
+  "dependencies": {
+    "pardus-library": "^1.1.0",
+    "pardus-options-library": "^2.7.0"
+  }
+}
