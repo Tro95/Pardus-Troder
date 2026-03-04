@@ -10,8 +10,6 @@ export default defineConfig([
                 ...globals.greasemonkey,
                 Atomics: "readonly",
                 SharedArrayBuffer: "readonly",
-                PardusOptions: "readonly",
-                PardusOptionsUtility: "readonly",
             },
             ecmaVersion: "latest",
             sourceType: "module",
@@ -41,6 +39,7 @@ export default defineConfig([
             "prefer-destructuring": "off",
             "no-restricted-properties": "off",
             "prefer-exponentiation-operator": "off",
+            "no-undef": "error",
         },
     },
 ]);
