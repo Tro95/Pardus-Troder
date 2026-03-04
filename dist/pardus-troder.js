@@ -2403,7 +2403,3039 @@ class PardusLibrary {
 
 
 
+;// ./node_modules/pardus-options-library/src/classes/pardus-options-utility.js
+/**
+ * @module PardusOptionsUtility
+ */
+class PardusOptionsUtility {
+    /**
+     *  @ignore
+     */
+    static defaultSaveFunction(key, value) {
+        return GM_setValue(key, value);
+    }
+
+    /**
+     *  @ignore
+     */
+    static defaultGetFunction(key, defaultValue = null) {
+        return GM_getValue(key, defaultValue);
+    }
+
+    /**
+     *  @ignore
+     */
+    static defaultDeleteFunction(key) {
+        return GM_deleteValue(key);
+    }
+
+    /**
+     *  Returns the active universe
+     *  @returns {string} One of 'orion', 'artemis', or 'pegasus'
+     *  @throws Will throw an error if no universe could be determined.
+     */
+    static getUniverse() {
+        switch (document.location.hostname) {
+            case 'orion.pardus.at':
+                return 'orion';
+            case 'artemis.pardus.at':
+                return 'artemis';
+            case 'pegasus.pardus.at':
+                return 'pegasus';
+            default:
+                throw new Error('Unable to determine universe');
+        }
+    }
+
+    /**
+     *  Returns the universe-specific name of a variable
+     *  @ignore
+     */
+    static getVariableName(variableName) {
+        return `${this.getUniverse()}_${variableName}`;
+    }
+
+    /**
+     *  Returns the universe-specific value of a variable
+     *  @param {string} variableName The name of the universe-specific variable to retrieve
+     *  @param {*} [defaultValue=null] A default value to return if the universe-specific variable has never been set.
+     *  @returns {*} Value of the universe-specific value, or if not set, the default value.
+     */
+    static getVariableValue(variableName, defaultValue = null) {
+        return this.defaultGetFunction(this.getVariableName(variableName), defaultValue);
+    }
+
+    /**
+     *  Sets the universe-specific value of a variable
+     *  @param {string} variableName The name of the universe-specific variable to set
+     *  @param {*} value The value to set for the universe-specific variable.
+     */
+    static setVariableValue(variableName, value) {
+        return this.defaultSaveFunction(this.getVariableName(variableName), value);
+    }
+
+    /**
+     *  Deletes the universe-specific value of a variable
+     *  @param {string} variableName The name of the universe-specific variable to delete
+     */
+    static deleteVariableValue(variableName) {
+        return this.defaultDeleteFunction(this.getVariableName(variableName));
+    }
+
+    /**
+     *  @ignore
+     */
+    static setActiveTab(id) {
+        window.localStorage.setItem('pardusOptionsOpenTab', id);
+        window.dispatchEvent(new window.Event('storage'));
+    }
+
+    /**
+     *  Returns a path to the user's image pack to use as a base for relative image URLs
+     *  @returns {string} Path to the user's iamge pack
+     */
+    static getImagePackUrl() {
+        const defaultImagePackUrl = '//static.pardus.at/img/std/';
+        const imagePackUrl = String(document.querySelector('body').style.backgroundImage).replace(/url\("*|"*\)|[a-z0-9]+\.gif/g, '');
+
+        return imagePackUrl !== '' ? imagePackUrl : defaultImagePackUrl;
+    }
+
+    /**
+     *  @ignore
+     */
+    static addGlobalListeners() {
+        EventTarget.prototype.addPardusKeyDownListener = function addPardusKeyDownListener(pardusVariable, defaultValue, listener, options = false) {
+            const pardusVariableKey = PardusOptionsUtility.getVariableValue(pardusVariable, defaultValue);
+
+            if (!pardusVariableKey) {
+                throw new Error(`No Pardus variable ${pardusVariable} defined!`);
+            }
+
+            if (Object.hasOwn(pardusVariableKey, 'disabled')) {
+                return;
+            }
+
+            if (!this.pardusListeners) {
+                this.pardusListeners = [];
+            }
+
+            // Prevent duplicates from being added
+            if (this.pardusListeners.includes(`${pardusVariableKey.code}${pardusVariable}`)) {
+                return;
+            }
+
+            this.pardusListeners.push(`${pardusVariableKey.code}${pardusVariable}`);
+
+            const eventListener = (event) => {
+                if (event.isComposing || event.keyCode === 229 || event.repeat) {
+                    return;
+                }
+
+                if (event.keyCode !== pardusVariableKey.code) {
+                    return;
+                }
+
+                listener(event);
+            };
+
+            this.addEventListener('keydown', eventListener, options);
+        };
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/html-element.js
+/**
+ * @class HtmlElement
+ */
+class HtmlElement {
+    /**
+     * @constructor HtmlElement
+     * @param {string} id HTML identifier for the element. Must be globally unique.
+     */
+    constructor(id) {
+        // Make sure it is a valid html identifier
+        if (!id || id === '') {
+            throw new Error('Id cannot be empty.');
+        }
+        const validIds = /^[a-zA-Z][\w:.-]*$/;
+        if (!validIds.test(id)) {
+            throw new Error(`Id '${id}' is not a valid HTML identifier.`);
+        }
+
+        this.id = id;
+        this.afterRefreshHooks = [];
+        this.beforeRefreshHooks = [];
+    }
+
+    /**
+     * Add an event listener to the element
+     * @function HtmlElement#addEventListener
+     * @param {string} eventName Name of the event to listen for
+     * @param {function} listener Listener to call when the event fires
+     */
+    addEventListener(eventName, listener, opts = false) {
+        if (this.getElement()) {
+            this.getElement().addEventListener(eventName, listener, opts);
+        }
+
+        if (opts && Object.hasOwn(opts, 'ephemeral') && opts.ephemeral) {
+            return;
+        }
+
+        this.addAfterRefreshHook(() => {
+            if (this.getElement()) {
+                this.getElement().addEventListener(eventName, listener, opts);
+            }
+        });
+    }
+
+    /**
+     * Remove an event listener from the element
+     * @function HtmlElement#removeEventListener
+     * @param {string} eventName Name of the event to listen for
+     * @param {function} listener Listener to call when the event fires
+     */
+    removeEventListener(eventName, listener) {
+        if (this.getElement()) {
+            this.getElement().removeEventListener(eventName, listener);
+        }
+    }
+
+    /**
+     * Return a string representation of the html element
+     * @function HtmlElement#toString
+     * @returns {string} String representation of the html element
+     */
+    toString() {
+        return `<div id='${this.id}'></div>`;
+    }
+
+    /**
+     * Run all hooks that should be called prior to refreshing the element
+     * @function HtmlElement#beforeRefreshElement
+     */
+    beforeRefreshElement() {
+        for (const func of this.beforeRefreshHooks) {
+            func();
+        }
+    }
+
+    /**
+     * Run all hooks that should be called after refreshing the element
+     * @function HtmlElement#afterRefreshElement
+     * @param {object} opts Optional arguments to be passed to the hooks
+     */
+    afterRefreshElement(opts = {}) {
+        for (const func of this.afterRefreshHooks) {
+            func(opts);
+        }
+    }
+
+    /**
+     * Add a hook to run after the element is refreshed
+     * @function HtmlElement#addAfterRefreshElement
+     * @param {function} func Function to call after the element is refreshed
+     */
+    addAfterRefreshHook(func) {
+        this.afterRefreshHooks.push(func);
+    }
+
+    /**
+     * Refresh the element in the dom
+     * @function HtmlElement#refreshElement
+     */
+    refreshElement() {
+        this.beforeRefreshElement();
+        this.getElement().replaceWith(this.toElement());
+        this.afterRefreshElement();
+    }
+
+    /**
+     * Gets how much the element should be offset from the top of the DOM
+     * @function HtmlElement#getOffsetTop
+     * @returns {integer} Pixels the element is offset from the top of the DOM
+     */
+    getOffsetTop() {
+        let currentOffset = this.getElement().offsetTop + this.getElement().offsetHeight;
+        let parent = this.getElement().offsetParent;
+
+        while (parent !== null) {
+            currentOffset += parent.offsetTop;
+            parent = parent.offsetParent;
+        }
+
+        return currentOffset;
+    }
+
+    /**
+     * Gets how much the element should be offset from the left of the DOM
+     * @function HtmlElement#getOffsetLeft
+     * @returns {integer} Pixels the element is offset from the left of the DOM
+     */
+    getOffsetLeft() {
+        let currentOffset = this.getElement().offsetLeft;
+        let parent = this.getElement().offsetParent;
+
+        while (parent !== null) {
+            currentOffset += parent.offsetLeft;
+            parent = parent.offsetParent;
+        }
+
+        return currentOffset;
+    }
+
+    /**
+     * Gets the element
+     * @function HtmlElement#getElement
+     * @returns {element} Element
+     */
+    getElement() {
+        return document.getElementById(this.id);
+    }
+
+    /**
+     * Creates the element within the DOM from the string representation
+     * @function HtmlElement#toElement
+     * @returns {element} Element
+     */
+    toElement() {
+        const template = document.createElement('template');
+        template.innerHTML = this.toString();
+        return template.content.firstChild;
+    }
+
+    /**
+     * Appends a child element to the element within the DOM
+     * @function HtmlElement#appendChild
+     * @param {element} child The child to append
+     * @returns {element} The child element
+     */
+    appendChild(ele) {
+        return document.getElementById(this.id).appendChild(ele);
+    }
+
+    /**
+     * Appends a child element to the element if it was a table within the DOM
+     * @function HtmlElement#appendTableChild
+     * @param {element} child The child to append
+     * @returns {element} The child element
+     */
+    appendTableChild(ele) {
+        return document.getElementById(this.id).firstChild.appendChild(ele);
+    }
+
+    /**
+     * Sets the innerHTML property of the element
+     * @function HtmlElement#setHTML
+     * @param {html} html to set inside the element
+     */
+    setHTML(html) {
+        this.innerHtml = html;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/tip-box.js
+
+
+
+class TipBox extends HtmlElement {
+    constructor({
+        id,
+    }) {
+        super(id);
+        this.contents = '';
+        this.title = '';
+        this.addEventListener('click', () => {
+            this.hide();
+        });
+    }
+
+    setContents({
+        contents = '',
+        title = '',
+    }) {
+        this.contents = contents;
+        this.title = title;
+        this.refreshElement();
+    }
+
+    setPosition({
+        element,
+        position = 'right',
+    }) {
+        let xOffset = 15;
+        let yOffset = -13;
+
+        switch (position) {
+            case 'left': {
+                xOffset += -220;
+                break;
+            }
+
+            case 'er': {
+                xOffset += 128;
+                break;
+            }
+
+            case 'lf': {
+                xOffset += -160;
+                yOffset += -310;
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+
+        this.getElement().style.top = `${element.getOffsetTop() + yOffset}px`;
+        this.getElement().style.left = `${element.getOffsetLeft() + xOffset}px`;
+    }
+
+    show() {
+        this.getElement().removeAttribute('hidden');
+    }
+
+    hide() {
+        this.getElement().setAttribute('hidden', '');
+    }
+
+    toString() {
+        return `<div id="${this.id}" hidden="" style="position: absolute; width: 200px; z-index: 100; border: 1pt black solid; background: #000000; padding: 0px;"><table class="messagestyle" style="background:url(${PardusOptionsUtility.getImagePackUrl()}bgd.gif)" width="100%" cellspacing="0" cellpadding="3"><tbody><tr><td style="text-align:left;background:#000000;"><b>${this.title}</b></td></tr><tr><td style="text-align:left;">${this.contents}</td></tr><tr><td height="5"><spacer type="block" width="1" height="1"></spacer></td></tr><tr><td style="text-align:right;background:#31313A;"><b>GNN Library</b><img src="${PardusOptionsUtility.getImagePackUrl()}info.gif" width="10" height="12" border="0"></td></tr></tbody></table></div>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/tabs/tabs-row.js
+
+
+class TabsRow extends HtmlElement {
+    constructor({
+        id,
+        hidden = false,
+    }) {
+        super(id);
+        this.hidden = hidden;
+        this.labels = [];
+        this.addAfterRefreshHook(() => {
+            for (const label of this.labels) {
+                label.afterRefreshElement();
+            }
+        });
+    }
+
+    addLabel({
+        label,
+    }) {
+        this.labels.push(label);
+        if (this.getElement()) {
+            this.appendChild(label.toElement());
+            label.afterRefreshElement();
+        }
+    }
+
+    show() {
+        this.hidden = false;
+        this.refreshElement();
+    }
+
+    hide() {
+        this.hidden = true;
+        this.refreshElement();
+    }
+
+    toString() {
+        if (this.hidden) {
+            return `<tr id="${this.id}" cellspacing="0" cellpadding="0" border="0" hidden="">${this.labels.join('')}</tr>`;
+        }
+        return `<tr id="${this.id}" cellspacing="0" cellpadding="0" border="0">${this.labels.join('')}</tr>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/tabs/tabs-element.js
+
+
+
+class TabsElement extends HtmlElement {
+    constructor({
+        id,
+    }) {
+        super(id);
+        this.tabsRow = new TabsRow({
+            id: `${this.id}-row`,
+        });
+    }
+
+    addLabel({
+        label,
+    }) {
+        this.tabsRow.addLabel({
+            label,
+        });
+    }
+
+    toString() {
+        return `<table id="${this.id}" cellspacing="0" cellpadding="0" border="0" align="left"><tbody>${this.tabsRow}</tbody></table>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/contents-area.js
+
+
+class ContentsArea extends HtmlElement {
+    constructor({
+        id,
+    }) {
+        super(id);
+    }
+
+    addContent({
+        content,
+    }) {
+        this.appendChild(document.createElement('div').appendChild(content.toElement()));
+        content.afterRefreshElement({
+            maintainRefreshStatus: true,
+        });
+    }
+
+    toString() {
+        return `<tr id="${this.id}" cellspacing="0" cellpadding="0" border="0"></tr>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/tabs/tab-label.js
+
+
+
+class TabLabel extends HtmlElement {
+    constructor({
+        id,
+        heading,
+        active = false,
+        padding = '10px',
+    }) {
+        super(id);
+        this.padding = padding;
+        this.heading = heading;
+        this.active = active;
+        this.addEventListener('mouseover', () => {
+            if (this.active) {
+                this.getElement().style.cursor = 'default';
+            } else {
+                this.getElement().style.backgroundImage = `url(${PardusOptionsUtility.getImagePackUrl()}tabactive.png)`;
+                this.getElement().style.cursor = 'default';
+            }
+        });
+        this.addEventListener('mouseout', () => {
+            if (!this.active) {
+                this.getElement().style.backgroundImage = `url(${PardusOptionsUtility.getImagePackUrl()}tab.png)`;
+                this.getElement().style.cursor = 'default';
+            }
+        });
+    }
+
+    toString() {
+        const imageUrl = (this.active) ? 'tabactive' : 'tab';
+        return `<td id="${this.id}" style="background: transparent url(&quot;${PardusOptionsUtility.getImagePackUrl()}${imageUrl}.png&quot;) no-repeat scroll 0% 0%; background-size: cover; cursor: default; padding-left: ${this.padding}; padding-right: ${this.padding}; box-sizing: border-box" class="tabcontent">${this.heading}</td>`;
+    }
+
+    setActive() {
+        this.getElement().style.backgroundImage = `url('${PardusOptionsUtility.getImagePackUrl()}tabactive.png')`;
+        this.active = true;
+    }
+
+    setInactive() {
+        this.getElement().style.backgroundImage = `url('${PardusOptionsUtility.getImagePackUrl()}tab.png')`;
+        this.active = false;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/disableable-html-element.js
+
+
+/**
+ * @class DisableableHtmlElement
+ * @extends HtmlElement
+ * @abstract
+ */
+class DisableableHtmlElement extends HtmlElement {
+    /**
+     * Create an HTML element that can be disabled
+     * @param {object} params Object containing parameters
+     * @param {string} params.id The id of the string. Must be unique.
+     * @param {boolean} params.disabled Whether the element is disabled or not
+     */
+    constructor({
+        id,
+        disabled = false,
+    }) {
+        super(id);
+        this.disabled = disabled;
+    }
+
+    /**
+     * Disables this element and all nested elements
+     * @function DisableableHtmlElement#disable
+     */
+    disable() {
+        this.setDisabled(true);
+        this.refreshElement();
+    }
+
+    /**
+     * Enables this element and all nested elements
+     * @function DisableableHtmlElement#enable
+     */
+    enable() {
+        this.setDisabled(false);
+        this.refreshElement();
+    }
+
+    /**
+     * Allows disabling or enabling ths element and all nested elements without refreshing
+     * @function DisableableHtmlElement#setDisabled
+     */
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/abstract/abstract-button.js
+
+
+class AbstractButton extends DisableableHtmlElement {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+        styleExtra = '',
+        actionText = '',
+        actionPerformedText = '',
+    }) {
+        super({
+            id,
+            disabled,
+        });
+
+        this.premium = premium;
+
+        if (this.premium) {
+            this.colour = '#FFCC11';
+        } else {
+            this.colour = '#D0D1D9';
+        }
+
+        this.backgroundColour = '#00001C';
+
+        if (this.disabled) {
+            this.colour = '#B5B5B5';
+            this.backgroundColour = '#CCCCCC';
+        }
+
+        this.styleExtra = styleExtra;
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+
+        this.actionText = actionText;
+        this.actionPerformedText = actionPerformedText;
+    }
+
+    toString() {
+        return `<input value="${this.actionText}" id="${this.id}" type="button" style="${this.style}" ${this.disabled ? 'disabled' : ''}>`;
+    }
+
+    /**
+     * Add an event listener to the element
+     * @function HtmlElement#addEventListener
+     * @param {function} listener Listener to call when the event fires
+     */
+    addClickListener(listener, opts = false) {
+        if (this.getElement()) {
+            this.getElement().addEventListener('click', listener, opts);
+        }
+
+        if (opts && Object.hasOwn(opts, 'ephemeral') && opts.ephemeral) {
+            return;
+        }
+
+        this.addAfterRefreshHook(() => {
+            if (this.getElement()) {
+                this.getElement().addEventListener('click', listener, opts);
+            }
+        });
+    }
+
+    setActionText(actionText = '', actionPerformedText = '') {
+        this.actionText = actionText;
+        this.actionPerformedText = actionPerformedText;
+        this.refreshElement();
+    }
+
+    displayClicked() {
+        this.getElement().setAttribute('disabled', 'true');
+        this.getElement().value = this.actionPerformedText;
+        this.getElement().setAttribute('style', 'color:green;background-color:silver');
+        setTimeout(() => {
+            this.getElement().removeAttribute('disabled');
+            this.getElement().value = this.actionText;
+            if (this.premium) {
+                this.getElement().setAttribute('style', 'color:#FFCC11');
+            } else {
+                this.getElement().removeAttribute('style');
+            }
+        }, 2000);
+    }
+
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        if (this.disabled) {
+            this.colour = '#B5B5B5';
+            this.backgroundColour = '#CCCCCC';
+        } else {
+            if (this.premium) {
+                this.colour = '#FFCC11';
+            } else {
+                this.colour = '#D0D1D9';
+            }
+            this.backgroundColour = '#00001C';
+        }
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+    }
+
+    disable() {
+        this.setDisabled(true);
+        if (this.getElement()) {
+            this.getElement().setAttribute('disabled', 'true');
+            this.getElement().setAttribute('style', this.style);
+        }
+    }
+
+    enable() {
+        this.setDisabled(false);
+        if (this.getElement()) {
+            this.getElement().removeAttribute('disabled');
+            this.getElement().setAttribute('style', this.style);
+        }
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/save-button-row/save-button.js
+
+
+class SaveButton extends AbstractButton {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+    }) {
+        super({
+            id,
+            premium,
+            disabled,
+            actionText: 'Save',
+            actionPerformedText: 'Saved',
+        });
+    }
+
+    displaySaved() {
+        this.displayClicked();
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/save-button-row/reset-button.js
+
+
+class ResetButton extends AbstractButton {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+    }) {
+        super({
+            id,
+            premium,
+            disabled,
+            actionText: 'Reset',
+            actionPerformedText: 'Reset',
+        });
+    }
+
+    displayReset() {
+        this.displayClicked();
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/save-button-row/save-button-row.js
+
+
+
+
+class SaveButtonRow extends DisableableHtmlElement {
+    constructor({
+        id,
+        premium = false,
+        resetButton = false,
+        disabled = false,
+    }) {
+        super({
+            id,
+            disabled,
+        });
+        this.premium = premium;
+        this.saveButton = new SaveButton({
+            id: `${this.id}-button`,
+            premium,
+            disabled,
+        });
+
+        if (resetButton) {
+            this.resetButton = new ResetButton({
+                id: `${this.id}-reset-button`,
+                premium,
+                disabled,
+            });
+        } else {
+            this.resetButton = null;
+        }
+    }
+
+    toString() {
+        return `<tr id="${this.id}"><td align="right" style="padding-right: 6px;">${(this.resetButton) ? `${this.resetButton}&nbsp` : ''}${this.saveButton}</td></tr>`;
+    }
+
+    /**
+     * Allows disabling or enabling this element and all nested elements without refreshing
+     * @function SaveButtonRow#setDisabled
+     */
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        this.saveButton.setDisabled(disabled);
+        if (this.resetButton) {
+            this.resetButton.setDisabled(disabled);
+        }
+    }
+
+    displaySaved() {
+        this.saveButton.displaySaved();
+    }
+
+    displayReset() {
+        if (this.resetButton) {
+            this.resetButton.displayReset();
+        }
+    }
+
+    addSaveEventListener(func) {
+        this.saveButton.addEventListener('click', func);
+    }
+
+    addResetEventListener(func) {
+        if (this.resetButton) {
+            this.resetButton.addEventListener('click', func);
+        }
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/save-button-row/load-button.js
+
+
+class LoadButton extends AbstractButton {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+    }) {
+        super({
+            id,
+            premium,
+            disabled,
+            actionText: 'Load',
+            actionPerformedText: 'Loaded',
+        });
+    }
+
+    displayLoaded() {
+        this.displayClicked();
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/save-button-row/preset-label.js
+
+
+
+class PresetLabel extends DisableableHtmlElement {
+    constructor({
+        id,
+        disabled = false,
+        defaultValue = '',
+    }) {
+        super({
+            id,
+            disabled,
+        });
+        this.defaultValue = defaultValue;
+        this.styleExtra = '';
+        this.colour = '#D0D1D9';
+        this.backgroundColour = '#00001C';
+
+        if (this.disabled) {
+            this.colour = '#B5B5B5';
+            this.backgroundColour = '#CCCCCC';
+        }
+
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+    }
+
+    toString() {
+        return `<input id="${this.id}" type="text" value="${this.getValue()}" style="${this.style}" ${this.disabled ? 'disabled' : ''}></input>`;
+    }
+
+    save() {
+        PardusOptionsUtility.defaultSaveFunction(`${PardusOptionsUtility.getVariableName(this.id)}`, this.getCurrentValue());
+    }
+
+    hasValue() {
+        if (!PardusOptionsUtility.defaultGetFunction(`${PardusOptionsUtility.getVariableName(this.id)}`, false)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Disables the input element
+     * @function AbstractOption#disable
+     */
+    disable() {
+        this.setDisabled(true);
+        if (this.getInputElement()) {
+            this.getInputElement().removeAttribute('disabled');
+            this.getInputElement().setAttribute('style', this.style);
+        }
+    }
+
+    /**
+     * Enables the input element
+     * @function AbstractOption#enable
+     */
+    enable() {
+        this.setDisabled(false);
+        if (this.getInputElement()) {
+            this.getInputElement().removeAttribute('disabled');
+            this.getInputElement().setAttribute('style', this.style);
+        }
+    }
+
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        if (this.disabled) {
+            this.colour = '#B5B5B5';
+            this.backgroundColour = '#CCCCCC';
+        } else {
+            this.colour = '#D0D1D9';
+            this.backgroundColour = '#00001C';
+        }
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+    }
+
+    /**
+     * Gets the input element for the option
+     * @function PresetLabel#getInputElement
+     * @returns {object} Input element
+     */
+    getInputElement() {
+        return document.getElementById(this.id);
+    }
+
+    getCurrentValue() {
+        return this.getInputElement().value;
+    }
+
+    getValue() {
+        return PardusOptionsUtility.defaultGetFunction(`${PardusOptionsUtility.getVariableName(this.id)}`, this.defaultValue);
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/save-button-row/preset-row.js
+
+
+
+
+
+class PresetRow extends DisableableHtmlElement {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+        presetNumber,
+    }) {
+        super({
+            id,
+            disabled,
+        });
+        this.premium = premium;
+        this.saveButton = new SaveButton({
+            id: `${this.id}-save-button`,
+            premium,
+            disabled,
+        });
+        this.loadButton = new LoadButton({
+            id: `${this.id}-load-button`,
+            premium,
+            disabled,
+        });
+        this.presetNumber = presetNumber;
+        this.label = new PresetLabel({
+            id: `${this.id}-label`,
+            defaultValue: `Preset ${this.presetNumber}`,
+            disabled,
+        });
+
+        if (!this.hasValue()) {
+            this.loadButton.disable();
+        }
+    }
+
+    toString() {
+        return `<tr id="${this.id}"><td align="left">${this.label}</input></td><td align="right">${this.loadButton} ${this.saveButton}</td></tr>`;
+    }
+
+    /**
+     * Allows disabling or enabling this element and all nested elements without refreshing
+     * @function PresetRow#setDisabled
+     */
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        this.saveButton.setDisabled(disabled);
+        this.loadButton.setDisabled(disabled);
+        this.label.setDisabled(disabled);
+    }
+
+    displaySaved() {
+        this.saveButton.displaySaved();
+    }
+
+    displayLoaded() {
+        if (this.loadButton) {
+            this.loadButton.displayLoaded();
+        }
+    }
+
+    hasValue() {
+        return this.label.hasValue();
+    }
+
+    setFunctions(options) {
+        if (options.length !== 0) {
+            this.addSaveEventListener(() => {
+                for (const option of options) {
+                    option.saveValue((name, value) => {
+                        option.saveFunction(`preset-${this.presetNumber}-${name}`, value);
+                    });
+                }
+                this.displaySaved();
+                this.loadButton.enable();
+
+                this.label.save();
+
+                const event = new Event('preset-save', { bubbles: true });
+                this.getElement().dispatchEvent(event);
+            });
+            this.addLoadEventListener(() => {
+                for (const option of options) {
+                    option.loadValue(option.getValue((name, value) => option.getFunction(`preset-${this.presetNumber}-${name}`, value)));
+                }
+                this.displayLoaded();
+
+                const event = new Event('preset-load', { bubbles: true });
+                this.getElement().dispatchEvent(event);
+            });
+        }
+    }
+
+    addSaveEventListener(func) {
+        this.saveButton.addEventListener('click', func);
+    }
+
+    addLoadEventListener(func) {
+        if (this.loadButton) {
+            this.loadButton.addEventListener('click', func);
+        }
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/save-button-row/presets.js
+
+
+
+class Presets extends DisableableHtmlElement {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+        presets = 0,
+    }) {
+        super({
+            id,
+            disabled,
+        });
+        this.premium = premium;
+        this.presets = [];
+        for (let i = 0; i < presets; i += 1) {
+            this.presets.push(new PresetRow({
+                id: `${this.id}-preset-row-${i}`,
+                premium,
+                disabled,
+                presetNumber: i + 1,
+            }));
+        }
+    }
+
+    /**
+     * Allows disabling or enabling this element and all nested elements without refreshing
+     * @function Presets#setDisabled
+     */
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        for (const preset of this.presets) {
+            preset.setDisabled(disabled);
+        }
+    }
+
+    toString() {
+        if (this.presets.length === 0) {
+            return '';
+        }
+
+        let html = `<tr id="${this.id}"><td><table width="100%">`;
+
+        for (const presetRow of this.presets) {
+            html += presetRow;
+        }
+
+        return `${html}</table></td></tr>`;
+    }
+
+    setFunctions(options) {
+        for (const presetRow of this.presets) {
+            presetRow.setFunctions(options);
+        }
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/info-element.js
+
+
+
+
+/**
+ * @class InfoElement
+ * @extends HtmlElement
+ */
+class InfoElement extends HtmlElement {
+    /**
+     * @constructor InfoElement
+     * @param {string} id HTML identifier for the element. Must be globally unique.
+     * @param {string} description Text to display in the InfoElement box
+     * @param {string} title Title to display at the top of the InfoElement box
+     * @param {string} [tipBoxPosition=right] The direction the InfoElement should appear in. Either 'right' or 'left'
+     */
+    constructor({
+        id,
+        description,
+        title,
+        tipBoxPosition = 'right',
+    }) {
+        super(id);
+        this.description = description;
+        this.title = title;
+        this.tipBoxPosition = tipBoxPosition;
+
+        this.addEventListener('mouseover', () => {
+            // eslint-disable-next-line import/no-cycle
+            this.tipBox = PardusOptions.getDefaultTipBox();
+            this.tipBox.setContents({
+                title: this.title,
+                contents: this.description,
+            });
+
+            this.tipBox.setPosition({
+                element: this,
+                position: this.tipBoxPosition,
+            });
+
+            this.tipBox.show();
+        });
+
+        this.addEventListener('mouseout', () => {
+            this.tipBox.hide();
+        });
+    }
+
+    /**
+     * Return a string representation of the InfoElement
+     * @function HtmlElement#toString
+     * @returns {string} String representation of the InfoElement
+     */
+    toString() {
+        return `<a id="${this.id}" href="#" onclick="return false;"><img src="${PardusOptionsUtility.getImagePackUrl()}info.gif" class="infoButton" alt=""></a>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/abstract-option.js
+
+
+
+
+/**
+ * @class AbstractOption
+ * @extends DisableableHtmlElement
+ * @abstract
+ */
+class AbstractOption extends DisableableHtmlElement {
+    constructor({
+        id,
+        variable,
+        description = '',
+        defaultValue = false,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        shallow = false,
+        reverse = false,
+        info = null,
+        disabled = false,
+        styleExtra = '',
+        align = 'left',
+    }) {
+        super({
+            id,
+            disabled,
+        });
+        this.variable = variable;
+        this.saveFunction = saveFunction;
+        this.getFunction = getFunction;
+        this.description = description;
+        this.info = info;
+        this.defaultValue = defaultValue;
+        this.inputId = `${this.id}-input`;
+        this.shallow = shallow;
+        this.reverse = reverse;
+        this.styleExtra = styleExtra;
+        this.colour = '#D0D1D9';
+        this.backgroundColour = '#00001C';
+        this.align = align;
+
+        if (this.disabled) {
+            this.colour = '#B5B5B5';
+            this.backgroundColour = '#CCCCCC';
+        }
+
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+
+        if (this.info !== null) {
+            this.infoElement = new InfoElement({
+                id: `${this.id}-info`,
+                description: this.info.description,
+                title: this.info.title,
+            });
+
+            this.addAfterRefreshHook(() => {
+                this.infoElement.afterRefreshElement();
+            });
+        } else {
+            this.infoElement = '';
+        }
+    }
+
+    toString() {
+        if (this.shallow) {
+            return `<td id='${this.id}'>${this.getInnerHTML()}<label>${this.description}</label>${this.infoElement}</td>`;
+        }
+        if (this.reverse) {
+            return `<tr id='${this.id}'><td>${this.getInnerHTML()}</td><td><label for='${this.inputId}'>${this.description}</label>${this.infoElement}</td></tr>`;
+        }
+
+        if (this.description === '') {
+            return `<tr id='${this.id}'><td col='2'>${this.getInnerHTML()}</td></tr>`;
+        }
+
+        return `<tr id='${this.id}'><td><label for='${this.inputId}'>${this.description}:</label>${this.infoElement}</td><td align='${this.align}'>${this.getInnerHTML()}</td></tr>`;
+    }
+
+    /**
+     * Get the inner HTML of the options element
+     * @abstract
+     * @function AbstractOption#getInnerHTML
+     * @returns {string} Inner HTML of the options element
+     */
+    getInnerHTML() {
+        return '';
+    }
+
+    /**
+     * Gets the last-saved value of the options element
+     * @function AbstractOption#getValue
+     * @returns {type} Last-saved value of the options element
+     */
+    getValue(overrideGetFunction = null) {
+        if (overrideGetFunction && typeof overrideGetFunction === 'function') {
+            return overrideGetFunction(`${PardusOptionsUtility.getVariableName(this.variable)}`, this.defaultValue);
+        }
+
+        return this.getFunction(`${PardusOptionsUtility.getVariableName(this.variable)}`, this.defaultValue);
+    }
+
+    /**
+     * Gets the current value of the options element
+     * @abstract
+     * @function AbstractOption#getCurrentValue
+     * @returns {type} Value of the options element
+     */
+    getCurrentValue() {
+        return null;
+    }
+
+    /**
+     * Gets the input element for the option
+     * @function AbstractOption#getInputElement
+     * @returns {object} Input element
+     */
+    getInputElement() {
+        return document.getElementById(this.inputId);
+    }
+
+    /**
+     * Resets the saved value of the options element to its default
+     * @function AbstractOption#resetValue
+     */
+    resetValue() {
+        this.saveFunction(`${PardusOptionsUtility.getVariableName(this.variable)}`, this.defaultValue);
+    }
+
+    /**
+     * Saves the current value of the options element
+     * @function AbstractOption#saveValue
+     */
+    saveValue(overrideSaveFunction = null) {
+        if (overrideSaveFunction && typeof overrideSaveFunction === 'function') {
+            overrideSaveFunction(`${PardusOptionsUtility.getVariableName(this.variable)}`, this.getCurrentValue());
+        } else if (!this.disabled) {
+            this.saveFunction(`${PardusOptionsUtility.getVariableName(this.variable)}`, this.getCurrentValue());
+        }
+    }
+
+    refreshStyle() {
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+        if (this.getInputElement()) {
+            this.getInputElement().setAttribute('style', this.style);
+        }
+    }
+
+    /**
+     * Disables the input element
+     * @function AbstractOption#disable
+     */
+    disable() {
+        this.setDisabled(true);
+        if (this.getInputElement()) {
+            this.getInputElement().setAttribute('disabled', '');
+            this.getInputElement().setAttribute('style', this.style);
+        }
+    }
+
+    /**
+     * Enables the input element
+     * @function AbstractOption#enable
+     */
+    enable() {
+        this.setDisabled(false);
+        if (this.getInputElement()) {
+            this.getInputElement().removeAttribute('disabled');
+            this.getInputElement().setAttribute('style', this.style);
+        }
+    }
+
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        if (this.disabled) {
+            this.colour = '#B5B5B5';
+            this.backgroundColour = '#CCCCCC';
+        } else {
+            this.colour = '#D0D1D9';
+            this.backgroundColour = '#00001C';
+        }
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+    }
+
+    loadValue(value) {
+        this.getInputElement().value = value;
+        this.saveValue();
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/boolean-option.js
+
+
+/**
+ * @class BooleanOption
+ * @extends AbstractOption
+ */
+class BooleanOption extends AbstractOption {
+    getInnerHTML() {
+        let checkedStatus = '';
+        if (this.getValue() === true) {
+            checkedStatus = ' checked';
+        }
+        return `<input id="${this.inputId}" type="checkbox"${checkedStatus} style="${this.style}" ${this.disabled ? 'disabled' : ''}>`;
+    }
+
+    /**
+     * Gets the current value of the boolean options element
+     * @function BooleanOption#getCurrentValue
+     * @returns {boolean} Value of the boolean options element
+     */
+    getCurrentValue() {
+        return this.getInputElement().checked;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/text-area-option.js
+
+
+
+class TextAreaOption extends AbstractOption {
+    constructor({
+        id,
+        variable,
+        description,
+        defaultValue = 0,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        disabled = false,
+        info = null,
+        rows = 3,
+        cols = 65,
+    }) {
+        super({
+            id,
+            variable,
+            description,
+            defaultValue,
+            saveFunction,
+            getFunction,
+            info,
+            disabled,
+            styleExtra: 'font-family: Helvetica, Arial, sans-serif;font-size:11px;',
+        });
+        this.rows = rows;
+        this.cols = cols;
+    }
+
+    getInnerHTML() {
+        return `<textarea id="${this.inputId}" width="100%" autocomplete="off" autocorrect="off" spellcheck="false" ${(this.rows === 0) ? '' : `rows="${this.rows}"`} ${(this.cols === 0) ? '' : `cols="${this.cols}"`} style="${this.style}" ${this.disabled ? 'disabled' : ''}>${this.getValue()}</textarea>`;
+    }
+
+    getCurrentValue() {
+        return this.getInputElement().value;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/numeric-option.js
+
+
+
+class NumericOption extends AbstractOption {
+    constructor({
+        id,
+        variable,
+        description,
+        defaultValue = 0,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        disabled = false,
+        min = 0,
+        max = 0,
+        step = 1,
+        info = null,
+    }) {
+        super({
+            id,
+            variable,
+            description,
+            defaultValue,
+            saveFunction,
+            getFunction,
+            info,
+            disabled,
+        });
+        this.minValue = min;
+        this.maxValue = max;
+        this.stepValue = step;
+    }
+
+    getInnerHTML() {
+        return `<input id="${this.inputId}" type="number" min="${this.minValue}" max="${this.maxValue}" step="${this.stepValue}" value="${this.getValue()}" style="${this.style}" ${this.disabled ? 'disabled' : ''}>`;
+    }
+
+    getCurrentValue() {
+        return this.getInputElement().value;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/abstract/abstract-toggle-button.js
+
+
+class AbstractToggleButton extends AbstractButton {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+        styleExtra = '',
+        actionText = '',
+        actionPerformedText = '',
+        toggleText = '',
+        togglePerformedText = '',
+        toggled = false,
+    }) {
+        super({
+            id,
+            premium,
+            disabled,
+            styleExtra,
+            actionText,
+            actionPerformedText,
+        });
+
+        this.toggled = toggled;
+
+        this.defaultText = actionText;
+        this.defaultPerformedText = actionPerformedText;
+        this.toggleText = toggleText;
+        this.togglePerformedText = togglePerformedText;
+
+        if (this.toggled) {
+            this.actionText = this.toggleText;
+            this.actionPerformedText = this.togglePerformedText;
+        }
+    }
+
+    toggle() {
+        this.toggled = !this.toggled;
+
+        if (this.toggled) {
+            this.actionText = this.toggleText;
+            this.actionPerformedText = this.togglePerformedText;
+        } else {
+            this.actionText = this.defaultText;
+            this.actionPerformedText = this.defaultPerformedText;
+        }
+
+        this.refreshElement();
+    }
+
+    toString() {
+        return `<input value="${this.actionText}" id="${this.id}" type="button" style="${this.style}" ${this.disabled ? 'disabled' : ''}>`;
+    }
+
+    displayClicked() {
+        this.getElement().setAttribute('disabled', 'true');
+        this.getElement().value = this.actionPerformedText;
+        this.getElement().setAttribute('style', 'color:green;background-color:silver');
+        setTimeout(() => {
+            this.getElement().removeAttribute('disabled');
+            this.getElement().value = this.actionText;
+            if (this.premium) {
+                this.getElement().setAttribute('style', 'color:#FFCC11');
+            } else {
+                this.getElement().removeAttribute('style');
+            }
+        }, 2000);
+    }
+
+    /**
+     * Add an event listener to the element
+     * @function HtmlElement#addEventListener
+     * @param {string} eventName Name of the event to listen for
+     * @param {function} listener Listener to call when the event fires
+     */
+    addClickListener(listener, opts = false) {
+        if (this.getElement() && !this.toggled) {
+            this.getElement().addEventListener('click', listener, opts);
+        }
+
+        if (opts && Object.hasOwn(opts, 'ephemeral') && opts.ephemeral) {
+            return;
+        }
+
+        this.addAfterRefreshHook(() => {
+            if (this.getElement() && !this.toggled) {
+                this.getElement().addEventListener('click', listener, opts);
+            }
+        });
+    }
+
+    /**
+     * Add an event listener to the element
+     * @function HtmlElement#addEventListener
+     * @param {string} eventName Name of the event to listen for
+     * @param {function} listener Listener to call when the event fires
+     */
+    addToggleClickListener(listener, opts = false) {
+        if (this.getElement() && this.toggled) {
+            this.getElement().addEventListener('click', listener, opts);
+        }
+
+        if (opts && Object.hasOwn(opts, 'ephemeral') && opts.ephemeral) {
+            return;
+        }
+
+        this.addAfterRefreshHook(() => {
+            if (this.getElement() && this.toggled) {
+                this.getElement().addEventListener('click', listener, opts);
+            }
+        });
+    }
+
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        if (this.disabled) {
+            this.colour = '#B5B5B5';
+            this.backgroundColour = '#CCCCCC';
+        } else {
+            if (this.premium) {
+                this.colour = '#FFCC11';
+            } else {
+                this.colour = '#D0D1D9';
+            }
+            this.backgroundColour = '#00001C';
+        }
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+    }
+
+    disable() {
+        this.setDisabled(true);
+        if (this.getElement()) {
+            this.getElement().setAttribute('disabled', 'true');
+            this.getElement().setAttribute('style', this.style);
+        }
+    }
+
+    enable() {
+        this.setDisabled(false);
+        if (this.getElement()) {
+            this.getElement().removeAttribute('disabled');
+            this.getElement().setAttribute('style', this.style);
+        }
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/key-down-set-key-button.js
+
+
+class SetKeyButton extends AbstractToggleButton {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+    }) {
+        super({
+            id,
+            premium,
+            disabled,
+            actionText: 'Set Key',
+            toggleText: 'Cancel',
+            styleExtra: 'width:58px;',
+        });
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/key-down-disable-button.js
+
+
+class DisableButton extends AbstractToggleButton {
+    constructor({
+        id,
+        premium = false,
+        disabled = false,
+        toggled = false,
+    }) {
+        super({
+            id,
+            premium,
+            disabled,
+            toggled,
+            actionText: 'Disable',
+            toggleText: 'Enable',
+            styleExtra: 'width:58px;',
+        });
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/key-down-option.js
+
+
+
+
+
+class KeyDownOption extends AbstractOption {
+    constructor({
+        id,
+        variable,
+        description = '',
+        defaultValue = false,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        shallow = false,
+        reverse = false,
+        info = null,
+    }) {
+        const currValue = getFunction(`${PardusOptionsUtility.getVariableName(variable)}`, defaultValue);
+        const currDisabled = Object.hasOwn(currValue, 'disabled') && currValue.disabled;
+        super({
+            id,
+            variable,
+            description,
+            defaultValue,
+            saveFunction,
+            getFunction,
+            shallow,
+            reverse,
+            info,
+            disabled: currDisabled,
+            styleExtra: 'width: 20px;padding: 2px;text-align: center;margin: 2px 7px 2px;',
+        });
+        this.setKeyButton = new SetKeyButton({
+            id: `${this.id}-setkey`,
+            disabled: currDisabled,
+        });
+        this.disableButton = new DisableButton({
+            id: `${this.id}-disable`,
+            toggled: currDisabled,
+        });
+        this.boundCaptureKeyListener = this.captureKeyListener.bind(this);
+        this.setKeyButton.addClickListener(() => {
+            document.getElementById(`${this.inputId}-key`).value = '_';
+            document.getElementById(`${this.inputId}-key`).style.color = 'lime';
+            document.addEventListener('keydown', this.boundCaptureKeyListener, {
+                once: true,
+                ephemeral: true,
+            });
+            this.setKeyButton.toggle();
+            this.disableButton.disable();
+        });
+        this.setKeyButton.addToggleClickListener(() => {
+            document.removeEventListener('keydown', this.boundCaptureKeyListener);
+            this.setKeyButton.toggle();
+            this.disableButton.enable();
+            this.refreshElement();
+        });
+        this.disableButton.addClickListener(() => {
+            this.disable();
+            this.disableButton.toggle();
+        });
+        this.disableButton.addToggleClickListener(() => {
+            this.enable();
+            this.disableButton.toggle();
+        });
+        this.addAfterRefreshHook(() => {
+            this.setKeyButton.afterRefreshElement();
+            this.disableButton.afterRefreshElement();
+        });
+    }
+
+    captureKeyListener(event) {
+        this.getInputElement().value = JSON.stringify({
+            code: event.keyCode,
+            key: event.code,
+            description: event.key,
+        });
+        document.getElementById(`${this.inputId}-key`).value = this.getCurrentKeyDescription();
+        document.getElementById(`${this.inputId}-key`).style.color = '#D0D1D9';
+        this.disableButton.enable();
+        this.setKeyButton.toggle();
+    }
+
+    getInnerHTML() {
+        let keyPressHtml = `<input id='${this.inputId}' type='text' hidden value='${JSON.stringify(this.getValue())}'>`;
+        keyPressHtml += `<table width='100%' style='border-collapse: collapse;'><tbody><tr><td align="left"><input id='${this.inputId}-key' type='text' cols='1' maxlength='1' readonly value="${this.getKeyDescription()}" style="${this.style}" ${this.disabled ? 'disabled' : ''}/></td><td align="right">${this.setKeyButton}</td><td align="right" style='padding-right: 0px;'>${this.disableButton}</td></tr></tbody></table>`;
+        return keyPressHtml;
+    }
+
+    /**
+     * Disables the input element
+     * @function AbstractOption#disable
+     */
+    disable() {
+        this.setDisabled(true);
+        document.getElementById(`${this.inputId}-key`).removeAttribute('disabled');
+        document.getElementById(`${this.inputId}-key`).setAttribute('style', this.style);
+
+        this.getInputElement().value = JSON.stringify({
+            ...this.getCurrentValue(),
+            disabled: true,
+        });
+    }
+
+    /**
+     * Enables the input element
+     * @function AbstractOption#enable
+     */
+    enable() {
+        this.setDisabled(false);
+        document.getElementById(`${this.inputId}-key`).removeAttribute('disabled');
+        document.getElementById(`${this.inputId}-key`).setAttribute('style', this.style);
+
+        const newValue = this.getCurrentValue();
+        delete newValue.disabled;
+        this.getInputElement().value = JSON.stringify(newValue);
+    }
+
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        if (this.disabled) {
+            this.colour = '#B5B5B5';
+            this.backgroundColour = '#CCCCCC';
+            this.setKeyButton.disable();
+        } else {
+            this.colour = '#D0D1D9';
+            this.backgroundColour = '#00001C';
+            this.setKeyButton.enable();
+        }
+        this.style = `color: ${this.colour};background-color: ${this.backgroundColour};${this.styleExtra}`;
+    }
+
+    saveValue(overrideSaveFunction = null) {
+        if (overrideSaveFunction && typeof overrideSaveFunction === 'function') {
+            overrideSaveFunction(`${PardusOptionsUtility.getVariableName(this.variable)}`, this.getCurrentValue());
+        } else {
+            this.saveFunction(`${PardusOptionsUtility.getVariableName(this.variable)}`, this.getCurrentValue());
+        }
+    }
+
+    getKey() {
+        return this.getValue().key;
+    }
+
+    getKeyDescription() {
+        return this.getValue().description;
+    }
+
+    getKeyCode() {
+        return this.getValue().code;
+    }
+
+    isDisabled() {
+        const value = this.getValue();
+
+        if (Object.hasOwn(value, 'disabled') && value.disabled) {
+            return true;
+        }
+
+        return false;
+    }
+
+    getCurrentKey() {
+        return this.getCurrentValue().key;
+    }
+
+    getCurrentKeyDescription() {
+        return this.getCurrentValue().description;
+    }
+
+    getCurrentCode() {
+        return this.getCurrentValue().code;
+    }
+
+    getCurrentValue() {
+        return JSON.parse(this.getInputElement().value);
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/select-option.js
+
+
+
+class SelectOption extends AbstractOption {
+    constructor({
+        id,
+        variable,
+        description,
+        defaultValue = null,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        disabled = false,
+        info = null,
+        inheritStyle = false,
+        options = [],
+    }) {
+        super({
+            id,
+            variable,
+            description,
+            defaultValue,
+            saveFunction,
+            getFunction,
+            info,
+            disabled,
+            align: 'right',
+        });
+        this.options = options;
+
+        if (inheritStyle) {
+            this.addEventListener('change', () => {
+                this.updateSelectStyle();
+            });
+        }
+    }
+
+    getInnerHTML() {
+        let selectHtml = '';
+        const savedValue = this.getValue();
+        let hasSelected = false;
+        let selectStyle = '';
+        for (const option of this.options) {
+            const style = (option.style) ? ` style="${option.style}"` : '';
+            if (!hasSelected && (option.value === savedValue || (option.default && option.default === true && !savedValue))) {
+                selectHtml += `<option value=${option.value}${style} selected>${option.text}</option>`;
+                hasSelected = true;
+                selectStyle = (option.style) ? ` style="${option.style}"` : '';
+            } else {
+                selectHtml += `<option value=${option.value}${style}>${option.text}</option>`;
+            }
+        }
+
+        selectHtml = `<select id="${this.inputId}"${selectStyle} style="${this.style}" ${this.disabled ? 'disabled' : ''}>${selectHtml}`;
+
+        return selectHtml;
+    }
+
+    updateSelectStyle() {
+        const currentStyle = this.getInputElement().selectedOptions[0].getAttribute('style');
+        this.getInputElement().setAttribute('style', currentStyle);
+    }
+
+    getOptions() {
+        return this.options;
+    }
+
+    setOptions(options = []) {
+        this.options = options;
+    }
+
+    getCurrentValue() {
+        return this.getInputElement().value;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options/grouped-options.js
+
+
+
+
+class GroupedOptions extends HtmlElement {
+    constructor({
+        id,
+        description,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+    }) {
+        super(id);
+        this.description = description;
+        this.saveFunction = saveFunction;
+        this.getFunction = getFunction;
+        this.options = [];
+    }
+
+    toString() {
+        return `<tr id="${this.id}"><td>${this.description}</td><td>${this.getInnerHTML()}</td></tr>`;
+    }
+
+    getInnerHTML() {
+        let html = '<table><tbody><tr>';
+        for (const option of this.options) {
+            html += option;
+        }
+        html += '</tr></tbody></table>';
+        return html;
+    }
+
+    saveValue() {
+        for (const option of this.options) {
+            option.saveValue();
+        }
+    }
+
+    addBooleanOption({
+        variable,
+        description,
+        defaultValue = false,
+        saveFunction = this.saveFunction,
+        getFunction = this.getFunction,
+    }) {
+        const booleanOptions = {
+            id: `${this.id}-option-${this.options.length}`,
+            variable,
+            description,
+            defaultValue,
+            saveFunction,
+            getFunction,
+            shallow: true,
+        };
+
+        const newBooleanOption = new BooleanOption(booleanOptions);
+
+        this.options.push(newBooleanOption);
+        this.refreshElement();
+        return newBooleanOption;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options-group.js
+
+
+
+
+
+
+
+
+
+class OptionsGroup extends DisableableHtmlElement {
+    constructor({
+        id,
+        premium = false,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        disabled = false,
+    }) {
+        super({
+            id,
+            disabled,
+        });
+        this.premium = premium;
+        this.saveFunction = saveFunction;
+        this.getFunction = getFunction;
+        this.options = [];
+        this.disabled = disabled;
+        this.addAfterRefreshHook(() => {
+            for (const option of this.options) {
+                option.afterRefreshElement();
+            }
+        });
+    }
+
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        for (const option of this.options) {
+            option.setDisabled(disabled);
+        }
+    }
+
+    addBooleanOption(args) {
+        const newOption = new BooleanOption({
+            id: `${this.id}-option-${this.options.length}`,
+            disabled: this.disabled,
+            ...args,
+        });
+        this.options.push(newOption);
+        return newOption;
+    }
+
+    addTextAreaOption(args) {
+        const newOption = new TextAreaOption({
+            id: `${this.id}-option-${this.options.length}`,
+            disabled: this.disabled,
+            ...args,
+        });
+        this.options.push(newOption);
+        return newOption;
+    }
+
+    addNumericOption(args) {
+        const newOption = new NumericOption({
+            id: `${this.id}-option-${this.options.length}`,
+            disabled: this.disabled,
+            ...args,
+        });
+        this.options.push(newOption);
+        return newOption;
+    }
+
+    addKeyDownOption(args) {
+        const newOption = new KeyDownOption({
+            id: `${this.id}-option-${this.options.length}`,
+            disabled: this.disabled,
+            ...args,
+        });
+        this.options.push(newOption);
+        return newOption;
+    }
+
+    addSelectOption(args) {
+        const newOption = new SelectOption({
+            id: `${this.id}-option-${this.options.length}`,
+            disabled: this.disabled,
+            ...args,
+        });
+        this.options.push(newOption);
+        return newOption;
+    }
+
+    addGroupedOption({
+        description,
+        saveFunction = this.saveFunction,
+        getFunction = this.getFunction,
+    }) {
+        const newOption = new GroupedOptions({
+            id: `${this.id}-option-${this.options.length}`,
+            disabled: this.disabled,
+            description,
+            saveFunction,
+            getFunction,
+        });
+        this.options.push(newOption);
+        return newOption;
+    }
+
+    toString() {
+        // If no options have been defined, then don't add any elements
+        if (this.options.length === 0) {
+            return `<tr id="${this.id}" style="display: none;"><td><table width="100%"><tbody></tbody></table></td></tr>`;
+        }
+        return `<tr id="${this.id}"><td><table width="100%"><tbody>${this.options.join('')}</tbody></table></td></tr>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/description-element.js
+
+
+/**
+ * Controls the description for a specific OptionsBox, only one description per OptionsBox permitted
+ * @private
+ */
+class DescriptionElement extends HtmlElement {
+    constructor({
+        id,
+        description = '',
+        imageLeft = '',
+        imageRight = '',
+    }) {
+        super(id);
+        this.backContainer = '';
+        this.description = description;
+        this.imageLeft = imageLeft;
+        this.imageRight = imageRight;
+        this.alignment = '';
+        this.frontContainer = {
+            styling: 'style="display: none;"',
+            id: '',
+            setId(idToSet) {
+                this.id = idToSet;
+            },
+            setStyle(style) {
+                this.styling = `style="${style}"`;
+            },
+            toString() {
+                return '';
+            },
+        };
+        this.frontContainer.setId(id);
+    }
+
+    addImageLeft(imageSrc) {
+        this.imageLeft = imageSrc;
+        this.refreshElement();
+    }
+
+    addImageRight(imageSrc) {
+        this.imageRight = imageSrc;
+        this.refreshElement();
+    }
+
+    setDescription(description) {
+        this.description = description;
+        this.refreshElement();
+    }
+
+    setAlignment(alignment) {
+        this.alignment = alignment;
+        this.refreshElement();
+    }
+
+    toString() {
+        let html = `<tr id=${this.id} style=''><td><table><tbody><tr>`;
+
+        if (this.imageLeft && this.imageLeft !== '') {
+            html = `${html}<td><img src="${this.imageLeft}"></td>`;
+        }
+
+        // If there's no specific alignment, work out the most ideal one to use
+        if (this.alignment === '') {
+            if (this.imageLeft === '' && this.imageRight === '') {
+                html = `${html}<td align="left">${this.description}</td>`;
+            } else {
+                html = `${html}<td align="center">${this.description}</td>`;
+            }
+        } else {
+            html = `${html}<td align="${this.alignment}">${this.description}</td>`;
+        }
+
+        if (this.imageRight && this.imageRight !== '') {
+            html = `${html}<td><img src="${this.imageRight}"></td>`;
+        }
+
+        return `${html}</tr></tbody></table></td></tr>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options-box.js
+
+
+
+
+
+
+
+class OptionsBox extends DisableableHtmlElement {
+    constructor({
+        id,
+        heading,
+        premium = false,
+        description = '',
+        imageLeft = '',
+        imageRight = '',
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        refresh = true,
+        resetButton = false,
+        presets = 0,
+        disabled = false,
+    }) {
+        super({
+            id,
+            disabled,
+        });
+        this.heading = heading;
+        this.premium = premium;
+        this.saveFunction = saveFunction;
+        this.getFunction = getFunction;
+        this.refresh = refresh;
+        this.resetButton = resetButton;
+        this.disabled = disabled;
+
+        const headerHtml = (premium) ? '<th class="premium">' : '<th>';
+        this.frontContainer = `<form id="${this.id}" action="none"><table style="background:url(${PardusOptionsUtility.getImagePackUrl()}bgd.gif)" width="100%" cellpadding="3" align="center"><tbody><tr>${headerHtml}${heading}</th></tr>`;
+        this.backContainer = '</tbody></table></form>';
+        this.innerHtml = '';
+        this.description = new DescriptionElement({
+            id: `${this.id}-description`,
+            description,
+            imageLeft,
+            imageRight,
+        });
+        this.optionsGroup = new OptionsGroup({
+            id: `${this.id}-options-group`,
+            premium,
+            saveFunction,
+            getFunction,
+            disabled,
+        });
+        this.saveButtonRow = new SaveButtonRow({
+            id: `${this.id}-save`,
+            premium,
+            resetButton,
+            disabled,
+        });
+        this.presets = new Presets({
+            id: `${this.id}-presets`,
+            premium,
+            presets,
+            disabled,
+        });
+        this.addAfterRefreshHook((opts) => {
+            if (opts.maintainRefreshStatus) {
+                return;
+            }
+            this.refresh = true;
+        });
+        this.addAfterRefreshHook(() => {
+            this.optionsGroup.afterRefreshElement();
+            this.saveButtonRow.afterRefreshElement();
+        });
+        this.addAfterRefreshHook(() => {
+            this.setFunctions();
+        });
+    }
+
+    toString() {
+        if (this.optionsGroup.options.length === 0) {
+            return this.frontContainer + this.description + this.innerHtml + this.optionsGroup + this.backContainer;
+        }
+        return this.frontContainer + this.description + this.innerHtml + this.optionsGroup + this.saveButtonRow + this.presets + this.backContainer;
+    }
+
+    setFunctions() {
+        if (this.optionsGroup.options.length !== 0) {
+            this.saveButtonRow.addSaveEventListener(() => {
+                for (const option of this.optionsGroup.options) {
+                    option.saveValue();
+                }
+                this.saveButtonRow.displaySaved();
+
+                const event = new Event('save');
+                this.getElement().dispatchEvent(event);
+            });
+            this.saveButtonRow.addResetEventListener(() => {
+                for (const option of this.optionsGroup.options) {
+                    option.resetValue();
+                }
+                this.saveButtonRow.displayReset();
+                this.optionsGroup.refreshElement();
+
+                const event = new Event('reset');
+                this.getElement().dispatchEvent(event);
+            });
+        }
+
+        this.presets.setFunctions(this.optionsGroup.options);
+    }
+
+    /**
+     * Allows disabling or enabling this element and all nested elements without refreshing
+     * @function OptionsBox#setDisabled
+     */
+    setDisabled(disabled = false) {
+        this.disabled = disabled;
+        this.optionsGroup.setDisabled(disabled);
+        this.saveButtonRow.setDisabled(disabled);
+        this.presets.setDisabled(disabled);
+    }
+
+    addSaveEventListener(func) {
+        return this.saveButtonRow.addSaveEventListener(func);
+    }
+
+    addBooleanOption({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newOption = this.optionsGroup.addBooleanOption(args);
+        if (refresh) {
+            this.refreshElement();
+        }
+        return newOption;
+    }
+
+    addTextAreaOption({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newOption = this.optionsGroup.addTextAreaOption(args);
+        if (refresh) {
+            this.refreshElement();
+        }
+        return newOption;
+    }
+
+    addNumericOption({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newOption = this.optionsGroup.addNumericOption(args);
+        if (refresh) {
+            this.refreshElement();
+        }
+        return newOption;
+    }
+
+    addKeyDownOption({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newOption = this.optionsGroup.addKeyDownOption(args);
+        if (refresh) {
+            this.refreshElement();
+        }
+        return newOption;
+    }
+
+    addSelectOption({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newOption = this.optionsGroup.addSelectOption(args);
+        if (refresh) {
+            this.refreshElement();
+        }
+        return newOption;
+    }
+
+    addGroupedOption({
+        description,
+        saveFunction = this.saveFunction,
+        getFunction = this.getFunction,
+        refresh = this.refresh,
+    }) {
+        const groupedOptions = {
+            description,
+            saveFunction,
+            getFunction,
+        };
+
+        const newOption = this.optionsGroup.addGroupedOption(groupedOptions);
+        if (refresh) {
+            this.refreshElement();
+        }
+        return newOption;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/options-content.js
+
+
+
+
+class OptionsContent extends HtmlElement {
+    constructor({
+        id,
+        content = null,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        refresh = true,
+        active = true,
+    }) {
+        super(id);
+        this.content = content;
+        this.saveFunction = saveFunction;
+        this.getFunction = getFunction;
+        this.leftBoxes = [];
+        this.rightBoxes = [];
+        this.topBoxes = [];
+        this.bottomBoxes = [];
+        this.refresh = refresh;
+        this.active = active;
+        this.addAfterRefreshHook((opts) => {
+            if (opts.maintainRefreshStatus) {
+                return;
+            }
+            this.refresh = true;
+        });
+        this.addAfterRefreshHook(() => {
+            for (const box of this.topBoxes) {
+                box.afterRefreshElement();
+            }
+            for (const box of this.leftBoxes) {
+                box.afterRefreshElement();
+            }
+            for (const box of this.rightBoxes) {
+                box.afterRefreshElement();
+            }
+            for (const box of this.bottomBoxes) {
+                box.afterRefreshElement();
+            }
+        });
+    }
+
+    addBox({
+        top = false,
+        bottom = false,
+        ...args
+    }) {
+        let newBox = null;
+        if (top) {
+            newBox = this.addBoxTop(args);
+        } else if (bottom) {
+            newBox = this.addBoxBottom(args);
+        } else if (this.leftBoxes.length <= this.rightBoxes.length) {
+            newBox = this.addBoxLeft(args);
+        } else {
+            newBox = this.addBoxRight(args);
+        }
+        return newBox;
+    }
+
+    addBoxBottom({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newBox = new OptionsBox({
+            id: `${this.id}-bottom-box-${this.bottomBoxes.length}`,
+            refresh,
+            ...args,
+        });
+
+        this.bottomBoxes.push(newBox);
+
+        if (refresh) {
+            this.refreshElement();
+        }
+
+        return newBox;
+    }
+
+    addBoxTop({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newBox = new OptionsBox({
+            id: `${this.id}-top-box-${this.topBoxes.length}`,
+            refresh,
+            ...args,
+        });
+
+        this.topBoxes.push(newBox);
+
+        if (refresh) {
+            this.refreshElement();
+        }
+
+        return newBox;
+    }
+
+    addBoxLeft({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newBox = new OptionsBox({
+            id: `${this.id}-left-box-${this.leftBoxes.length}`,
+            refresh,
+            ...args,
+        });
+
+        this.leftBoxes.push(newBox);
+
+        if (refresh) {
+            this.refreshElement();
+        }
+
+        return newBox;
+    }
+
+    addBoxRight({
+        refresh = this.refresh,
+        ...args
+    }) {
+        const newBox = new OptionsBox({
+            id: `${this.id}-right-box-${this.rightBoxes.length}`,
+            refresh,
+            ...args,
+        });
+
+        this.rightBoxes.push(newBox);
+
+        if (refresh) {
+            this.refreshElement();
+        }
+
+        return newBox;
+    }
+
+    addPremiumBox(args) {
+        return this.addBox({
+            premium: true,
+            ...args,
+        });
+    }
+
+    addPremiumBoxLeft(args) {
+        return this.addBoxLeft({
+            premium: true,
+            ...args,
+        });
+    }
+
+    addPremiumBoxRight(args) {
+        return this.addBoxRight({
+            premium: true,
+            ...args,
+        });
+    }
+
+    toString() {
+        if (this.content !== null) {
+            return this.content;
+        }
+        const hidden = this.active ? '' : 'hidden';
+        return `<tr id="${this.id}" ${hidden}><td><table width="100%" align="center"><tbody><tr><td id="${this.id}-top" colspan="3" valign="top">${this.topBoxes.join('<br><br>')}${(this.topBoxes.length > 0) ? '<br><br>' : ''}</td></tr><tr><td id="${this.id}-left" width="350" valign="top">${this.leftBoxes.join('<br><br>')}</td><td width="40"></td><td id="${this.id}-right" width="350" valign="top">${this.rightBoxes.join('<br><br>')}</td></tr><tr><td id="${this.id}-bottom" colspan="3" valign="top">${(this.bottomBoxes.length > 0) ? '<br><br>' : ''}${this.bottomBoxes.join('<br><br>')}</td></tr></tbody></table></td></tr>`;
+    }
+
+    setActive() {
+        this.active = true;
+        this.getElement().removeAttribute('hidden');
+    }
+
+    setInactive() {
+        this.active = false;
+        this.getElement().setAttribute('hidden', '');
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/tabs/sub-tab.js
+
+
+
+
+class SubTab {
+    constructor({
+        id,
+        label,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        refresh = true,
+        active = false,
+        padding,
+    }) {
+        this.id = id;
+        this.active = active;
+        this.label = new TabLabel({
+            id: `${this.id}-label`,
+            heading: label,
+            active: this.active,
+            padding,
+        });
+        this.content = new OptionsContent({
+            id: `${this.id}-content`,
+            saveFunction,
+            getFunction,
+            refresh,
+            active: this.active,
+        });
+    }
+
+    setActive() {
+        if (this.active === true) {
+            return;
+        }
+        this.active = true;
+        this.label.setActive();
+        this.content.setActive();
+    }
+
+    setInactive() {
+        if (this.active === false) {
+            return;
+        }
+        this.active = false;
+        this.label.setInactive();
+        this.content.setInactive();
+    }
+
+    afterRefreshElement(opts) {
+        this.label.afterRefreshElement(opts);
+        this.content.afterRefreshElement(opts);
+    }
+
+    getLabel() {
+        return this.label;
+    }
+
+    getContent() {
+        return this.content;
+    }
+
+    toString() {
+        return this.content.toString();
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/version-row.js
+/*eslint camelcase: ["error", {allow: ["GM_info"]}]*/
+
+
+class VersionRow extends HtmlElement {
+    constructor({
+        id,
+    }) {
+        super(id);
+    }
+
+    toString() {
+        return `<tr id="${this.id}"><td align="right" style="font-size:11px;color:#696988;padding-right:7px;padding-top:5px">Version ${GM_info.script.version}</td></tr>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/tabs/tab-content.js
+
+
+
+
+
+
+class TabContent extends HtmlElement {
+    constructor({
+        id,
+        heading,
+        defaultLabel = 'Default tab',
+        content = null,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        refresh = true,
+    }) {
+        super(id);
+        this.heading = heading;
+        this.content = content;
+        this.saveFunction = saveFunction;
+        this.getFunction = getFunction;
+        this.subTabsRow = new TabsRow({
+            id: `${this.id}-tabsrow`,
+        });
+        this.refresh = refresh;
+        this.subTabs = [];
+        this.defaultTab = this.addSubTab({
+            label: defaultLabel,
+            saveFunction: this.saveFunction,
+            getFunction: this.getFunction,
+            refresh: false,
+            active: true,
+        });
+        this.versionRow = new VersionRow({
+            id: `${this.id}-versionrow`,
+        });
+        this.addAfterRefreshHook((opts) => {
+            if (opts.maintainRefreshStatus) {
+                return;
+            }
+            this.refresh = true;
+        });
+        this.addAfterRefreshHook((opts) => {
+            if (!this.refresh && opts.maintainRefreshStatus) {
+                return;
+            }
+            for (const subTab of this.subTabs) {
+                subTab.afterRefreshElement(opts);
+            }
+        });
+    }
+
+    addSubTab({
+        label,
+        saveFunction = this.saveFunction,
+        getFunction = this.getFunction,
+        refresh = this.refresh,
+        active = false,
+        padding,
+    }) {
+        const newSubTab = new SubTab({
+            id: `${this.id}-subtab-${this.subTabs.length}`,
+            label,
+            saveFunction,
+            getFunction,
+            refresh,
+            active,
+            padding,
+        });
+
+        const newSubTabContent = newSubTab.getContent();
+        const newSubTabLabel = newSubTab.getLabel();
+
+        this.subTabsRow.addLabel({
+            label: newSubTabLabel,
+        });
+
+        this.subTabs.push(newSubTab);
+
+        newSubTabLabel.addEventListener('click', () => {
+            this.setActiveSubTab(newSubTab.id);
+        });
+
+        if (refresh) {
+            this.refreshElement();
+        }
+
+        return newSubTabContent;
+    }
+
+    setActiveSubTab(subTabId) {
+        for (const subTab of this.subTabs) {
+            if (subTab.id === subTabId) {
+                subTab.setActive();
+            } else {
+                subTab.setInactive();
+            }
+        }
+    }
+
+    addBox(args) {
+        return this.defaultTab.addBox(args);
+    }
+
+    addBoxBottom(args) {
+        return this.defaultTab.addBoxBottom(args);
+    }
+
+    addBoxTop(args) {
+        return this.defaultTab.addBoxTop(args);
+    }
+
+    addBoxLeft(args) {
+        return this.defaultTab.addBoxLeft(args);
+    }
+
+    addBoxRight(args) {
+        return this.defaultTab.addBoxRight(args);
+    }
+
+    addPremiumBox(args) {
+        return this.defaultTab.addPremiumBox(args);
+    }
+
+    addPremiumBoxLeft(args) {
+        return this.defaultTab.addPremiumBoxLeft(args);
+    }
+
+    addPremiumBoxRight(args) {
+        return this.defaultTab.addPremiumBoxRight(args);
+    }
+
+    setActive() {
+        this.getElement().removeAttribute('hidden');
+    }
+
+    setInactive() {
+        this.getElement().setAttribute('hidden', '');
+    }
+
+    toString() {
+        if (this.content !== null) {
+            return this.content;
+        }
+        const hidden = (this.subTabs.length > 1) ? '' : 'hidden';
+        const innerStyle = (this.subTabs.length > 1) ? 'class="tabstyle"' : '';
+        return `<table id="${this.id}" hidden class="tabstyle" style="background:url(${PardusOptionsUtility.getImagePackUrl()}bgdark.gif)" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><div align="center"><h1>${this.heading}</h1></div></td></tr><tr><td><table width="100%" align="center" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td><table cellspacing="0" cellpadding="0" border="0" ${hidden}><tbody>${this.subTabsRow}</tbody></table></td></tr><tr><td><table ${innerStyle} cellspacing="0" cellpadding="0" border="0"><tbody>${this.subTabs.join('')}</tbody></table></td></tr></tbody></table></td></tr>${this.versionRow}</tbody></table>`;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/tabs/tab.js
+
+
+
+
+class Tab {
+    constructor({
+        id,
+        heading,
+        content = null,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        refresh = true,
+        defaultLabel,
+    }) {
+        this.id = id;
+        this.heading = heading;
+        this.content = new TabContent({
+            id: `options-content-${this.id}`,
+            heading,
+            content,
+            saveFunction,
+            getFunction,
+            refresh,
+            defaultLabel,
+        });
+        this.label = new TabLabel({
+            id: `${this.id}-label`,
+            heading,
+        });
+        this.active = false;
+        this.saveFunction = saveFunction;
+        this.getFunction = getFunction;
+    }
+
+    addListeners() {
+        this.getLabel().addEventListener('click', () => PardusOptionsUtility.setActiveTab(this.id), true);
+        window.addEventListener('storage', () => {
+            if (window.localStorage.getItem('pardusOptionsOpenTab') === this.id && !this.active) {
+                this.setActive();
+            }
+            if (window.localStorage.getItem('pardusOptionsOpenTab') !== this.id && this.active) {
+                this.setInactive();
+            }
+        });
+    }
+
+    setActive() {
+        this.label.setActive();
+        this.content.setActive();
+        this.active = true;
+    }
+
+    setInactive() {
+        this.label.setInactive();
+        this.content.setInactive();
+        this.active = false;
+    }
+
+    getContent() {
+        return this.content;
+    }
+
+    getLabel() {
+        return this.label;
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/classes/pardus-options.js
+
+
+
+
+
+
+/**
+ * @module PardusOptions
+ */
+class PardusOptions {
+    /**
+     *  @ignore
+     */
+    static init() {
+        if (document.getElementById('options-area')) {
+            return;
+        }
+
+        // Get the normal Pardus options
+        const defaultPardusOptionsContent = document.getElementsByTagName('table')[2];
+
+        // Identify the containing HTML element to house all the options HTML
+        const pardusMainElement = defaultPardusOptionsContent.parentNode;
+
+        // Give the Pardus options an appropriate id, and remove it from the DOM
+        defaultPardusOptionsContent.setAttribute('id', 'options-content-pardus-default');
+        defaultPardusOptionsContent.setAttribute('class', 'tabstyle');
+        defaultPardusOptionsContent.remove();
+
+        // Add this object to the DOM within the main containing element
+        pardusMainElement.appendChild(this.getPardusOptionsElement());
+
+        const defaultTipBox = this.createDefaultTipBox();
+        pardusMainElement.appendChild(defaultTipBox.toElement());
+
+        // Add the Pardus options back in
+        this.addTab({
+            id: 'pardus-default',
+            heading: 'Pardus Options',
+            content: defaultPardusOptionsContent.outerHTML,
+            refresh: false,
+        });
+
+        // Set the Pardus options tab to be active by default
+        PardusOptionsUtility.setActiveTab('pardus-default');
+    }
+
+    /**
+     *  @deprecated Get the version of the Pardus Options Library running
+     */
+    static version() {
+        return 1.6;
+    }
+
+    /**
+     * @ignore
+     */
+    static createDefaultTipBox() {
+        return new TipBox({
+            id: 'options-default-tip-box',
+        });
+    }
+
+    /**
+     * @ignore
+     */
+    static getDefaultTipBox() {
+        const defaultTipBox = this.createDefaultTipBox();
+        defaultTipBox.refreshElement();
+        return defaultTipBox;
+    }
+
+    /**
+     * @ignore
+     */
+    static getTabsElement() {
+        return new TabsElement({
+            id: 'options-tabs',
+        });
+    }
+
+    /**
+     * @ignore
+     */
+    static getContentElement() {
+        return new ContentsArea({
+            id: 'options-content',
+        });
+    }
+
+    /**
+     * @ignore
+     */
+    static getPardusOptionsElement() {
+        const template = document.createElement('template');
+        template.innerHTML = `<table id="options-area" cellspacing="0" cellpadding="0" border="0"><tbody><tr cellspacing="0" cellpadding="0" border="0"><td>${this.getTabsElement()}</td></tr>${this.getContentElement()}</tbody></table>`;
+        return template.content.firstChild;
+    }
+
+    /**
+     * Add a tab on the Options page on Pardus to show your options
+     * @param {Object} params An object containing parameter values
+     * @param {string} params.id A namespace identifier to identify the tab from other tabs. Must be globally unique.
+     * @param {string} params.heading Text to display in the tab
+     * @param {string} params.content HTML to embed within the tab.
+     * @returns {TabContent} Tab
+     */
+    static addTab({
+        id,
+        heading,
+        content = null,
+        saveFunction = PardusOptionsUtility.defaultSaveFunction,
+        getFunction = PardusOptionsUtility.defaultGetFunction,
+        refresh = true,
+        defaultLabel,
+    }) {
+        const newTab = new Tab({
+            id,
+            heading,
+            content,
+            saveFunction,
+            getFunction,
+            refresh,
+            defaultLabel,
+        });
+
+        // Check for id uniqueness
+        if (document.getElementById(newTab.id)) {
+            throw new Error(`Tab '${newTab.id}' already exists!`);
+        }
+
+        this.getTabsElement().addLabel({
+            label: newTab.getLabel(),
+        });
+
+        this.getContentElement().addContent({
+            content: newTab.getContent(),
+        });
+
+        newTab.addListeners();
+
+        return newTab.getContent();
+    }
+}
+
+;// ./node_modules/pardus-options-library/src/index.js
+
+
+
+/**
+  *  Add the Options object to the page for all scripts to use
+  */
+if (document.location.pathname === '/options.php') {
+    PardusOptions.init();
+}
+
+PardusOptionsUtility.addGlobalListeners();
+
+
+
 ;// ./src/variables.js
+
+
 // Variable keys used with PardusOptionsUtility.getVariableValue/setVariableValue
 const VAR = {
     PREVIEW: 'preview',
@@ -3585,6 +6617,7 @@ class ship_transfer_ShipTransfer {
 }
 
 ;// ./src/pages/options.js
+
 
 
 class Options {

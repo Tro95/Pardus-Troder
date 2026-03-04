@@ -1,3 +1,5 @@
+import { PardusOptionsUtility } from 'pardus-options-library';
+
 // Variable keys used with PardusOptionsUtility.getVariableValue/setVariableValue
 export const VAR = {
     PREVIEW: 'preview',

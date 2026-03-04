@@ -1,3 +1,4 @@
+import { PardusOptions } from 'pardus-options-library';
 import { VAR, getVar, setVar } from '../variables.js';
 
 export default class Options {
